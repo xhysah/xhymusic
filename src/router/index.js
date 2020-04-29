@@ -1,22 +1,64 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+const phoneLogin = () => import('../views/Login/phoneLogin')
+const register = () => import('../views/register/register')
+const index = () => import('../views/index')
+const recommend = () => import('../views/recommend/recommend')
+const profileMusic = () => import('../views/profileMusic/profileMusic')
+const ranking = () => import('../views/ranking/ranking')
+const songMenu = () => import('../views/songMenu/songMenu')
+const newsRadio = () => import('../views/newsRadio/newsRadio')
+const singer = () => import('../views/singer/singer')
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'index',
+    component: index,
+    children: [
+      {
+        path: 'recommend',
+        name: 'recommend',
+        component: recommend
+      },
+      {
+        path: 'profileMusic',
+        name: 'profileMusic',
+        component: profileMusic
+      },
+      {
+        path: 'ranking',
+        name: 'ranking',
+        component: ranking
+      },
+      {
+        path: 'songMenu',
+        name: 'songMenu',
+        component: songMenu
+      },
+      {
+        path: 'newsRadio',
+        name: 'newsRadio',
+        component: newsRadio
+      },
+      {
+        path: 'singer',
+        name: 'singer',
+        component: singer
+      }
+    ]
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/register',
+    name: 'register',
+    component: register
+  },
+  {
+    path: '/login',
+    name: 'phoneLogin',
+    component: phoneLogin
   }
 ]
 

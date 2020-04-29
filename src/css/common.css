@@ -1,0 +1,15 @@
+body{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  color: white;
+}
+.line{
+  border: 1px solid red
+}
+img{
+  width:100%;
+  height:100%;
+}
