@@ -12,4 +12,10 @@ body{
 img{
   width:100%;
   height:100%;
+  cursor: pointer;
+}
+.flex{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }

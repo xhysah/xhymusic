@@ -11,6 +11,7 @@
         </el-form-item>
         <div class="center">
           <el-button type="primary" class="loginButton" @click="confirmPhone">确定</el-button>
+          <el-button @click="phoneLogin">手机号登录</el-button>
         </div>
       </el-form>
       <!--    注册-->
@@ -95,6 +96,9 @@ export default {
           console.log(err)
         })
       })
+    },
+    phoneLogin () {
+      this.$emit('login', 1)
     }
   },
   computed: {}

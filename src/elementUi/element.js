@@ -21,7 +21,9 @@ import {
   TableColumn,
   Dialog,
   Col,
-  Divider
+  Divider,
+  Tabs,
+  TabPane
 } from 'element-ui'
 
 Vue.use(Form)
@@ -45,4 +47,6 @@ Vue.use(TableColumn)
 Vue.use(Dialog)
 Vue.use(Col)
 Vue.use(Divider)
+Vue.use(Tabs)
+Vue.use(TabPane)
 Vue.prototype.$message = Message

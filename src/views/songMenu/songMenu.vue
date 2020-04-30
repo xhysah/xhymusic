@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div>
-        <el-row>
-          <span>全部</span>
-          <el-button @click="categoriesVisible=true">默认按钮</el-button>
-          <span>热门</span>
-        </el-row>
+    <el-main>
+      <el-row>
+        <span class="all">全部</span>
+        <el-button size="mini" @click="categoriesVisible=true">选择分类</el-button>
+        <span class="hot">热门</span>
+      </el-row>
       <div class="line"></div>
-      <div class="center">
+      <div class="flex">
         <template v-for="(item, index) in highQualities">
           <song-outline :key="index" length="150px">
             <template v-slot:img>
@@ -19,12 +19,19 @@
           </song-outline>
         </template>
       </div>
-    </div>
+    </el-main>
     <!--    分类对话框-->
-    <el-dialog title="收货地址" :visible.sync="categoriesVisible">
+    <el-dialog center :visible.sync="categoriesVisible" width="50%" :modal="false">
       <div v-for="(item, index) in categories" :key="index">
-        <div>{{item}}</div>
-        <div v-for="(items, index) in reduction[index]" :key="index">------------{{items.name}}</div>
+        <div  class="category">
+          <i :class="icon[index]"></i>
+          {{item}}
+        </div>
+        <div class="category-item">
+          <span class="category-item-item" v-for="(items, index) in reduction[index]" :key="index">{{items.name}}
+            <el-divider direction="vertical"></el-divider>
+          </span>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -44,10 +51,20 @@ export default {
   },
   data () {
     return {
+      // 歌单分类数据
       categories: {},
       sub: {},
+      // 分类对话框是否显示
       categoriesVisible: false,
-      highQualities: {}
+      // 精品歌单
+      highQualities: {},
+      icon: [
+        'el-icon-edit',
+        'el-icon-cold-drink',
+        'el-icon-headset',
+        'el-icon-sunny',
+        'el-icon-scissors'
+      ]
     }
   },
   methods: {
@@ -87,8 +104,38 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .center
+  .el-main
+    width 80%
+    margin 0 auto
+    .hot
+      position relative
+      left 70%
+      background-color red
+      font-size 13px
+      padding 3px 10px
+      border-radius 5px
+    .all
+      font-size 25px
+      margin-left 50px
+      margin-right 20px
+    .el-button
+      position relative
+      top -2px
+  .el-row
+    margin 10px
+  .category
+    font-size 18px
+    i
+      margin 0 5px
+  .category-item
     display flex
-    justify-content center
     flex-wrap wrap
+    margin-right 80px
+  .category-item-item
+    cursor pointer
+    position relative
+    margin 2px 0px
+    font-size 10px
+    left 80px
+    top -25px
 </style>

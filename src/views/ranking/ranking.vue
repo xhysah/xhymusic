@@ -49,6 +49,7 @@ export default {
   name: 'ranking',
   created () {
     this.getRanking()
+    this.getMyselfRanking(0)
   },
   data () {
     return {
@@ -93,12 +94,13 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+color=#353535
 .el-container
   width 70%
   margin 0 auto
   margin-top 50px
   .el-aside
-    border 2px solid #353535
+    border 2px solid color
 .el-image
   width 60px
   height 60px
@@ -116,9 +118,9 @@ export default {
 img
   width 150px
   height 150px
-  border 2px solid #353535
+  border 2px solid color
   margin 3px
-  box-shadow 0px 0px 10px  #353535
+  box-shadow 0px 0px 10px color
 .main
   display flex
   justify-content center
@@ -147,7 +149,7 @@ img
     top 40px
 .el-main
   margin 0px 30px
-  border 2px solid #353535
+  border 2px solid color
 .main-title
   :last-child
     float right

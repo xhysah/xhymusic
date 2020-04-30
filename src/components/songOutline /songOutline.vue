@@ -34,4 +34,8 @@ export default {
     margin 30px
     .sentence
       color white
+      font-size 10px
+      cursor pointer
+  .sentence:hover
+    text-decoration underline
 </style>

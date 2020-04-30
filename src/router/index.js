@@ -9,7 +9,8 @@ const ranking = () => import('../views/ranking/ranking')
 const songMenu = () => import('../views/songMenu/songMenu')
 const newsRadio = () => import('../views/newsRadio/newsRadio')
 const singer = () => import('../views/singer/singer')
-
+const detail = () => import('../views/songMenu/detail/detail')
+const singerInformation = () => import('../views/singer/singerInformation/singerInformation')
 Vue.use(VueRouter)
 
 const routes = [
@@ -49,6 +50,16 @@ const routes = [
         component: singer
       }
     ]
+  },
+  {
+    path: '/artist/:sid',
+    name: 'singerInformation',
+    component: singerInformation
+  },
+  {
+    path: '/songMenuDetail',
+    name: 'songMenuDetail',
+    component: detail
   },
   {
     path: '/register',

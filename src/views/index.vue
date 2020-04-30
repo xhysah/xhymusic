@@ -23,30 +23,40 @@
     </keep-alive>
     <!--    显示登录对话框-->
     <el-dialog
-      title="登录"
       :visible.sync="loginVisible"
-      width="30%">
-      <div class="button-group">
-<!--        <el-button size="medium" round @click="showPhoneLogin">登录</el-button>-->
-<!--        <el-button round size="medium" @click="showRegister">注册</el-button>-->
+      width="30%"
+      @close="active=0">
+      <div class="button-group" v-if="active == 0">
+        <el-button size="medium" round @click="active=1">登录</el-button>
+        <el-button round size="medium" @click="active=2">注册</el-button>
       </div>
+      <phone-login v-else-if="active == 1" @register="editActive"></phone-login>
+      <register v-else @login="editActive" ></register>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import phoneLogin from './Login/phoneLogin'
+import register from './register/register'
 export default {
   name: 'index',
   data () {
     return {
       activeIndex: 'recommend',
-      // 登录显示
-      loginVisible: false
+      // 是否显示对话框
+      loginVisible: false,
+      active: 0
     }
   },
   components: {
+    phoneLogin,
+    register
   },
   methods: {
+    editActive (value) {
+      this.active = value
+    }
   },
   computed: {
   },
@@ -62,7 +72,7 @@ export default {
   span
     position relative
     left 150px
-    margin auto 0px
+    margin auto 0
     font-size 10px
     color #909399
 .el-menu.el-menu--horizontal
@@ -75,5 +85,5 @@ export default {
     width 200px
     margin 5px 0
     +.el-button
-      margin-left 0px
+      margin-left 0
 </style>

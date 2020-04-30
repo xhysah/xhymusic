@@ -3,7 +3,7 @@
     <!--    banner-->
     <el-carousel :interval="5000" indicator-position="outside">
       <el-carousel-item v-for="(item, index) in banners" :key="index">
-        <img :src="item.imageUrl" :alt="item.typeTitle">
+        <img class="banner" :src="item.imageUrl" :alt="item.typeTitle">
       </el-carousel-item>
     </el-carousel>
     <!--    热门-->
@@ -15,11 +15,11 @@
     </el-row>
     <div class="line"></div>
     <!--    网友精选-->
-    <div class="center">
+    <div class="flex">
       <template v-for="(item, index) in toplist">
         <song-outline :key="index" length="150px">
           <template v-slot:img>
-            <img :src="item.coverImgUrl" alt="">
+            <img :src="item.coverImgUrl" alt="" @click="songlist(item.id)">
           </template>
           <template v-slot:sentence>
             <div>{{item.name}}</div>
@@ -76,7 +76,11 @@ export default {
           return this.$message.error('获取网友精选数据失败')
         }
         this.toplist = data.playlists
+        console.log(data.playlists)
       })
+    },
+    songlist (id) {
+      this.$router.push({ name: 'songMenuDetail', query: { path: '/top/playlist/id=', id: id } })
     }
   },
   computed: {}
@@ -91,8 +95,9 @@ export default {
     font-size 22px
     margin 0 20px
     color white
-  .center
-    display flex
-    justify-content center
-    flex-wrap wrap
+  .flex
+    margin 0 160px
+  .banner
+    height auto
+    max-width 900px
 </style>

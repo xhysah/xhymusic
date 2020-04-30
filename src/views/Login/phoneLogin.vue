@@ -13,7 +13,7 @@
         </el-form-item>
         <div class="center">
           <el-button type="primary" class="loginButton" @click="login">登录</el-button>
-          <el-button>取消</el-button>
+          <el-button @click="register(2)">注册</el-button>
         </div>
       </el-form>
     </el-card>
@@ -45,13 +45,16 @@ export default {
         if (!valid) {
           return this.$message.error('请填写完整信息')
         }
-        this.$http.get('/login/cellphone', { params: this.loginForm }).then(response => {
-          const { data } = response
+        this.$http.get('/login/cellphone', { params: this.loginForm }).then(({ data }) => {
           if (data.code === 200) {
             document.cookie = data.token
+            this.emit('success')
           }
         })
       })
+    },
+    register (value) {
+      this.$emit('register', value)
     }
   },
   computed: {}
