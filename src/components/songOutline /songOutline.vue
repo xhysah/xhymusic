@@ -36,6 +36,8 @@ export default {
       color white
       font-size 10px
       cursor pointer
+      white-space nowrap
+      overflow hidden
   .sentence:hover
     text-decoration underline
 </style>

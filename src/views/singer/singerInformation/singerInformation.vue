@@ -45,11 +45,11 @@
         </template>
       </el-tab-pane>
       <el-tab-pane label="艺人介绍">
-        <div>{{artist.name}}简介</div>
+        <div class="header"><el-divider direction="vertical"></el-divider>{{artist.name}}简介</div>
         <div>{{disc.briefDesc}}</div>
         <template v-for="(item, index) in disc.introduction">
           <div :key="index">
-            <div>{{item.ti}}</div>
+            <div class="header"><el-divider direction="vertical"></el-divider>{{item.ti}}</div>
             <div>{{item.txt}}</div>
           </div>
         </template>
@@ -170,6 +170,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  color=#353535
+  .el-divider
+    background-color red
+    width 2px
   .el-container
     width 70%
     margin auto
@@ -177,7 +181,7 @@ export default {
     margin 0 20px
   .el-main
     margin  20px auto
-    border-left 1px solid #353535
+    border-left 1px solid color
     .img
       margin 0 20px
       height 300px
@@ -188,10 +192,25 @@ export default {
         bottom  120px
         height auto
   .el-aside
-    border-left  1px solid #353535
-    border-right 1px solid #353535
+    border-left  1px solid color
+    border-right 1px solid color
   audio
     background-color yellow
   table tr:nth-child(odd)
     background-color red
+  table tr:nth-child(even)
+    color #909399
+  table
+    font-size 14px
+    width 100%
+  td
+    cellspacing 0
+    padding 5px 0
+  .header
+    font-size 20px
+    +div
+      margin 10px 30px
+      font-size 14px
+      color #909399
+      text-indent 2em
 </style>

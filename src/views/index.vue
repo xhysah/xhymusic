@@ -15,6 +15,8 @@
       <el-menu-item index="songMenu">歌单</el-menu-item>
       <el-menu-item index="newsRadio">主播电台</el-menu-item>
       <el-menu-item index="singer">歌手</el-menu-item>
+      <el-input v-model="input" autofocus placeholder="专辑/歌手/歌单/用户" prefix-icon="el-icon-search"></el-input>
+      <button  @click="$router.push('search')">dsd</button>
       <span @click="loginVisible=true">登录</span>
     </el-menu>
     <!--    显示的页面-->
@@ -46,7 +48,8 @@ export default {
       activeIndex: 'recommend',
       // 是否显示对话框
       loginVisible: false,
-      active: 0
+      active: 0,
+      input: ''
     }
   },
   components: {
