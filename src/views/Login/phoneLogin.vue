@@ -62,12 +62,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.center
-  display flex
-  justify-content center
-  align-items center
-.box-card
-  width 450px
-.loginButton
-  width 120px
+  .center
+    display flex
+    justify-content center
+    align-items center
+  .box-card
+    width 450px
+  .loginButton
+    width 120px
 </style>

@@ -1,7 +1,11 @@
 <template>
   <div>
     <el-main>
-      <el-input v-model="search"></el-input>
+      <el-row>
+        <div class="search">
+        <el-input v-model="search"><el-button slot="append" icon="el-icon-search"></el-button></el-input>
+        </div>
+      </el-row>
       <el-tabs  type="card" v-model="activeName">
         <el-tab-pane label="单曲" name="single">单曲</el-tab-pane>
         <el-tab-pane label="单曲" name="singer">歌手</el-tab-pane>
@@ -31,5 +35,13 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+  .el-main
+    margin 0 auto
+    .search
+      width 400px
+      margin 10px auto
+  .el-input
+    border-radius 20px
+    :focus
+      border-color: red
 </style>

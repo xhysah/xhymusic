@@ -55,11 +55,6 @@ const routes = [
         path: 'search',
         name: 'search',
         component: search
-      },
-      {
-        path: 'artist/:sid',
-        name: 'singerInformation',
-        component: singerInformation
       }
     ]
   },
@@ -77,6 +72,11 @@ const routes = [
     path: '/login',
     name: 'phoneLogin',
     component: phoneLogin
+  },
+  {
+    path: '/artist/:sid',
+    name: 'singerInformation',
+    component: singerInformation
   }
 ]
 

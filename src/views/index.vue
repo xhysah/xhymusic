@@ -43,6 +43,9 @@ import phoneLogin from './Login/phoneLogin'
 import register from './register/register'
 export default {
   name: 'index',
+  created () {
+    this.firstIndex()
+  },
   data () {
     return {
       activeIndex: 'recommend',
@@ -59,6 +62,9 @@ export default {
   methods: {
     editActive (value) {
       this.active = value
+    },
+    firstIndex () {
+      this.$router.push('recommend')
     }
   },
   computed: {
@@ -69,24 +75,29 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.el-menu-demo
-  display flex
-  justify-content center
-  span
-    position relative
-    left 150px
+  .el-menu-demo
+    display flex
+    justify-content center
+    span
+      position relative
+      left 150px
+      margin auto 0
+      font-size 10px
+      color #909399
+  .el-menu.el-menu--horizontal
+    border-bottom none
+  .button-group
+    background-color black
+    text-align center
+    .el-button
+      background-color #353535
+      width 200px
+      margin 5px 0
+      +.el-button
+        margin-left 0
+  .el-input
+    width auto
     margin auto 0
-    font-size 10px
-    color #909399
-.el-menu.el-menu--horizontal
-  border-bottom none
-.button-group
-  background-color black
-  text-align center
-  .el-button
-    background-color #353535
-    width 200px
-    margin 5px 0
-    +.el-button
-      margin-left 0
+    :focus
+      border-color red
 </style>

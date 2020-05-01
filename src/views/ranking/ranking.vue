@@ -95,65 +95,65 @@ export default {
 
 <style lang="stylus" scoped>
 color=#353535
-.el-container
-  width 70%
-  margin 0 auto
-  margin-top 50px
-  .el-aside
-    border 2px solid color
-.el-image
-  width 60px
-  height 60px
-  margin 10px
-.small
-  font-size 10px
-  color #909399
-  position absolute
-  left 90px
-  top -40px
-.first
-  font-size 15px
-  position relative
-  top -50px
-img
-  width 150px
-  height 150px
-  border 2px solid color
-  margin 3px
-  box-shadow 0px 0px 10px color
-.main
-  display flex
-  justify-content center
-  flex-wrap wrap
-  flex-direction column
-  margin -20px 20px
-  .img-item
-    margin 10px 20px
-    img
-      width 30px
-      height 30px
-.active
-  position relative
-  top -120px
-  font-size 25px
-  margin 20px
-  +div
-    position relative
-    left 150px
-    top -90px
-    margin 20px
-  span
-    font-size 12px
+  .el-container
+    width 70%
+    margin 0 auto
+    margin-top 50px
+    .el-aside
+      border 2px solid color
+  .el-image
+    width 60px
+    height 60px
+    margin 10px
+  .small
+    font-size 10px
+    color #909399
     position absolute
-    left 10px
-    top 40px
-.el-main
-  margin 0px 30px
-  border 2px solid color
-.main-title
-  :last-child
-    float right
-    font-size 12px
-    :first-child
-      color red
+    left 90px
+    top -40px
+  .first
+    font-size 15px
+    position relative
+    top -50px
+  img
+    width 150px
+    height 150px
+    border 2px solid color
+    margin 3px
+    box-shadow 0px 0px 10px color
+  .main
+    display flex
+    justify-content center
+    flex-wrap wrap
+    flex-direction column
+    margin -20px 20px
+    .img-item
+      margin 10px 20px
+      img
+        width 30px
+        height 30px
+  .active
+    position relative
+    top -120px
+    font-size 25px
+    margin 20px
+    +div
+      position relative
+      left 150px
+      top -90px
+      margin 20px
+    span
+      font-size 12px
+      position absolute
+      left 10px
+      top 40px
+  .el-main
+    margin 0px 30px
+    border 2px solid color
+  .main-title
+    :last-child
+      float right
+      font-size 12px
+      :first-child
+        color red
 </style>
