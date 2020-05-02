@@ -5,20 +5,21 @@
     <div class="img">
       <img :src="artist.picUrl" alt="">
     </div>
-    <el-tabs type="border-card" style="background-color: black">
+    <el-tabs type="border-card" style="background-color: black" :stretch="true" class="tabs">
       <el-tab-pane label="热门作品">
         <audio :src="playUrl" autoplay="autoplay"></audio>
 <!--        <div v-for="(item, index) in hotSongs" :key="index">-->
 <!--          <div @click="play(item.id)">{{item.name}}&#45;&#45;&#45;&#45;&#45;&#45;{{item.al.name}}</div>-->
 <!--        </div>-->
-        <table>
-          <tr v-for="(item, index) in hotSongs" :key="index">
-            <td>{{index+1}}</td>
-            <i class="el-icon-video-play" :class="{'el-icon-video-pause':active == item.id}" @click="play(item.id)"></i>
-            <td>{{item.name}}</td>
-            <td>{{item.al.name}}</td>
-          </tr>
-        </table>
+<!--        <table>-->
+<!--          <tr v-for="(item, index) in hotSongs" :key="index">-->
+<!--            <td>{{index+1}}</td>-->
+<!--            <i class="el-icon-video-play" :class="{'el-icon-video-pause':active == item.id}" @click="play(item.id)"></i>-->
+<!--            <td>{{item.name}}</td>-->
+<!--            <td>{{item.al.name}}</td>-->
+<!--          </tr>-->
+<!--        </table>-->
+        <song-table :songs="hotSongs" @playurl="editUrl"></song-table>
       </el-tab-pane>
       <el-tab-pane label="所有专辑">
         <template v-for="(item, index) in album">
@@ -63,10 +64,12 @@
 
 <script>
 import songOutline from '../../../components/songOutline /songOutline'
+import songTable from '../../../components/songTable/songTable'
 export default {
   name: 'singerInformation',
   components: {
-    songOutline
+    songOutline,
+    songTable
   },
   created () {
     this.getSimSinger()
@@ -80,7 +83,7 @@ export default {
       // 歌手信息
       artist: {},
       // 歌手的热门歌曲
-      hotSongs: {},
+      hotSongs: [],
       // 歌手专辑
       album: {},
       // 歌手MV
@@ -91,7 +94,6 @@ export default {
         introduction: {}
       },
       playUrl: '',
-      active: 0,
       // 相似歌手
       simArtists: {}
     }
@@ -139,25 +141,18 @@ export default {
         this.disc.introduction = data.introduction
       })
     },
-    // 播放歌曲
-    play (id) {
-      this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取歌信息失败')
-        }
-        this.playUrl = data.data[0].url
-        this.active = id
-      })
-    },
     // 获得相似的歌手
     getSimSinger () {
       this.$http.get(`/simi/artist?id=${this.sid}`).then(({ data }) => {
-        if (data.code !== 200) {
+        if (data.code !== 301) {
           return this.$message.error('获取相似歌手信息失败')
         }
         this.simArtists = data.artists.slice(0, 8)
         console.log(data.artists.slice(0, 8))
       })
+    },
+    editUrl (value) {
+      this.playUrl = value
     }
   },
   computed: {
@@ -196,16 +191,6 @@ export default {
     border-right 1px solid color
   audio
     background-color yellow
-  table tr:nth-child(odd)
-    background-color red
-  table tr:nth-child(even)
-    color #909399
-  table
-    font-size 14px
-    width 100%
-  td
-    cellspacing 0
-    padding 5px 0
   .header
     font-size 20px
     +div

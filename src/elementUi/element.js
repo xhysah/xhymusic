@@ -23,7 +23,8 @@ import {
   Col,
   Divider,
   Tabs,
-  TabPane
+  TabPane,
+  Popover
 } from 'element-ui'
 
 Vue.use(Form)
@@ -49,4 +50,5 @@ Vue.use(Col)
 Vue.use(Divider)
 Vue.use(Tabs)
 Vue.use(TabPane)
+Vue.use(Popover)
 Vue.prototype.$message = Message

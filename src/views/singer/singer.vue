@@ -25,9 +25,9 @@
         <div class="line"></div>
       <!--        循环字母-->
         <div class="spell" v-if="activeId.typeId !== 0">
-          <span class="red" :class="{active: currentId2 === 0}" @click="show(activeId.typeId, activeId.areaId, activeId.headerName)">热门</span>
+          <span class="red" :class="{actives: currentId2 === 0}" @click="show(activeId.typeId, activeId.areaId, activeId.headerName)">热门</span>
           <template v-for="n in 26">
-            <span :key="n" :class="{active: currentId2 === String.fromCharCode(n+96)}" class="spell-item" @click="searchSinger(String.fromCharCode(n+96))">{{String.fromCharCode(n+64)}}</span>
+            <span :key="n" :class="{actives: currentId2 === String.fromCharCode(n+96)}" class="spell-item" @click="searchSinger(String.fromCharCode(n+96))">{{String.fromCharCode(n+64)}}</span>
            </template>
         </div>
       <!--        歌手信息-->
@@ -217,8 +217,14 @@ export default {
     font-size 25px
     margin 10px
   .active
+    border-radius 20px
+    background-color #1c1c1c
+    box-shadow 0 0 8px red
+  .actives
+    border-radius 5px
     background-color red
-    box-shadow 0px 0 3px yellow
+    box-shadow 0 0 8px red
+    border 1px solid red
   img:hover
     border 1px solid red
     box-shadow 0 0 20px red

@@ -2,17 +2,14 @@
   <div class="center">
 <!--    发送验证码-->
     <el-card class="box-card">
-      <div slot="header">
-        <span>注册</span>
-      </div>
-      <el-form ref="phoneForm" :model="phoneForm" :rules="phoneRules" label-width="80px" v-if="show">
-        <el-form-item prop="phone" label="手机号">
+      <el-form ref="phoneForm" :model="phoneForm" :rules="phoneRules" v-if="show">
+        <el-form-item prop="phone">
           <el-input v-model="phoneForm.phone" placeholder="请输入手机号"></el-input>
         </el-form-item>
         <div class="center">
-          <el-button type="primary" class="loginButton" @click="confirmPhone">确定</el-button>
-          <el-button @click="phoneLogin">手机号登录</el-button>
+          <el-button type="danger" class="loginButton" @click="confirmPhone">确定</el-button>
         </div>
+        <div @click="phoneLogin(1)"><i class="el-icon-back"></i>手机号登录</div>
       </el-form>
       <!--    注册-->
       <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="80px" v-else>
@@ -26,7 +23,7 @@
           <el-input v-model="registerForm.nickname" placeholder="请输入昵称"></el-input>
         </el-form-item>
         <div class="center">
-          <el-button type="primary" class="loginButton" @click="registerByPhone">确定</el-button>
+          <el-button type="danger" class="loginButton" @click="registerByPhone">确定</el-button>
         </div>
       </el-form>
     </el-card>
@@ -97,8 +94,8 @@ export default {
         })
       })
     },
-    phoneLogin () {
-      this.$emit('login', 1)
+    phoneLogin (value) {
+      this.$emit('login', value)
     }
   },
   computed: {}
@@ -112,6 +109,8 @@ export default {
     align-items center
   .box-card
     width 450px
+    border none
+    background-color black
   .loginButton
     width 120px
 </style>

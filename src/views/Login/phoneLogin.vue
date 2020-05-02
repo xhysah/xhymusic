@@ -1,9 +1,6 @@
 <template>
   <div class="center">
     <el-card class="box-card">
-      <div slot="header">
-        <span>手机登录</span>
-      </div>
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules">
         <el-form-item prop="phone">
           <el-input v-model="loginForm.phone" placeholder="请输入手机号"></el-input>
@@ -12,9 +9,9 @@
           <el-input v-model="loginForm.password" placeholder="请输入密码"></el-input>
         </el-form-item>
         <div class="center">
-          <el-button type="primary" class="loginButton" @click="login">登录</el-button>
-          <el-button @click="register(2)">注册</el-button>
+          <el-button type="danger" class="loginButton" @click="login">登录</el-button>
         </div>
+        <div @click="register(2)"><i class="el-icon-back"></i>注册</div>
       </el-form>
     </el-card>
   </div>
@@ -48,7 +45,7 @@ export default {
         this.$http.get('/login/cellphone', { params: this.loginForm }).then(({ data }) => {
           if (data.code === 200) {
             document.cookie = data.token
-            this.emit('success')
+            this.$emit('success')
           }
         })
       })
@@ -67,7 +64,9 @@ export default {
     justify-content center
     align-items center
   .box-card
+    border none
     width 450px
+    background-color black
   .loginButton
     width 120px
 </style>

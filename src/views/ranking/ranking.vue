@@ -31,22 +31,28 @@
           <span>歌曲列表</span>
           <span>播放：<span>{{activeRanking.playCount}}</span><span>次</span></span>
         </div>
-        <template v-for="(item, index) in ranking">
-        <div :key="index" class="img-item">
-<!--          <img :src="item.al.picUrl" alt="">-->
-          <span>{{item.name}}</span>
-          <span>{{item.alia[0]}}</span>
-          <span>{{item.ar[0].name}}</span>
-        </div>
-      </template>
+        <audio :src="playUrl" autoplay="autoplay"></audio>
+        <song-table :songs="ranking" @playurl="editUrl"></song-table>
+<!--        <template v-for="(item, index) in ranking">-->
+<!--        <div :key="index" class="img-item">-->
+<!--&lt;!&ndash;          <img :src="item.al.picUrl" alt="">&ndash;&gt;-->
+<!--          <span>{{item.name}}</span>-->
+<!--          <span>{{item.alia[0]}}</span>-->
+<!--          <span>{{item.ar[0].name}}</span>-->
+<!--        </div>-->
+<!--      </template>-->
       </div>
     </el-main>
   </el-container>
 </template>
 
 <script>
+import songTable from '../../components/songTable/songTable'
 export default {
   name: 'ranking',
+  components: {
+    songTable
+  },
   created () {
     this.getRanking()
     this.getMyselfRanking(0)
@@ -58,7 +64,8 @@ export default {
       // 正在查看的排行榜
       activeRanking: {},
       // 正在查看的排行榜数据
-      ranking: {}
+      ranking: [],
+      playUrl: ''
     }
   },
   methods: {
@@ -80,6 +87,9 @@ export default {
         this.ranking = data.playlist.tracks
         console.log(data)
       })
+    },
+    editUrl (value) {
+      this.playUrl = value
     }
   },
   computed: {
@@ -127,11 +137,6 @@ color=#353535
     flex-wrap wrap
     flex-direction column
     margin -20px 20px
-    .img-item
-      margin 10px 20px
-      img
-        width 30px
-        height 30px
   .active
     position relative
     top -120px
