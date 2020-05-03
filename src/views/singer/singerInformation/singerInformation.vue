@@ -7,7 +7,7 @@
     </div>
     <el-tabs type="border-card" style="background-color: black" :stretch="true" class="tabs">
       <el-tab-pane label="热门作品">
-        <audio :src="playUrl" autoplay="autoplay"></audio>
+        <audio :src="playUrl" autoplay="autoplay" controls="controls"></audio>
 <!--        <div v-for="(item, index) in hotSongs" :key="index">-->
 <!--          <div @click="play(item.id)">{{item.name}}&#45;&#45;&#45;&#45;&#45;&#45;{{item.al.name}}</div>-->
 <!--        </div>-->
@@ -22,28 +22,32 @@
         <song-table :songs="hotSongs" @playurl="editUrl"></song-table>
       </el-tab-pane>
       <el-tab-pane label="所有专辑">
-        <template v-for="(item, index) in album">
-          <song-outline :key="index" length="150px">
-            <template v-slot:img>
-              <img :src="item.picUrl" alt="">
-            </template>
-            <template v-slot:sentence>
-              <div>{{item.name}}</div>
-            </template>
-          </song-outline>
-        </template>
+        <div class="flex">
+          <template v-for="(item, index) in album">
+            <song-outline :key="index" length="150px" height="150px">
+              <template v-slot:img>
+                <img :src="item.picUrl" alt="">
+              </template>
+              <template v-slot:sentence>
+                <div>{{item.name}}</div>
+              </template>
+            </song-outline>
+          </template>
+        </div>
       </el-tab-pane>
       <el-tab-pane label="相关mv">
-        <template v-for="(item, index) in mv">
-          <song-outline :key="index" length="200px">
-            <template v-slot:img>
-              <img :src="item.imgurl16v9" alt="">
-            </template>
-            <template v-slot:sentence>
-              <div>{{item.name}}</div>
-            </template>
-          </song-outline>
-        </template>
+        <div class="flex">
+          <template v-for="(item, index) in mv">
+            <song-outline :key="index" length="260px">
+              <template v-slot:img>
+                <img :src="item.imgurl16v9" alt="">
+              </template>
+              <template v-slot:sentence>
+                <div>{{item.name}}</div>
+              </template>
+            </song-outline>
+          </template>
+        </div>
       </el-tab-pane>
       <el-tab-pane label="艺人介绍">
         <div class="header"><el-divider direction="vertical"></el-divider>{{artist.name}}简介</div>
@@ -57,7 +61,21 @@
       </el-tab-pane>
     </el-tabs>
   </el-main>
-    <el-aside width="240px">
+    <el-aside width="280px">
+      <div class="simiHeader">相似歌手</div>
+      <div class="line"></div>
+      <div class="flex">
+        <template v-for="(item, index) in simArtists">
+          <song-outline :key="index" length="50px" height="50px">
+            <template v-slot:img>
+              <img :src="item.img1v1Url" alt="">
+            </template>
+            <template v-slot:sentence>
+              <div>{{item.name}}</div>
+            </template>
+          </song-outline>
+        </template>
+      </div>
     </el-aside>
   </el-container>
 </template>
@@ -139,15 +157,16 @@ export default {
         console.log(data)
         this.disc.briefDesc = data.briefDesc
         this.disc.introduction = data.introduction
+        // console.log(data.introduction[3].txt.split(' 2'))
       })
     },
     // 获得相似的歌手
     getSimSinger () {
       this.$http.get(`/simi/artist?id=${this.sid}`).then(({ data }) => {
-        if (data.code !== 301) {
+        if (data.code !== 200) {
           return this.$message.error('获取相似歌手信息失败')
         }
-        this.simArtists = data.artists.slice(0, 8)
+        this.simArtists = data.artists.slice(0, 6)
         console.log(data.artists.slice(0, 8))
       })
     },
@@ -190,7 +209,7 @@ export default {
     border-left  1px solid color
     border-right 1px solid color
   audio
-    background-color yellow
+    width 100%
   .header
     font-size 20px
     +div
@@ -198,4 +217,7 @@ export default {
       font-size 14px
       color #909399
       text-indent 2em
+  .simiHeader
+    margin-top 80px
+    margin-bottom 10px
 </style>

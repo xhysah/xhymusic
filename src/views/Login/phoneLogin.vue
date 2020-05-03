@@ -45,13 +45,17 @@ export default {
         this.$http.get('/login/cellphone', { params: this.loginForm }).then(({ data }) => {
           if (data.code === 200) {
             document.cookie = data.token
-            this.$emit('success')
+            console.log(data)
+            console.log(data.account.id)
+            console.log(data.profile.avatarUrl)
+            // console.log(data.backgroundUrl)
+            this.$emit('success', data.profile.avatarUrl)
           }
         })
       })
     },
     register (value) {
-      this.$emit('register', value)
+      this.$emit('register', { value: value, title: '注册' })
     }
   },
   computed: {}

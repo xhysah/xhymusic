@@ -9,7 +9,7 @@
       <div class="line"></div>
       <div class="flex">
         <template v-for="(item, index) in highQualities">
-          <song-outline :key="index" length="150px">
+          <song-outline :key="index" length="150px" height="150px">
             <template v-slot:img>
               <img :src="item.coverImgUrl" alt="">
             </template>

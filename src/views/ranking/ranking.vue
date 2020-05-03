@@ -31,7 +31,7 @@
           <span>歌曲列表</span>
           <span>播放：<span>{{activeRanking.playCount}}</span><span>次</span></span>
         </div>
-        <audio :src="playUrl" autoplay="autoplay"></audio>
+        <audio :src="playUrl" autoplay="autoplay" controls="controls"></audio>
         <song-table :songs="ranking" @playurl="editUrl"></song-table>
 <!--        <template v-for="(item, index) in ranking">-->
 <!--        <div :key="index" class="img-item">-->
@@ -69,6 +69,7 @@ export default {
     }
   },
   methods: {
+    // 获取排行榜数据
     getRanking () {
       this.$http.get('/toplist/detail').then(({ data }) => {
         if (data.code !== 200) {
@@ -78,6 +79,7 @@ export default {
         console.log(data.list)
       })
     },
+    // 根据id获取排行榜详细数据
     getMyselfRanking (idx) {
       this.$http.get('/top/list', { params: { idx: idx } }).then(({ data }) => {
         if (data.code !== 200) {
@@ -88,11 +90,13 @@ export default {
         console.log(data)
       })
     },
+    // 得到该单曲的音乐播放地址
     editUrl (value) {
       this.playUrl = value
     }
   },
   computed: {
+    // 对更新时间做计算
     updateTime () {
       const time = new Date()
       time.setTime(this.activeRanking.updateTime)

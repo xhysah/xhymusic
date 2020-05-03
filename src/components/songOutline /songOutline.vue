@@ -1,6 +1,6 @@
 <template>
   <div class="img-item">
-    <div :style="{width:newLength, height:newLength}">
+    <div :style="{width:newLength, height:newHeight}">
       <slot name="img"></slot>
     </div>
     <div class="sentence" :style="{width:newLength}">
@@ -16,11 +16,16 @@ export default {
     length: {
       type: String,
       default: '150px'
+    },
+    height: {
+      type: String,
+      default: 'auto'
     }
   },
   data () {
     return {
-      newLength: this.length
+      newLength: this.length,
+      newHeight: this.height
     }
   },
   methods: {},
@@ -31,7 +36,7 @@ export default {
 <style lang="stylus" scoped>
   .img-item
     display inline-block
-    margin 30px
+    margin 20px
     .sentence
       color white
       font-size 10px

@@ -1,59 +1,91 @@
 <template>
   <div>
     <!--    导航菜单-->
-    <el-menu
-      :default-active="activeIndex"
-      class="el-menu-demo"
-      mode="horizontal"
-      background-color="black"
-      text-color="white"
-      active-text-color="red"
-      router>
-      <el-menu-item index="recommend">推荐</el-menu-item>
-      <el-menu-item index="profileMusic">我的音乐</el-menu-item>
-      <el-menu-item index="ranking">排行榜</el-menu-item>
-      <el-menu-item index="songMenu">歌单</el-menu-item>
-      <el-menu-item index="newsRadio">主播电台</el-menu-item>
-      <el-menu-item index="singer">歌手</el-menu-item>
-      <el-popover
-        placement="bottom"
-        trigger="focus">
-        <!--          歌曲-->
-        <div v-if="result.songs">
-          <i class="el-icon-headset"></i>单曲
-          <div v-for="(item, index) in result.songs" :key="index">
-            <div class="item">{{item.name}}-<template v-for="(item1, index) in item.artists"><span  :key="index"></span>{{item1.name}} </template></div>
+    <keep-alive>
+      <el-menu
+        :default-active="activeIndex"
+        class="el-menu-demo"
+        mode="horizontal"
+        background-color="black"
+        text-color="white"
+        active-text-color="red"
+        router>
+        <el-menu-item index="recommend">推荐</el-menu-item>
+        <el-menu-item index="profileMusic">我的音乐</el-menu-item>
+        <el-menu-item index="ranking">排行榜</el-menu-item>
+        <el-menu-item index="songMenu">歌单</el-menu-item>
+        <el-menu-item index="newsRadio">主播电台</el-menu-item>
+        <el-menu-item index="singer">歌手</el-menu-item>
+        <el-popover
+          placement="bottom"
+          trigger="focus">
+          <!--          歌曲-->
+          <div v-if="result.songs">
+            <i class="el-icon-headset"></i>单曲
+            <div v-for="(item, index) in result.songs" :key="index">
+              <div class="item">{{item.name}}-
+                <template v-for="(item1, index) in item.artists"><span :key="index"></span>{{item1.name}}</template>
+              </div>
+            </div>
+            <div class="line"></div>
           </div>
-          <div class="line"></div>
-        </div>
-        <!--        歌手-->
-        <div v-if="result.artists">
-          <i class="el-icon-user"></i>歌手
-          <div v-for="(item, index) in result.artists" :key="index">
-            <div class="item">{{item.name}}</div>
+          <!--        歌手-->
+          <div v-if="result.artists">
+            <i class="el-icon-user"></i>歌手
+            <div v-for="(item, index) in result.artists" :key="index">
+              <div class="item">{{item.name}}</div>
+            </div>
+            <div class="line"></div>
           </div>
-          <div class="line"></div>
-        </div>
-        <!--        专辑-->
-        <div v-if="result.albums">
-          <i class="el-icon-star-off"></i>专辑
-          <div v-for="(item, index) in result.albums" :key="index">
-            <div class="item">{{item.name}}-{{item.artist.name}}</div>
+          <!--        专辑-->
+          <div v-if="result.albums">
+            <i class="el-icon-star-off"></i>专辑
+            <div v-for="(item, index) in result.albums" :key="index">
+              <div class="item">{{item.name}}-{{item.artist.name}}</div>
+            </div>
+            <div class="line"></div>
           </div>
-          <div class="line"></div>
-        </div>
-        <!--        mv-->
-        <div v-if="result.mvs">
-          <i class="el-icon-s-platform"></i>视频
-          <template v-for="(item, index) in result.mvs">
-            <div class="item" :key="index">{{item.name}}-<template v-for="(item1, index) in item.artists"><span  :key="index"></span>{{item1.name}}</template></div>
-          </template>
-        </div>
-      <el-input class="input" slot="reference" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户" prefix-icon="el-icon-search"></el-input>
-      </el-popover>
-<!--      <button  @click="$router.push('search')">dsd</button>-->
-      <span @click="loginVisible=true">登录</span>
-    </el-menu>
+          <!--        mv-->
+          <div v-if="result.mvs">
+            <i class="el-icon-s-platform"></i>视频
+            <template v-for="(item, index) in result.mvs">
+              <div class="item" :key="index">{{item.name}}-
+                <template v-for="(item1, index) in item.artists"><span :key="index"></span>{{item1.name}}</template>
+              </div>
+            </template>
+          </div>
+          <el-input class="input" slot="reference" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户"
+                    prefix-icon="el-icon-search"></el-input>
+        </el-popover>
+        <!--      <button  @click="$router.push('search')">dsd</button>-->
+        <span @click="loginVisible=true" v-if="loginIf === 0">登录</span>
+        <el-popover
+          v-else
+          placement="bottom"
+          trigger="hover">
+          <ul>
+            <li><i class="el-icon-user"></i>我的主页</li>
+            <li><i class="el-icon-message"></i>我的消息</li>
+            <li><i class="el-icon-setting"></i>个人设置</li>
+            <li><i class="el-icon-circle-close"></i>退出</li>
+          </ul>
+          <img :src="headImgUrl" alt="hhh" slot="reference">
+        </el-popover>
+
+        <!--      <el-popover-->
+        <!--        placement="bottom"-->
+        <!--        trigger="hover">-->
+        <!--        <ul>-->
+        <!--          <li><i class="el-icon-user"></i>我的主页</li>-->
+        <!--          <li><i class="el-icon-message"></i>我的消息</li>-->
+        <!--          <li><i class="el-icon-setting"></i>个人设置</li>-->
+        <!--          <li><i class="el-icon-circle-close"></i>退出</li>-->
+        <!--        </ul>-->
+        <!--        <img v-if="loginIf === 0" :src="headImgUrl" alt="jjj" slot="reference">-->
+        <!--&lt;!&ndash;        <el-button slot="reference">hover 激活</el-button>&ndash;&gt;-->
+        <!--      </el-popover>-->
+      </el-menu>
+    </keep-alive>
     <!--    显示的页面-->
     <keep-alive>
       <router-view/>
@@ -64,12 +96,12 @@
         :visible.sync="loginVisible"
         width="400px"
         :title="title"
-        @close="active=0">
+        @close="change(0,'没有账号？请先注册')">
         <div class="button-group" v-if="active == 0">
-          <el-button size="medium" round @click="active=1">手机登录</el-button>
-          <el-button round size="medium" @click="active=2">注册</el-button>
+          <el-button size="medium" round @click="change(1, '手机登录')">手机登录</el-button>
+          <el-button round size="medium" @click="change(2, '注册')">注册</el-button>
         </div>
-        <phone-login v-else-if="active == 1" @register="editActive"></phone-login>
+        <phone-login v-else-if="active == 1" @register="editActive" @success="login"></phone-login>
         <register v-else @login="editActive"></register>
       </el-dialog>
     </div>
@@ -81,18 +113,23 @@ import phoneLogin from './Login/phoneLogin'
 import register from './register/register'
 export default {
   name: 'index',
-  created () {
-    this.firstIndex()
-  },
   data () {
     return {
       activeIndex: 'recommend',
       // 是否显示对话框
       loginVisible: false,
+      // 在登录框中，哪一个内容该显示
       active: 0,
+      // 搜索框的值
       input: '',
+      // 根据搜索框内容搜索到的结果
       result: {},
-      title: '我我哦我'
+      // 登录框标题
+      title: '没有账号？请先注册',
+      // 头像地址
+      headImgUrl: '',
+      // 头像显示，还是登录显示
+      loginIf: 0
     }
   },
   watch: {
@@ -105,12 +142,12 @@ export default {
     register
   },
   methods: {
+    // 监听子组件事件
     editActive (value) {
-      this.active = value
+      this.active = value.value
+      this.title = value.title
     },
-    firstIndex () {
-      this.$router.push('recommend')
-    },
+    // 根据input里面的值发送请求，得到结果
     search (value) {
       this.$http.get(`/search/suggest?keywords=${value}`).then(({ data }) => {
         if (data.code !== 200) {
@@ -119,6 +156,16 @@ export default {
         this.result = data.result
         console.log(data.result)
       })
+    },
+    // 在登录框中，为显示哪个做改变
+    change (value, title) {
+      this.active = value
+      this.title = title
+    },
+    login (value) {
+      this.loginVisible = false
+      this.headImgUrl = value
+      this.loginIf = 1
     }
   },
   computed: {
@@ -146,8 +193,10 @@ export default {
       width 200px
       margin 5px 0
       border 1px solid red
+      margin-top 20px
       +.el-button
         margin-left 0
+        margin-bottom 30px
   .el-input
     width auto
     margin auto 20px
@@ -171,6 +220,7 @@ export default {
     position relative
     top -10px
   .dialog
+    /*color white*/
     >>>.el-dialog__header
       background-color black
       border 1px solid red
@@ -180,4 +230,11 @@ export default {
       border 1px solid red
       border-top none
       padding 5px 0
+    >>>.el-dialog__title
+      color white
+  img
+    width 30px
+    height 30px
+    border-radius 50%
+    margin auto 0
 </style>

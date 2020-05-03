@@ -19,3 +19,7 @@ img{
   justify-content: space-between;
   flex-wrap: wrap;
 }
+li{
+  list-style: none;
+  margin: 3px 0;
+}

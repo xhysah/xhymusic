@@ -17,7 +17,7 @@
     <!--    网友精选-->
     <div class="flex">
       <template v-for="(item, index) in toplist">
-        <song-outline :key="index" length="150px">
+        <song-outline :key="index" length="150px" height="150px">
           <template v-slot:img>
             <img :src="item.coverImgUrl" alt="" @click="songlist(item.id)">
           </template>

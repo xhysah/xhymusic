@@ -33,7 +33,7 @@
       <!--        歌手信息-->
         <div class="flex">
           <template v-for="item in singers">
-            <song-outline :key="item.id" length="100px">
+            <song-outline :key="item.id" length="100px" height="100px">
               <template v-slot:img>
                 <img :src="item.img1v1Url" alt="" @click="showInformation(item.id)">
               </template>
@@ -130,8 +130,8 @@ export default {
         if (data.code !== 200) {
           return this.$message.error('获取歌手信息失败')
         }
-        this.singers = data.artists.slice(0, 8)
-        this.restSingers = data.artists.slice(8)
+        this.singers = data.artists.slice(0, 10)
+        this.restSingers = data.artists.slice(10)
         // console.log(this.restSingers)
       })
     },
@@ -142,8 +142,8 @@ export default {
         if (data.code !== 200) {
           return this.$message.error('搜索歌手信息失败')
         }
-        this.singers = data.artists.slice(0, 8)
-        this.restSingers = data.artists.slice(8)
+        this.singers = data.artists.slice(0, 10)
+        this.restSingers = data.artists.slice(10)
       })
     },
     // 显示热门歌手
@@ -155,8 +155,8 @@ export default {
         if (data.code !== 200) {
           return this.$message.error('获取歌手信息失败')
         }
-        this.singers = data.artists.slice(0, 8)
-        this.restSingers = data.artists.slice(8)
+        this.singers = data.artists.slice(0, 10)
+        this.restSingers = data.artists.slice(10)
       })
     },
     showInformation (id) {

@@ -95,7 +95,7 @@ export default {
       })
     },
     phoneLogin (value) {
-      this.$emit('login', value)
+      this.$emit('login', { value: value, title: '手机登录' })
     }
   },
   computed: {}

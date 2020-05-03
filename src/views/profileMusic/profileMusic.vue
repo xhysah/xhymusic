@@ -1,7 +1,7 @@
 <template>
   <div>
     profilemusic
-    <song-outline length="100px">
+    <song-outline length="100px" height="100px">
       <template v-slot:img>
         <img src="http://p2.music.126.net/NWTxt74aTH4bejNmRb7y4Q==/18765364953000742.jpg" alt="">
       </template>
