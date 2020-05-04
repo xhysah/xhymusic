@@ -23,3 +23,6 @@ li{
   list-style: none;
   margin: 3px 0;
 }
+audio{
+  width: 100%
+}

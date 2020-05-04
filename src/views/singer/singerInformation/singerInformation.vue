@@ -1,13 +1,12 @@
 <template>
   <el-container>
     <el-main>
-    <div>{{artist.name}}</div>
+    <div class="header">{{artist.name}}</div>
     <div class="img">
       <img :src="artist.picUrl" alt="">
     </div>
     <el-tabs type="border-card" style="background-color: black" :stretch="true" class="tabs">
       <el-tab-pane label="热门作品">
-        <audio :src="playUrl" autoplay="autoplay" controls="controls"></audio>
 <!--        <div v-for="(item, index) in hotSongs" :key="index">-->
 <!--          <div @click="play(item.id)">{{item.name}}&#45;&#45;&#45;&#45;&#45;&#45;{{item.al.name}}</div>-->
 <!--        </div>-->
@@ -19,7 +18,7 @@
 <!--            <td>{{item.al.name}}</td>-->
 <!--          </tr>-->
 <!--        </table>-->
-        <song-table :songs="hotSongs" @playurl="editUrl"></song-table>
+        <song-table :songs="hotSongs" @playurl="editUrl" @pause="pauseMusics" @play="playMusics" ref="songTable"></song-table>
       </el-tab-pane>
       <el-tab-pane label="所有专辑">
         <div class="flex">
@@ -77,6 +76,14 @@
         </template>
       </div>
     </el-aside>
+    <div class="audio">
+      <img :src="img" alt="">
+      <i class="el-icon-caret-left"></i>
+      <i class="el-icon-video-pause" v-if="playIf" @click="pauseMusic"></i>
+      <i class="el-icon-video-play" v-else @click="playMusic"></i>
+      <i class="el-icon-caret-right"></i>
+      <audio :src="playUrl" autoplay="autoplay" ref="audio" @ended="ended"></audio>
+    </div>
   </el-container>
 </template>
 
@@ -96,6 +103,9 @@ export default {
     this.getMv()
     this.getDesc()
   },
+  mounted () {
+    console.log(this.$refs.audio)
+  },
   data () {
     return {
       // 歌手信息
@@ -113,7 +123,9 @@ export default {
       },
       playUrl: '',
       // 相似歌手
-      simArtists: {}
+      simArtists: {},
+      img: '',
+      playIf: false
     }
   },
   methods: {
@@ -170,8 +182,43 @@ export default {
         console.log(data.artists.slice(0, 8))
       })
     },
-    editUrl (value) {
+    editUrl (value, img) {
       this.playUrl = value
+      this.img = img
+      this.playIf = true
+    },
+    pauseMusics () {
+      const audio1 = this.$refs.audio
+      this.playIf = false
+      audio1.pause()
+    },
+    playMusics () {
+      if (this.playUrl !== '') {
+        const audio = this.$refs.audio
+        audio.play()
+        this.playIf = true
+      }
+    },
+    play (ca) {
+      console.log(ca)
+    },
+    playMusic () {
+      if (this.playUrl !== '') {
+        const audio = this.$refs.audio
+        audio.play()
+        this.playIf = true
+        console.log(this.$refs.songTable.active--)
+      }
+    },
+    pauseMusic () {
+      const audio1 = this.$refs.audio
+      this.playIf = false
+      audio1.pause()
+      console.log(this.$refs.songTable.active++)
+    },
+    ended () {
+      this.playIf = false
+      console.log(this.$refs.songTable.active--)
     }
   },
   computed: {
@@ -208,8 +255,6 @@ export default {
   .el-aside
     border-left  1px solid color
     border-right 1px solid color
-  audio
-    width 100%
   .header
     font-size 20px
     +div
@@ -220,4 +265,8 @@ export default {
   .simiHeader
     margin-top 80px
     margin-bottom 10px
+  .audio
+    img
+      width 40px
+      height 40px
 </style>

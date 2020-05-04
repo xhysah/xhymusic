@@ -3,7 +3,7 @@
     <table>
       <tr v-for="(item, index) in songs" :key="index">
         <td>{{index+1}}</td>
-        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id)"></i>
+        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl)"></i>
         <td>{{item.name}}</td>
         <td>{{item.al.name}}</td>
       </tr>
@@ -26,15 +26,24 @@ export default {
   },
   methods: {
     // 播放歌曲
-    play (id) {
-      this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取歌信息失败')
-        }
-        // this.playUrl = data.data[0].url
+    play (id, img) {
+      if (this.active === id) {
+        this.active = id + 1
+        this.$emit('pause')
+      } else if (this.active === id + 1) {
+        this.$emit('play')
         this.active = id
-        this.$emit('playurl', data.data[0].url)
-      })
+      } else {
+        this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
+          if (data.code !== 200) {
+            return this.$message.error('获取歌信息失败')
+          }
+          // this.playUrl = data.data[0].url
+          this.active = id
+          console.log(data)
+          this.$emit('playurl', data.data[0].url, img)
+        })
+      }
     }
   },
   computed: {}

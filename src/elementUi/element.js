@@ -24,7 +24,8 @@ import {
   Divider,
   Tabs,
   TabPane,
-  Popover
+  Popover,
+  Progress
 } from 'element-ui'
 
 Vue.use(Form)
@@ -51,4 +52,5 @@ Vue.use(Divider)
 Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(Popover)
+Vue.use(Progress)
 Vue.prototype.$message = Message

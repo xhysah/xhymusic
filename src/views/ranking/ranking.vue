@@ -1,49 +1,69 @@
 <template>
-  <el-container>
-    <!--    侧边栏部分-->
-    <el-aside width="300px">
-      <template v-for="(item, index) in rankingList">
-        <div :key="item.coverImgId" @click="getMyselfRanking(index)">
-          <el-image :src="item.coverImgUrl"></el-image>
-          <span class="first">{{item.name}}</span>
-          <div style="position: relative"><span class="small">{{item.updateFrequency}}</span></div>
-        </div>
-      </template>
-    </el-aside>
-    <!--      主体部分-->
-    <el-main>
-      <!--      主体上面部分-->
-      <div>
-        <img :src="activeRanking.coverImgUrl" alt="">
-        <span class="active">{{activeRanking.name}}
+  <div>
+    <el-container v-if="ranking">
+      <!--    侧边栏部分-->
+      <el-aside width="300px">
+        <template v-for="(item, index) in rankingList">
+          <div :key="item.coverImgId" @click="getMyselfRanking(idx[index])" :class="{check:active===idx[index]}">
+            <el-image :src="item.coverImgUrl"></el-image>
+            <span class="first">{{item.name}}</span>
+            <div style="position: relative"><span class="small">{{item.updateFrequency}}</span></div>
+          </div>
+        </template>
+      </el-aside>
+      <!--      主体部分-->
+      <el-main>
+        <!--      主体上面部分-->
+        <div>
+          <img :src="activeRanking.coverImgUrl" alt="">
+          <span class="active">{{activeRanking.name}}
           <span>最近更新：{{updateTime}}</span>
         </span>
-        <div>
-          <el-button size="mini" type="primary" icon="el-icon-video-play" plain>播放</el-button>
-          <el-button size="mini" type="danger" :round="true" plain icon="el-icon-chat-line-square">({{activeRanking.commentCount}})</el-button>
-          <el-button size="mini" type="danger" :round="true" plain icon="el-icon-share">({{activeRanking.shareCount}})</el-button>
-          <el-button size="mini" type="danger" :round="true" plain icon="el-icon-folder-add">({{activeRanking.subscribedCount}})</el-button>
+          <div>
+            <el-button size="mini" type="primary" icon="el-icon-video-play" plain>播放</el-button>
+            <el-button size="mini" type="danger" :round="true" plain icon="el-icon-chat-line-square">
+              ({{activeRanking.commentCount}})
+            </el-button>
+            <el-button size="mini" type="danger" :round="true" plain icon="el-icon-share">
+              ({{activeRanking.shareCount}})
+            </el-button>
+            <el-button size="mini" type="danger" :round="true" plain icon="el-icon-folder-add">
+              ({{activeRanking.subscribedCount}})
+            </el-button>
+          </div>
         </div>
-      </div>
-      <!--      主体下面部分-->
-      <div class="main">
-        <div class="main-title">
-          <span>歌曲列表</span>
-          <span>播放：<span>{{activeRanking.playCount}}</span><span>次</span></span>
+        <!--      主体下面部分-->
+        <div class="main">
+          <div class="main-title">
+            <span>歌曲列表</span>
+            <span>播放：<span>{{activeRanking.playCount}}</span><span>次</span></span>
+          </div>
+          <song-table :songs="ranking" @playurl="editUrl" @pause="pauseMusics" @play="playMusics"
+                      ref="songTable"></song-table>
+          <!--        <template v-for="(item, index) in ranking">-->
+          <!--        <div :key="index" class="img-item">-->
+          <!--&lt;!&ndash;          <img :src="item.al.picUrl" alt="">&ndash;&gt;-->
+          <!--          <span>{{item.name}}</span>-->
+          <!--          <span>{{item.alia[0]}}</span>-->
+          <!--          <span>{{item.ar[0].name}}</span>-->
+          <!--        </div>-->
+          <!--      </template>-->
         </div>
-        <audio :src="playUrl" autoplay="autoplay" controls="controls"></audio>
-        <song-table :songs="ranking" @playurl="editUrl"></song-table>
-<!--        <template v-for="(item, index) in ranking">-->
-<!--        <div :key="index" class="img-item">-->
-<!--&lt;!&ndash;          <img :src="item.al.picUrl" alt="">&ndash;&gt;-->
-<!--          <span>{{item.name}}</span>-->
-<!--          <span>{{item.alia[0]}}</span>-->
-<!--          <span>{{item.ar[0].name}}</span>-->
-<!--        </div>-->
-<!--      </template>-->
-      </div>
-    </el-main>
-  </el-container>
+      </el-main>
+    </el-container>
+    <div class="audio">
+      <img :src="img" alt="">
+      <i class="el-icon-caret-left"></i>
+      <i class="el-icon-video-pause" v-if="playIf" @click="pauseMusic"></i>
+      <i class="el-icon-video-play" v-else @click="playMusic"></i>
+      <i class="el-icon-caret-right"></i>
+      <div>{{duration}}</div>
+      <el-progress :percentage="percentage" color="red" show-text="false"></el-progress>
+      <div>{{currentTime}}</div>
+      <audio :src="playUrl" autoplay="autoplay" ref="audio" @ended="ended" @canplay="getDuration"
+             @timeupdate="getCurrentTime"></audio>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -55,7 +75,10 @@ export default {
   },
   created () {
     this.getRanking()
-    this.getMyselfRanking(0)
+    this.getMyselfRanking(3)
+  },
+  mounted () {
+    console.log(this.$refs.audio)
   },
   data () {
     return {
@@ -65,7 +88,16 @@ export default {
       activeRanking: {},
       // 正在查看的排行榜数据
       ranking: [],
-      playUrl: ''
+      playUrl: '',
+      img: '',
+      playIf: false,
+      idx: [3, 0, 2, 1, 23, 24, 25, 26, 27, 22, 28, 36, 29, 30, 5, 6, 21, 7, 8, 10, 9, 20, 31, 32, 19, 35],
+      active: -1,
+      duration: '00:00',
+      metaDuration: 0,
+      currentTime: '00:00',
+      metaCurrentTime: 0,
+      percentage: 0
     }
   },
   methods: {
@@ -81,6 +113,7 @@ export default {
     },
     // 根据id获取排行榜详细数据
     getMyselfRanking (idx) {
+      this.active = idx
       this.$http.get('/top/list', { params: { idx: idx } }).then(({ data }) => {
         if (data.code !== 200) {
           return this.$message.error('获取排行榜数据失败')
@@ -91,8 +124,59 @@ export default {
       })
     },
     // 得到该单曲的音乐播放地址
-    editUrl (value) {
+    editUrl (value, img) {
       this.playUrl = value
+      console.log(value)
+      this.img = img
+      this.playIf = true
+      console.log(img)
+    },
+    ended () {
+      this.playIf = false
+      console.log(this.$refs.songTable.active--)
+    },
+    playMusic () {
+      if (this.playUrl !== '') {
+        const audio = this.$refs.audio
+        audio.play()
+        this.playIf = true
+        console.log(this.$refs.songTable.active--)
+      }
+    },
+    pauseMusic () {
+      const audio1 = this.$refs.audio
+      this.playIf = false
+      audio1.pause()
+      console.log(this.$refs.songTable.active++)
+    },
+    pauseMusics () {
+      const audio1 = this.$refs.audio
+      this.playIf = false
+      audio1.pause()
+    },
+    playMusics () {
+      if (this.playUrl !== '') {
+        const audio = this.$refs.audio
+        audio.play()
+        this.playIf = true
+      }
+    },
+    getDuration () {
+      const audio2 = this.$refs.audio
+      this.metaDuration = audio2.duration
+      this.duration = `${this.double(Math.floor(audio2.duration / 60))}:${this.double(Math.floor(audio2.duration % 60))}`
+    },
+    getCurrentTime () {
+      const audio3 = this.$refs.audio
+      this.metaCurrentTime = audio3.currentTime
+      this.currentTime = `${this.double(Math.floor(audio3.currentTime / 60))}:${this.double(Math.floor(audio3.currentTime % 60))}`
+    },
+    // 返回两位数
+    double (num) {
+      if (num.toString().length !== 2) {
+        return '0' + num
+      }
+      return num
     }
   },
   computed: {
@@ -102,6 +186,12 @@ export default {
       time.setTime(this.activeRanking.updateTime)
       console.log(time.toLocaleDateString())
       return time.toLocaleDateString()
+    }
+  },
+  watch: {
+    currentTime () {
+      this.percentage = Math.floor(this.metaCurrentTime / this.metaDuration * 100)
+      console.log(Math.floor(this.metaCurrentTime / this.metaDuration * 100))
     }
   }
 }
@@ -165,4 +255,10 @@ color=#353535
       font-size 12px
       :first-child
         color red
+  .audio
+    img
+      width 40px
+      height 40px
+  .check
+    background-color #1c1c1c
 </style>
