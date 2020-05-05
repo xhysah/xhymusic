@@ -3,7 +3,7 @@
     <table>
       <tr v-for="(item, index) in songs" :key="index">
         <td>{{index+1}}</td>
-        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl)"></i>
+        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>
         <td>{{item.name}}</td>
         <td>{{item.al.name}}</td>
       </tr>
@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     // 播放歌曲
-    play (id, img) {
+    play (id, img, name, singer) {
       if (this.active === id) {
         this.active = id + 1
         this.$emit('pause')
@@ -41,7 +41,7 @@ export default {
           // this.playUrl = data.data[0].url
           this.active = id
           console.log(data)
-          this.$emit('playurl', data.data[0].url, img)
+          this.$emit('playurl', data.data[0].url, img, name, singer)
         })
       }
     }

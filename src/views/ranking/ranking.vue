@@ -52,15 +52,14 @@
       </el-main>
     </el-container>
     <div class="audio">
-      <img :src="img" alt="">
       <i class="el-icon-caret-left"></i>
       <i class="el-icon-video-pause" v-if="playIf" @click="pauseMusic"></i>
       <i class="el-icon-video-play" v-else @click="playMusic"></i>
       <i class="el-icon-caret-right"></i>
-      <div>{{duration}}</div>
-      <el-progress :percentage="percentage" color="red" show-text="false"></el-progress>
-      <div>{{currentTime}}</div>
-      <audio :src="playUrl" autoplay="autoplay" ref="audio" @ended="ended" @canplay="getDuration"
+      <img :src="playSong.img" alt=""><span>{{playSong.name}}</span><span>{{playSong.singer}}</span>
+      <el-progress :percentage="percentage" color="red" :show-text="false" ></el-progress>
+      <span>{{currentTime}}/{{duration}}</span>
+      <audio :src="playSong.url" autoplay="autoplay" ref="audio" @ended="ended" @canplay="getDuration"
              @timeupdate="getCurrentTime"></audio>
     </div>
   </div>
@@ -88,11 +87,15 @@ export default {
       activeRanking: {},
       // 正在查看的排行榜数据
       ranking: [],
-      playUrl: '',
-      img: '',
+      playSong: {
+        url: '',
+        img: '',
+        name: '',
+        singer: ''
+      },
       playIf: false,
       idx: [3, 0, 2, 1, 23, 24, 25, 26, 27, 22, 28, 36, 29, 30, 5, 6, 21, 7, 8, 10, 9, 20, 31, 32, 19, 35],
-      active: -1,
+      active: 3,
       duration: '00:00',
       metaDuration: 0,
       currentTime: '00:00',
@@ -124,10 +127,11 @@ export default {
       })
     },
     // 得到该单曲的音乐播放地址
-    editUrl (value, img) {
-      this.playUrl = value
-      console.log(value)
-      this.img = img
+    editUrl (value, img, name, singer) {
+      this.playSong.url = value
+      this.playSong.img = img
+      this.playSong.name = name
+      this.playSong.singer = singer
       this.playIf = true
       console.log(img)
     },
@@ -256,9 +260,27 @@ color=#353535
       :first-child
         color red
   .audio
+    margin auto
+    background-color #1c1c1c
     img
-      width 40px
-      height 40px
+      width 30px
+      height 30px
+      display inline-block
+    i
+      display inline-block
+      font-size 30px
+      margin auto 2px
+    >>>.el-progress--without-text .el-progress-bar
+      display inline-block
+    >>>.el-progress-bar
+      width 60%
+    span
+      display inline-block
+      margin 20px
+      font-size 13px
+      color #888888
   .check
     background-color #1c1c1c
+  .el-progress
+    display inline
 </style>

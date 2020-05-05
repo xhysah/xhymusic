@@ -2,8 +2,9 @@
   <div>
     <!--    banner-->
     <el-carousel :interval="5000" indicator-position="outside">
+      <audio :src="playurl" autoplay="autoplay"></audio>
       <el-carousel-item v-for="(item, index) in banners" :key="index">
-        <img class="banner" :src="item.imageUrl" :alt="item.typeTitle">
+        <img class="banner" :src="item.imageUrl" :alt="item.typeTitle" @click="play(item.targetId)">
       </el-carousel-item>
     </el-carousel>
     <!--    热门-->
@@ -44,7 +45,8 @@ export default {
       // 热门推荐
       playlist: {},
       // 网友精选碟
-      toplist: {}
+      toplist: {},
+      playurl: ''
     }
   },
   created () {
@@ -60,6 +62,7 @@ export default {
           return this.$message.error('获取banner数据失败')
         }
         this.banners = data.banners
+        console.log(data)
       })
     },
     getHot () {
@@ -81,6 +84,15 @@ export default {
     },
     songlist (id) {
       this.$router.push({ name: 'songMenuDetail', query: { path: '/top/playlist/id=', id: id } })
+    },
+    play (id) {
+      this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
+        if (data.code !== 200) {
+          return this.$message.error('获取歌曲失败')
+        }
+        this.playurl = data.data[0].url
+        console.log(data)
+      })
     }
   },
   computed: {}
