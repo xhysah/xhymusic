@@ -22,4 +22,4 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
-! [recommend] (https://github.com/xhysah/xhymusic/blob/master/src/assets/img/recommend.png)
+![recommend](https://github.com/xhysah/xhymusic/blob/master/src/assets/img/recommend.png)
