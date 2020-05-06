@@ -8,14 +8,13 @@
         mode="horizontal"
         background-color="black"
         text-color="white"
-        active-text-color="red"
-        router>
-        <el-menu-item index="recommend">推荐</el-menu-item>
-        <el-menu-item index="profileMusic">我的音乐</el-menu-item>
-        <el-menu-item index="ranking">排行榜</el-menu-item>
-        <el-menu-item index="songMenu">歌单</el-menu-item>
-        <el-menu-item index="newsRadio">主播电台</el-menu-item>
-        <el-menu-item index="singer">歌手</el-menu-item>
+        active-text-color="red">
+        <el-menu-item index="recommend" @click="go('/recommend')">推荐</el-menu-item>
+        <el-menu-item index="profileMusic" @click="go('/profileMusic')">我的音乐</el-menu-item>
+        <el-menu-item index="ranking" @click="go('/ranking')">排行榜</el-menu-item>
+        <el-menu-item index="songMenu" @click="go('/songMenu')">歌单</el-menu-item>
+        <el-menu-item index="newsRadio" @click="go('/newsRadio')">主播电台</el-menu-item>
+        <el-menu-item index="singer" @click="go('/singer')">歌手</el-menu-item>
         <el-popover
           placement="bottom"
           trigger="focus">
@@ -105,10 +104,12 @@
         <register v-else @login="editActive"></register>
       </el-dialog>
     </div>
+    <music-player></music-player>
   </div>
 </template>
 
 <script>
+import musicPlayer from '../components/musicPlayer/musicPlayer'
 import phoneLogin from './Login/phoneLogin'
 import register from './register/register'
 export default {
@@ -139,7 +140,8 @@ export default {
   },
   components: {
     phoneLogin,
-    register
+    register,
+    musicPlayer
   },
   methods: {
     // 监听子组件事件
@@ -166,6 +168,9 @@ export default {
       this.loginVisible = false
       this.headImgUrl = value
       this.loginIf = 1
+    },
+    go (value) {
+      this.$router.push(value)
     }
   },
   computed: {

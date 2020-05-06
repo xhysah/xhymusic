@@ -22,39 +22,48 @@ const routes = [
     component: index,
     children: [
       {
-        path: 'recommend',
+        path: '',
+        redirect: '/recommend'
+      },
+      {
+        path: '/recommend',
         name: 'recommend',
         component: recommend
       },
       {
-        path: 'profileMusic',
+        path: '/profileMusic',
         name: 'profileMusic',
         component: profileMusic
       },
       {
-        path: 'ranking',
+        path: '/ranking',
         name: 'ranking',
         component: ranking
       },
       {
-        path: 'songMenu',
+        path: '/songMenu',
         name: 'songMenu',
         component: songMenu
       },
       {
-        path: 'newsRadio',
+        path: '/newsRadio',
         name: 'newsRadio',
         component: newsRadio
       },
       {
-        path: 'singer',
+        path: '/singer',
         name: 'singer',
         component: singer
       },
       {
-        path: 'search',
+        path: '/search',
         name: 'search',
         component: search
+      },
+      {
+        path: '/artist/:sid',
+        name: 'singerInformation',
+        component: singerInformation
       }
     ]
   },
@@ -72,11 +81,6 @@ const routes = [
     path: '/login',
     name: 'phoneLogin',
     component: phoneLogin
-  },
-  {
-    path: '/artist/:sid',
-    name: 'singerInformation',
-    component: singerInformation
   }
 ]
 

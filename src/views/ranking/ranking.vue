@@ -38,8 +38,9 @@
             <span>歌曲列表</span>
             <span>播放：<span>{{activeRanking.playCount}}</span><span>次</span></span>
           </div>
-          <song-table :songs="ranking" @playurl="editUrl" @pause="pauseMusics" @play="playMusics"
-                      ref="songTable"></song-table>
+          <song-table :songs="ranking"></song-table>
+<!--          <song-table :songs="ranking" @playurl="editUrl" @pause="pauseMusics" @play="playMusics"-->
+<!--                      ref="songTable"></song-table>-->
           <!--        <template v-for="(item, index) in ranking">-->
           <!--        <div :key="index" class="img-item">-->
           <!--&lt;!&ndash;          <img :src="item.al.picUrl" alt="">&ndash;&gt;-->
@@ -51,17 +52,6 @@
         </div>
       </el-main>
     </el-container>
-    <div class="audio">
-      <i class="el-icon-caret-left"></i>
-      <i class="el-icon-video-pause" v-if="playIf" @click="pauseMusic"></i>
-      <i class="el-icon-video-play" v-else @click="playMusic"></i>
-      <i class="el-icon-caret-right"></i>
-      <img :src="playSong.img" alt=""><span>{{playSong.name}}</span><span>{{playSong.singer}}</span>
-      <el-progress :percentage="percentage" color="red" :show-text="false" ></el-progress>
-      <span>{{currentTime}}/{{duration}}</span>
-      <audio :src="playSong.url" autoplay="autoplay" ref="audio" @ended="ended" @canplay="getDuration"
-             @timeupdate="getCurrentTime"></audio>
-    </div>
   </div>
 </template>
 
@@ -76,9 +66,6 @@ export default {
     this.getRanking()
     this.getMyselfRanking(3)
   },
-  mounted () {
-    console.log(this.$refs.audio)
-  },
   data () {
     return {
       // 排行榜数据
@@ -87,20 +74,20 @@ export default {
       activeRanking: {},
       // 正在查看的排行榜数据
       ranking: [],
-      playSong: {
-        url: '',
-        img: '',
-        name: '',
-        singer: ''
-      },
-      playIf: false,
+      // playSong: {
+      //   url: '',
+      //   img: '',
+      //   name: '',
+      //   singer: ''
+      // },
+      // playIf: false,
       idx: [3, 0, 2, 1, 23, 24, 25, 26, 27, 22, 28, 36, 29, 30, 5, 6, 21, 7, 8, 10, 9, 20, 31, 32, 19, 35],
-      active: 3,
-      duration: '00:00',
-      metaDuration: 0,
-      currentTime: '00:00',
-      metaCurrentTime: 0,
-      percentage: 0
+      active: 3
+      // duration: '00:00',
+      // metaDuration: 0,
+      // currentTime: '00:00',
+      // metaCurrentTime: 0,
+      // percentage: 0
     }
   },
   methods: {
@@ -125,63 +112,63 @@ export default {
         this.ranking = data.playlist.tracks
         console.log(data)
       })
-    },
-    // 得到该单曲的音乐播放地址
-    editUrl (value, img, name, singer) {
-      this.playSong.url = value
-      this.playSong.img = img
-      this.playSong.name = name
-      this.playSong.singer = singer
-      this.playIf = true
-      console.log(img)
-    },
-    ended () {
-      this.playIf = false
-      console.log(this.$refs.songTable.active--)
-    },
-    playMusic () {
-      if (this.playUrl !== '') {
-        const audio = this.$refs.audio
-        audio.play()
-        this.playIf = true
-        console.log(this.$refs.songTable.active--)
-      }
-    },
-    pauseMusic () {
-      const audio1 = this.$refs.audio
-      this.playIf = false
-      audio1.pause()
-      console.log(this.$refs.songTable.active++)
-    },
-    pauseMusics () {
-      const audio1 = this.$refs.audio
-      this.playIf = false
-      audio1.pause()
-    },
-    playMusics () {
-      if (this.playUrl !== '') {
-        const audio = this.$refs.audio
-        audio.play()
-        this.playIf = true
-      }
-    },
-    getDuration () {
-      const audio2 = this.$refs.audio
-      this.metaDuration = audio2.duration
-      this.duration = `${this.double(Math.floor(audio2.duration / 60))}:${this.double(Math.floor(audio2.duration % 60))}`
-    },
-    getCurrentTime () {
-      const audio3 = this.$refs.audio
-      this.metaCurrentTime = audio3.currentTime
-      this.currentTime = `${this.double(Math.floor(audio3.currentTime / 60))}:${this.double(Math.floor(audio3.currentTime % 60))}`
-    },
-    // 返回两位数
-    double (num) {
-      if (num.toString().length !== 2) {
-        return '0' + num
-      }
-      return num
     }
+    // 得到该单曲的音乐播放地址
+    // editUrl (value, img, name, singer) {
+    //   this.playSong.url = value
+    //   this.playSong.img = img
+    //   this.playSong.name = name
+    //   this.playSong.singer = singer
+    //   this.playIf = true
+    //   console.log(img)
+    // },
+    // ended () {
+    //   this.playIf = false
+    //   console.log(this.$refs.songTable.active--)
+    // },
+    // playMusic () {
+    //   if (this.playUrl !== '') {
+    //     const audio = this.$refs.audio
+    //     audio.play()
+    //     this.playIf = true
+    //     console.log(this.$refs.songTable.active--)
+    //   }
+    // },
+    // pauseMusic () {
+    //   const audio1 = this.$refs.audio
+    //   this.playIf = false
+    //   audio1.pause()
+    //   console.log(this.$refs.songTable.active++)
+    // },
+    // pauseMusics () {
+    //   const audio1 = this.$refs.audio
+    //   this.playIf = false
+    //   audio1.pause()
+    // },
+    // playMusics () {
+    //   if (this.playUrl !== '') {
+    //     const audio = this.$refs.audio
+    //     audio.play()
+    //     this.playIf = true
+    //   }
+    // },
+    // getDuration () {
+    //   const audio2 = this.$refs.audio
+    //   this.metaDuration = audio2.duration
+    //   this.duration = `${this.double(Math.floor(audio2.duration / 60))}:${this.double(Math.floor(audio2.duration % 60))}`
+    // },
+    // getCurrentTime () {
+    //   const audio3 = this.$refs.audio
+    //   this.metaCurrentTime = audio3.currentTime
+    //   this.currentTime = `${this.double(Math.floor(audio3.currentTime / 60))}:${this.double(Math.floor(audio3.currentTime % 60))}`
+    // },
+    // // 返回两位数
+    // double (num) {
+    //   if (num.toString().length !== 2) {
+    //     return '0' + num
+    //   }
+    //   return num
+    // }
   },
   computed: {
     // 对更新时间做计算
@@ -193,10 +180,10 @@ export default {
     }
   },
   watch: {
-    currentTime () {
-      this.percentage = Math.floor(this.metaCurrentTime / this.metaDuration * 100)
-      console.log(Math.floor(this.metaCurrentTime / this.metaDuration * 100))
-    }
+    // currentTime () {
+    //   this.percentage = Math.floor(this.metaCurrentTime / this.metaDuration * 100)
+    //   console.log(Math.floor(this.metaCurrentTime / this.metaDuration * 100))
+    // }
   }
 }
 </script>
@@ -251,7 +238,7 @@ color=#353535
       left 10px
       top 40px
   .el-main
-    margin 0px 30px
+    margin 0 30px
     border 2px solid color
   .main-title
     :last-child
@@ -260,27 +247,41 @@ color=#353535
       :first-child
         color red
   .audio
+    width 85%
+    border-radius 10px 10px 0 0
     margin auto
     background-color #1c1c1c
+    .i-group
+      display inline-block
+      margin auto
+    .i
+      width 70%
+      display inline-block
+      margin auto
+      span
+        margin 0
+        color white
+        font-size 13px
+        +span
+          font-size 12px
+          color #888888
+          margin 0 20px
     img
       width 30px
       height 30px
       display inline-block
+      margin 0 15px
+      position relative
+      top 5px
     i
       display inline-block
       font-size 30px
       margin auto 2px
-    >>>.el-progress--without-text .el-progress-bar
-      display inline-block
-    >>>.el-progress-bar
-      width 60%
     span
       display inline-block
-      margin 20px
+      margin 0 0 0 20px
       font-size 13px
       color #888888
   .check
     background-color #1c1c1c
-  .el-progress
-    display inline
 </style>
