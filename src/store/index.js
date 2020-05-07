@@ -12,10 +12,49 @@ export default new Vuex.Store({
       singer: ''
     },
     playIf: false,
-    duration: '00:00',
-    currentTime: '00:00',
     audio: {},
-    active: 0
+    active: 0,
+    metaDuration: 0,
+    metaCurrentTime: 0
+  },
+  getters: {
+    percentage (state) {
+      if (state.metaDuration === 0) {
+        return 0
+      }
+      return Math.floor(state.metaCurrentTime / state.metaDuration * 100)
+    },
+    duration (state) {
+      const double = function (num) {
+        if (num.toString().length !== 2) {
+          if (num === 0) {
+            return '00'
+          }
+          return '0' + num
+        }
+        return num
+      }
+      return `${double(Math.floor(state.metaDuration / 60))}:${double(Math.floor(state.metaDuration % 60))}`
+    },
+    currentTime (state) {
+      const double2 = function (num) {
+        if (num.toString().length !== 2) {
+          if (num === 0) {
+            return '00'
+          }
+          return '0' + num
+        }
+        return num
+      }
+      return `${double2(Math.floor(state.metaCurrentTime / 60))}:${double2(Math.floor(state.metaCurrentTime % 60))}`
+    }
+    // 返回两位数
+    // double (state, num) {
+    //   if (num.toString().length !== 2) {
+    //     return '0' + num
+    //   }
+    //   return num
+    // },
   },
   mutations: {
     playUrl (state, payload) {
@@ -32,18 +71,14 @@ export default new Vuex.Store({
       // console.log(this.$refs.songTable.active--)
     },
     getDuration (state, audio) {
-      state.duration = `${Math.floor(audio.duration / 60)}:${Math.floor(audio.duration % 60)}`
+      // state.duration = `${Math.floor(audio.duration / 60)}:${Math.floor(audio.duration % 60)}`
+      state.metaDuration = audio.duration
+      state.metaCurrentTime = audio.currentTime
       state.audio = audio
     },
     getCurrentTime (state) {
-      state.currentTime = `${Math.floor(state.audio.currentTime / 60)}:${Math.floor(state.audio.currentTime % 60)}`
-    },
-    // 返回两位数
-    double (state, num) {
-      if (num.toString().length !== 2) {
-        return '0' + num
-      }
-      return num
+      // state.currentTime = `${Math.floor(state.audio.currentTime / 60)}:${Math.floor(state.audio.currentTime % 60)}`
+      state.metaCurrentTime = state.audio.currentTime
     },
     pauseMusic (state) {
       state.playIf = false

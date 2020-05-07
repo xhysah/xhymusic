@@ -15,48 +15,8 @@
         <el-menu-item index="songMenu" @click="go('/songMenu')">歌单</el-menu-item>
         <el-menu-item index="newsRadio" @click="go('/newsRadio')">主播电台</el-menu-item>
         <el-menu-item index="singer" @click="go('/singer')">歌手</el-menu-item>
-        <el-popover
-          placement="bottom"
-          trigger="focus">
-          <!--          歌曲-->
-          <div v-if="result.songs">
-            <i class="el-icon-headset"></i>单曲
-            <div v-for="(item, index) in result.songs" :key="index">
-              <div class="item">{{item.name}}-
-                <template v-for="(item1, index) in item.artists"><span :key="index"></span>{{item1.name}}</template>
-              </div>
-            </div>
-            <div class="line"></div>
-          </div>
-          <!--        歌手-->
-          <div v-if="result.artists">
-            <i class="el-icon-user"></i>歌手
-            <div v-for="(item, index) in result.artists" :key="index">
-              <div class="item">{{item.name}}</div>
-            </div>
-            <div class="line"></div>
-          </div>
-          <!--        专辑-->
-          <div v-if="result.albums">
-            <i class="el-icon-star-off"></i>专辑
-            <div v-for="(item, index) in result.albums" :key="index">
-              <div class="item">{{item.name}}-{{item.artist.name}}</div>
-            </div>
-            <div class="line"></div>
-          </div>
-          <!--        mv-->
-          <div v-if="result.mvs">
-            <i class="el-icon-s-platform"></i>视频
-            <template v-for="(item, index) in result.mvs">
-              <div class="item" :key="index">{{item.name}}-
-                <template v-for="(item1, index) in item.artists"><span :key="index"></span>{{item1.name}}</template>
-              </div>
-            </template>
-          </div>
-          <el-input class="input" slot="reference" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户"
-                    prefix-icon="el-icon-search"></el-input>
-        </el-popover>
-        <!--      <button  @click="$router.push('search')">dsd</button>-->
+        <el-input class="input" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户"
+                    prefix-icon="el-icon-search" @keyup.enter.native="searchInf(input)"></el-input>
         <span @click="loginVisible=true" v-if="loginIf === 0">登录</span>
         <el-popover
           v-else
@@ -70,19 +30,6 @@
           </ul>
           <img :src="headImgUrl" alt="hhh" slot="reference">
         </el-popover>
-
-        <!--      <el-popover-->
-        <!--        placement="bottom"-->
-        <!--        trigger="hover">-->
-        <!--        <ul>-->
-        <!--          <li><i class="el-icon-user"></i>我的主页</li>-->
-        <!--          <li><i class="el-icon-message"></i>我的消息</li>-->
-        <!--          <li><i class="el-icon-setting"></i>个人设置</li>-->
-        <!--          <li><i class="el-icon-circle-close"></i>退出</li>-->
-        <!--        </ul>-->
-        <!--        <img v-if="loginIf === 0" :src="headImgUrl" alt="jjj" slot="reference">-->
-        <!--&lt;!&ndash;        <el-button slot="reference">hover 激活</el-button>&ndash;&gt;-->
-        <!--      </el-popover>-->
       </el-menu>
     </keep-alive>
     <!--    显示的页面-->
@@ -104,7 +51,47 @@
         <register v-else @login="editActive"></register>
       </el-dialog>
     </div>
-    <music-player></music-player>
+    <transition name="music">
+      <music-player class="music" v-show="show"></music-player>
+    </transition>
+    <!--    显示搜索框-->
+    <div v-show="result !== null" class="search">
+      <!--          歌曲-->
+      <div v-if="result.songs">
+        <i class="el-icon-headset"></i>单曲
+        <div v-for="(item, index) in result.songs" :key="index">
+          <div class="item">{{item.name}}-
+            <template v-for="(item1, index) in item.artists"><span :key="index"></span>{{item1.name}}</template>
+          </div>
+        </div>
+        <div class="line"></div>
+      </div>
+      <!--        歌手-->
+      <div v-if="result.artists">
+        <i class="el-icon-user"></i>歌手
+        <div v-for="(item, index) in result.artists" :key="index">
+          <div class="item">{{item.name}}</div>
+        </div>
+        <div class="line"></div>
+      </div>
+      <!--        专辑-->
+      <div v-if="result.albums">
+        <i class="el-icon-star-off"></i>专辑
+        <div v-for="(item, index) in result.albums" :key="index">
+          <div class="item">{{item.name}}-{{item.artist.name}}</div>
+        </div>
+        <div class="line"></div>
+      </div>
+      <!--        mv-->
+      <div v-if="result.mvs">
+        <i class="el-icon-s-platform"></i>视频
+        <template v-for="(item, index) in result.mvs">
+          <div class="item" :key="index">{{item.name}}-
+            <template v-for="(item1, index) in item.artists"><span :key="index"></span>{{item1.name}}</template>
+          </div>
+        </template>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -130,8 +117,19 @@ export default {
       // 头像地址
       headImgUrl: '',
       // 头像显示，还是登录显示
-      loginIf: 0
+      loginIf: 0,
+      show: false
     }
+  },
+  mounted () {
+    function show () {
+      if ((window.innerHeight - event.clientY) < 200) {
+        this.show = true
+      } else {
+        this.show = false
+      }
+    }
+    window.addEventListener('mousemove', show.bind(this))
   },
   watch: {
     input (value) {
@@ -171,6 +169,9 @@ export default {
     },
     go (value) {
       this.$router.push(value)
+    },
+    searchInf (value) {
+      this.$router.push({ path: '/search', query: { keywords: value } })
     }
   },
   computed: {
@@ -179,6 +180,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .music
+    position fixed
+    bottom 0
+    width 100%
   .el-menu-demo
     display flex
     justify-content center
@@ -215,15 +220,6 @@ export default {
   i
     margin-right 10px
     font-size 1.3em
-  .item
-    position relative
-    left 70px
-    top -20px
-    font-size 13px
-    margin 1px 0
-  .line
-    position relative
-    top -10px
   .dialog
     /*color white*/
     >>>.el-dialog__header
@@ -241,5 +237,14 @@ export default {
     width 30px
     height 30px
     border-radius 50%
-    margin auto 0
+    margin auto
+  .music-enter-active, .music-leave-active
+    transition opacity 1s
+  .music-enter, .music-leave-to
+    opacity 0
+  .search
+    width 200px
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
 </style>

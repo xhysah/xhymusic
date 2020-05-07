@@ -18,11 +18,10 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'index',
     component: index,
     children: [
       {
-        path: '',
+        path: '/',
         redirect: '/recommend'
       },
       {
