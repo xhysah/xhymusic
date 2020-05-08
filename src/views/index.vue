@@ -16,7 +16,9 @@
         <el-menu-item index="newsRadio" @click="go('/newsRadio')">主播电台</el-menu-item>
         <el-menu-item index="singer" @click="go('/singer')">歌手</el-menu-item>
         <el-input class="input" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户"
-                    prefix-icon="el-icon-search" @keyup.enter.native="searchInf(input)"></el-input>
+                    prefix-icon="el-icon-search" @keyup.enter.native="searchInf(input)"
+                  @input="changeValue" @blur="blur"
+        ></el-input>
         <span @click="loginVisible=true" v-if="loginIf === 0">登录</span>
         <el-popover
           v-else
@@ -51,11 +53,12 @@
         <register v-else @login="editActive"></register>
       </el-dialog>
     </div>
+    <!--    音乐栏显示-->
     <transition name="music">
       <music-player class="music" v-show="show"></music-player>
     </transition>
     <!--    显示搜索框-->
-    <div v-show="result !== null" class="search">
+    <div v-show="Object.keys(result).length !== 0" class="search">
       <!--          歌曲-->
       <div v-if="result.songs">
         <i class="el-icon-headset"></i>单曲
@@ -118,10 +121,12 @@ export default {
       headImgUrl: '',
       // 头像显示，还是登录显示
       loginIf: 0,
+      // 控制音乐栏显示
       show: false
     }
   },
   mounted () {
+    // 判断音乐栏是否显示
     function show () {
       if ((window.innerHeight - event.clientY) < 200) {
         this.show = true
@@ -130,11 +135,6 @@ export default {
       }
     }
     window.addEventListener('mousemove', show.bind(this))
-  },
-  watch: {
-    input (value) {
-      this.search(value)
-    }
   },
   components: {
     phoneLogin,
@@ -149,6 +149,9 @@ export default {
     },
     // 根据input里面的值发送请求，得到结果
     search (value) {
+      if (value === '') {
+        return
+      }
       this.$http.get(`/search/suggest?keywords=${value}`).then(({ data }) => {
         if (data.code !== 200) {
           return this.$message.error('搜索失败')
@@ -167,11 +170,30 @@ export default {
       this.headImgUrl = value
       this.loginIf = 1
     },
+    // 去往哪一个子页面
     go (value) {
       this.$router.push(value)
     },
+    // 在input里面写值并按enter键，进入serch页面
     searchInf (value) {
-      this.$router.push({ path: '/search', query: { keywords: value } })
+      if (value === '') {
+        return
+      }
+      this.$router.push({
+        path: '/search',
+        query: { keywords: value }
+      })
+    },
+    changeValue (value) {
+      if (value === '') {
+        this.result = {}
+        console.log('sdd')
+      }
+      this.search(value)
+    },
+    blur () {
+      this.result = {}
+      this.input = ''
     }
   },
   computed: {
@@ -243,8 +265,23 @@ export default {
   .music-enter, .music-leave-to
     opacity 0
   .search
+    position fixed
+    top 52px
+    right 24%
     width 200px
     overflow hidden
     text-overflow ellipsis
     white-space nowrap
+    background-color purple
+    z-index 20
+    padding 20px
+    border-radius 5px
+    .item
+      position relative
+      left 70px
+      top -20px
+      font-size 12px
+    .line
+      position relative
+      top -10px
 </style>

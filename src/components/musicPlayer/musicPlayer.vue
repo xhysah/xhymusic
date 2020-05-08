@@ -65,7 +65,7 @@ export default {
       return this.$store.getters.currentTime
     },
     percentage () {
-      console.log(this.$store.getters.percentage)
+      // console.log(this.$store.getters.percentage)
       return this.$store.getters.percentage
     }
   }
