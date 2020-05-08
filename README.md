@@ -1,5 +1,5 @@
 # xhymusic
-##vue+elementUI+网易云音乐 API
+## vue+elementUI+网易云音乐 API
 ![recommend](https://github.com/xhysah/xhymusic/blob/master/src/assets/img/recommend.png)
 ![ranking](https://github.com/xhysah/xhymusic/blob/master/src/assets/img/ranking.png)
 ![singer](https://github.com/xhysah/xhymusic/blob/master/src/assets/img/singer.png)
