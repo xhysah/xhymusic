@@ -19,7 +19,8 @@
                     prefix-icon="el-icon-search" @keyup.enter.native="searchInf(input)"
                   @input="changeValue" @blur="blur"
         ></el-input>
-        <span @click="loginVisible=true" v-if="loginIf === 0">登录</span>
+        <span @click="loginVisible=true" v-if="loginIf === 0" ref="login">登录</span>
+        <!--        登录后显示-->
         <el-popover
           v-else
           placement="bottom"
@@ -35,7 +36,7 @@
       </el-menu>
     </keep-alive>
     <!--    显示的页面-->
-    <keep-alive>
+    <keep-alive exclude="songMenu">
       <router-view/>
     </keep-alive>
     <!--    显示登录对话框-->
@@ -117,14 +118,25 @@ export default {
       result: {},
       // 登录框标题
       title: '没有账号？请先注册',
-      // 头像地址
-      headImgUrl: '',
       // 头像显示，还是登录显示
       loginIf: 0,
       // 控制音乐栏显示
       show: false
     }
   },
+  created () {
+    if (window.sessionStorage.getItem('phone') && window.sessionStorage.getItem('password')) {
+      this.loginIf = 1
+    }
+  },
+  // created () {
+  //   // this.$nextTick(function () {
+  //   //   console.log(this.$refs.login)
+  //   // })
+  //   setTimeout(function () {
+  //     console.log(this.$refs.login)
+  //   }, 1)
+  // },
   mounted () {
     // 判断音乐栏是否显示
     function show () {
@@ -135,6 +147,12 @@ export default {
       }
     }
     window.addEventListener('mousemove', show.bind(this))
+    // window.addEventListener('beforeunload', function () {
+    //   window.sessionStorage.setItem('url', this.$store.state.playSong.url)
+    //   window.sessionStorage.setItem('img', this.$store.state.playSong.img)
+    //   window.sessionStorage.setItem('name', this.$store.state.playSong.name)
+    //   window.sessionStorage.setItem('singer', this.$store.state.playSong.singer)
+    // })
   },
   components: {
     phoneLogin,
@@ -183,6 +201,7 @@ export default {
         path: '/search',
         query: { keywords: value }
       })
+      this.result = {}
     },
     changeValue (value) {
       if (value === '') {
@@ -197,6 +216,18 @@ export default {
     }
   },
   computed: {
+    // 头像地址
+    headImgUrl: {
+      get () {
+        if (window.sessionStorage.getItem('phone') && window.sessionStorage.getItem('password')) {
+          return window.sessionStorage.getItem('imgUrl')
+        }
+        return ''
+      },
+      set (newValue) {
+        console.log('sasa')
+      }
+    }
   }
 }
 </script>
@@ -267,19 +298,23 @@ export default {
     position fixed
     top 52px
     right 24%
-    width 200px
-    overflow hidden
-    text-overflow ellipsis
-    white-space nowrap
+    width 220px
     background-color purple
     z-index 20
     padding 20px
     border-radius 5px
     .item
+      width 130px
+      //超粗文字部分，隐藏
+      overflow hidden
+      // 文本被修建
+      text-overflow ellipsis
+      white-space nowrap
       position relative
       left 70px
       top -20px
       font-size 12px
+      cursor pointer
     .line
       position relative
       top -10px

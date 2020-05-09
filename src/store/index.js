@@ -6,10 +6,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     playSong: {
-      url: '',
-      img: '',
-      name: '',
-      singer: ''
+      url: window.sessionStorage.getItem('url'),
+      img: window.sessionStorage.getItem('img'),
+      name: window.sessionStorage.getItem('name'),
+      singer: window.sessionStorage.getItem('singer')
     },
     playIf: false,
     audio: {},
@@ -63,6 +63,10 @@ export default new Vuex.Store({
       state.playSong.name = payload.name
       state.playSong.singer = payload.singer
       state.playIf = true
+      window.sessionStorage.setItem('url', payload.url)
+      window.sessionStorage.setItem('img', payload.img)
+      window.sessionStorage.setItem('name', payload.name)
+      window.sessionStorage.setItem('singer', payload.singer)
     },
     ended (state) {
       // 让musicPlayer里面的播放标签变为停止标签

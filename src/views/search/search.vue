@@ -12,7 +12,7 @@
           <el-tab-pane label="单曲" name="songs">
             <songs :songs="searchResult[0].songs"></songs>
           </el-tab-pane>
-          <el-tab-pane label="歌手" name="singer">
+          <el-tab-pane label="歌手" name="singer" :lazy="true">
             <template v-for="(item, index) in searchResult[1].artists">
               <song-outline :key="index" length="150px" height="150px">
                 <template v-slot:img>
@@ -24,7 +24,7 @@
               </song-outline>
             </template>
           </el-tab-pane>
-          <el-tab-pane label="专辑" name="album">
+          <el-tab-pane label="专辑" name="album" :lazy="true">
             <template v-for="(item, index) in searchResult[2].albums">
               <song-outline :key="index" length="150px" height="150px">
                 <template v-slot:img>
@@ -36,7 +36,7 @@
               </song-outline>
             </template>
           </el-tab-pane>
-          <el-tab-pane label="视频" name="mv">
+          <el-tab-pane label="视频" name="mv" :lazy="true">
             <template v-for="(item, index) in searchResult[3].videos">
               <song-outline :key="index" length="150px">
                 <template v-slot:img>
@@ -48,15 +48,15 @@
               </song-outline>
             </template>
           </el-tab-pane>
-          <el-tab-pane label="歌词" name="lyric">
+          <el-tab-pane label="歌词" name="lyric" :lazy="true">
             <template v-for="(item , index) in searchResult[4].songs">
               <lyric :key="index" :song="item"></lyric>
             </template>
           </el-tab-pane>
-          <el-tab-pane label="歌单" name="songList">
+          <el-tab-pane label="歌单" name="songList" :lazy="true">
             <songmenu :songs="searchResult[5].playlists"></songmenu>
           </el-tab-pane>
-          <el-tab-pane label="主播电台" name="station">
+          <el-tab-pane label="主播电台" name="station" :lazy="true">
             <template v-for="(item, index) in searchResult[6].djRadios">
               <song-outline :key="index" length="150px">
                 <template v-slot:img>
@@ -117,7 +117,7 @@ export default {
           return this.$message.error('搜索失败')
         }
         this.searchResult[i] = data.result
-        // console.log(this.searchResult[7])
+        console.log(this.searchResult)
       })
     },
     songlist (id) {

@@ -43,6 +43,14 @@ const routes = [
         path: '/songMenu',
         name: 'songMenu',
         component: songMenu
+        // beforeEnter: (to, from, next) => {
+        //   if (from.path === '/recommend') {
+        //
+        //   }
+        //   console.log(to)
+        //   console.log(from)
+        //   console.log(next)
+        // }
       },
       {
         path: '/newsRadio',
@@ -88,5 +96,4 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-
 export default router

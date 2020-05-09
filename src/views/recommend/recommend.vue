@@ -11,7 +11,7 @@
     <el-row type="flex" class="row-bg" justify="center">
       <span class="hot">热门推荐</span>
       <template v-for="(item, index) in playlist">
-        <el-link type="info"  :key="index" style="margin: 0 20px"><span>{{item.name}}</span></el-link>
+        <el-link type="info"  :key="index" style="margin: 0 20px" @click="goSongMenu(item.name)"><span>{{item.name}}</span></el-link>
       </template>
     </el-row>
     <div class="line"></div>
@@ -74,7 +74,7 @@ export default {
       })
     },
     getTop () {
-      this.$http.get('/top/playlist?offset=12').then(({ data }) => {
+      this.$http.get('/top/playlist/highquality').then(({ data }) => {
         if (data.code !== 200) {
           return this.$message.error('获取网友精选数据失败')
         }
@@ -92,6 +92,15 @@ export default {
         }
         this.playurl = data.data[0].url
         console.log(data)
+      })
+    },
+    goSongMenu (name) {
+      console.log(name)
+      this.$router.push({
+        path: '/songMenu',
+        query: {
+          name: name
+        }
       })
     }
   },

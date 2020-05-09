@@ -2,13 +2,13 @@
   <div>
     <el-main>
       <el-row>
-        <span class="all">全部</span>
+        <span class="all">{{cateName}}</span>
         <el-button size="mini" @click="categoriesVisible=true">选择分类</el-button>
-        <span class="hot">热门</span>
+        <span class="hot" @click="cateHot">热门</span>
       </el-row>
       <div class="line"></div>
       <div class="flex">
-        <template v-for="(item, index) in highQualities">
+        <template v-for="(item, index) in songMenu">
           <song-outline :key="index" length="150px" height="150px">
             <template v-slot:img>
               <img :src="item.coverImgUrl" alt="">
@@ -22,13 +22,14 @@
     </el-main>
     <!--    分类对话框-->
     <el-dialog center :visible.sync="categoriesVisible" width="50%" :modal="false">
+      <el-button type="primary" plain size="mini" @click="highQuality">全部</el-button>
       <div v-for="(item, index) in categories" :key="index">
         <div  class="category">
           <i :class="icon[index]"></i>
           {{item}}
         </div>
         <div class="category-item">
-          <span class="category-item-item" v-for="(items, index) in reduction[index]" :key="index">{{items.name}}
+          <span class="category-item-item" v-for="(items, index) in reduction[index]" :key="index" @click="cate(items.name)">{{items.name}}
             <el-divider direction="vertical"></el-divider>
           </span>
         </div>
@@ -47,17 +48,24 @@ export default {
   created () {
     // 获取歌单分类数据
     this.getSongMenu()
-    this.highQuality()
+    if (this.$route.query.name === undefined) {
+      this.highQuality()
+      console.log('ewe')
+    } else {
+      this.cate(this.$route.query.name)
+      console.log('aada')
+    }
   },
   data () {
     return {
       // 歌单分类数据
+      cateName: '',
       categories: {},
       sub: {},
       // 分类对话框是否显示
       categoriesVisible: false,
       // 精品歌单
-      highQualities: {},
+      songMenu: {},
       icon: [
         'el-icon-edit',
         'el-icon-cold-drink',
@@ -68,6 +76,7 @@ export default {
     }
   },
   methods: {
+    // 分类数据
     getSongMenu () {
       this.$http.get('/playlist/catlist').then(({ data }) => {
         if (data.code !== 200) {
@@ -79,11 +88,33 @@ export default {
       })
     },
     highQuality () {
-      this.$http.get('/top/playlist/highquality').then(({ data }) => {
+      this.$http.get('/top/playlist').then(({ data }) => {
         if (data.code !== 200) {
           return this.$message.error('获取精品歌单数据失败')
         }
-        this.highQualities = data.playlists
+        this.songMenu = data.playlists
+        this.cateName = '全部'
+        this.categoriesVisible = false
+        console.log(data)
+      })
+    },
+    cate (cat) {
+      this.$http.get(`/top/playlist?cat=${cat}`).then(({ data }) => {
+        if (data.code !== 200) {
+          return this.$message.error('获取分类数据失败')
+        }
+        this.songMenu = data.playlists
+        this.categoriesVisible = false
+        this.cateName = cat
+        console.log(data)
+      })
+    },
+    cateHot () {
+      this.$http.get(`/top/playlist?cat=${this.cateName}`).then(({ data }) => {
+        if (data.code !== 200) {
+          return this.$message.error('获取分类数据失败')
+        }
+        this.songMenu = data.playlists
         console.log(data)
       })
     }
@@ -138,4 +169,7 @@ export default {
     font-size 10px
     left 80px
     top -25px
+  .el-button
+    position relative
+    top -20px
 </style>
