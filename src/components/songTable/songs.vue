@@ -5,14 +5,16 @@
         <td>{{index+1}}</td>
         <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>-->
         <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.artists[0].img1v1Url,item.name,item.album.name)"></i>
-        <td>{{item.name}}</td>
-        <td>
-          <template v-for="(items, index) in item.artists">
-            <span :key="items.id" v-if="index===0">{{items.name}}</span>
-            <span :key="items.id" v-else>/{{items.name}}</span>
-          </template>
+        <td  class="td"><div>{{item.name}}</div></td>
+        <td  class="td">
+          <div>
+            <template v-for="(items, index) in item.artists">
+              <span :key="items.id" v-if="index===0">{{items.name}}</span>
+              <span :key="items.id" v-else>/{{items.name}}</span>
+            </template>
+          </div>
         </td>
-        <td>{{item.album.name}}</td>
+        <td  class="td"><div>{{item.album.name}}</div></td>
       </tr>
     </table>
   </div>
@@ -77,4 +79,11 @@ export default {
     padding 5px
   i
     font-size 1.5em
+  .td
+    width 26%
+    div
+      width 290px
+      overflow hidden
+      text-overflow ellipsis
+      white-space nowrap
 </style>

@@ -9,7 +9,7 @@
     </el-carousel>
     <!--    热门-->
     <el-row type="flex" class="row-bg" justify="center">
-      <span class="hot">热门推荐</span>
+      <span class="hot" @click="handleCurrentChange">热门推荐</span>
       <template v-for="(item, index) in playlist">
         <el-link type="info"  :key="index" style="margin: 0 20px" @click="goSongMenu(item.name)"><span>{{item.name}}</span></el-link>
       </template>
@@ -45,7 +45,7 @@ export default {
       // 热门推荐
       playlist: {},
       // 网友精选碟
-      toplist: {},
+      toplist: [],
       playurl: ''
     }
   },
@@ -54,6 +54,7 @@ export default {
     this.getBanner()
     this.getHot()
     this.getTop()
+    this.$store.commit('editActiveName', 'recommend')
   },
   methods: {
     getBanner () {
@@ -74,7 +75,7 @@ export default {
       })
     },
     getTop () {
-      this.$http.get('/top/playlist/highquality').then(({ data }) => {
+      this.$http.get('/top/playlist/highquality?limit=15').then(({ data }) => {
         if (data.code !== 200) {
           return this.$message.error('获取网友精选数据失败')
         }
@@ -83,7 +84,8 @@ export default {
       })
     },
     songlist (id) {
-      this.$router.push({ name: 'songMenuDetail', query: { path: '/top/playlist/id=', id: id } })
+      this.$store.commit('editActiveName', 'songMenu')
+      this.$router.push({ path: '/songMenuDetail', query: { id } })
     },
     play (id) {
       this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
@@ -101,6 +103,15 @@ export default {
         query: {
           name: name
         }
+      })
+    },
+    handleCurrentChange () {
+      this.$http.get(`/top/playlist/highquality?before=${this.toplist[this.toplist.length - 1].updateTime}&limit=15`).then(({ data }) => {
+        if (data.code !== 200) {
+          return this.$message.error('获取网友精选数据失败')
+        }
+        this.toplist = data.playlists
+        console.log(data.playlists)
       })
     }
   },

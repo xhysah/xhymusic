@@ -1,44 +1,40 @@
 <template>
   <div>
     <!--    导航菜单-->
-    <keep-alive>
-      <el-menu
-        :default-active="activeIndex"
-        class="el-menu-demo"
-        mode="horizontal"
-        background-color="black"
-        text-color="white"
-        active-text-color="red">
-        <el-menu-item index="recommend" @click="go('/recommend')">推荐</el-menu-item>
-        <el-menu-item index="profileMusic" @click="go('/profileMusic')">我的音乐</el-menu-item>
-        <el-menu-item index="ranking" @click="go('/ranking')">排行榜</el-menu-item>
-        <el-menu-item index="songMenu" @click="go('/songMenu')">歌单</el-menu-item>
-        <el-menu-item index="newsRadio" @click="go('/newsRadio')">主播电台</el-menu-item>
-        <el-menu-item index="singer" @click="go('/singer')">歌手</el-menu-item>
-        <el-input class="input" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户"
-                    prefix-icon="el-icon-search" @keyup.enter.native="searchInf(input)"
-                  @input="changeValue" @blur="blur"
-        ></el-input>
-        <span @click="loginVisible=true" v-if="loginIf === 0" ref="login">登录</span>
-        <!--        登录后显示-->
-        <el-popover
-          v-else
-          placement="bottom"
-          trigger="hover">
-          <ul>
-            <li><i class="el-icon-user"></i>我的主页</li>
-            <li><i class="el-icon-message"></i>我的消息</li>
-            <li><i class="el-icon-setting"></i>个人设置</li>
-            <li><i class="el-icon-circle-close"></i>退出</li>
-          </ul>
-          <img :src="headImgUrl" alt="hhh" slot="reference">
-        </el-popover>
-      </el-menu>
-    </keep-alive>
+    <el-menu
+      :default-active="activeIndex"
+      class="el-menu-demo"
+      mode="horizontal"
+      background-color="black"
+      text-color="white"
+      active-text-color="red">
+      <el-menu-item index="recommend" @click="go('/recommend')">推荐</el-menu-item>
+      <el-menu-item index="profileMusic" @click="go('/profileMusic')">我的音乐</el-menu-item>
+      <el-menu-item index="ranking" @click="go('/ranking')">排行榜</el-menu-item>
+      <el-menu-item index="songMenu" @click="go('/songMenu')">歌单</el-menu-item>
+      <el-menu-item index="newsRadio" @click="go('/newsRadio')">主播电台</el-menu-item>
+      <el-menu-item index="singer" @click="go('/singer')">歌手</el-menu-item>
+      <el-input class="input" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户"
+                prefix-icon="el-icon-search" @keyup.enter.native="searchInf(input)"
+                @input="changeValue" @blur="blur"
+      ></el-input>
+      <span @click="loginVisible=true" v-if="loginIf === 0" ref="login">登录</span>
+      <!--        登录后显示-->
+      <el-popover
+        v-else
+        placement="bottom"
+        trigger="hover">
+        <ul>
+          <li><i class="el-icon-user"></i>我的主页</li>
+          <li><i class="el-icon-message"></i>我的消息</li>
+          <li><i class="el-icon-setting"></i>个人设置</li>
+          <li><i class="el-icon-circle-close"></i>退出</li>
+        </ul>
+        <img :src="headImgUrl" alt="hhh" slot="reference">
+      </el-popover>
+    </el-menu>
     <!--    显示的页面-->
-    <keep-alive exclude="songMenu">
-      <router-view/>
-    </keep-alive>
+    <router-view/>
     <!--    显示登录对话框-->
     <div class="dialog">
       <el-dialog
@@ -107,7 +103,6 @@ export default {
   name: 'index',
   data () {
     return {
-      activeIndex: 'recommend',
       // 是否显示对话框
       loginVisible: false,
       // 在登录框中，哪一个内容该显示
@@ -227,6 +222,9 @@ export default {
       set (newValue) {
         console.log('sasa')
       }
+    },
+    activeIndex () {
+      return this.$store.state.activeName
     }
   }
 }

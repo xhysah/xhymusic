@@ -36,6 +36,7 @@
         <div class="main">
           <div class="main-title">
             <span>歌曲列表</span>
+            <span class="songNum">{{activeRanking.trackCount}}首歌</span>
             <span>播放：<span>{{activeRanking.playCount}}</span><span>次</span></span>
           </div>
           <song-table :songs="ranking"></song-table>
@@ -65,6 +66,7 @@ export default {
   created () {
     this.getRanking()
     this.getMyselfRanking(3)
+    this.$store.commit('editActiveName', 'ranking')
   },
   data () {
     return {
@@ -241,6 +243,11 @@ color=#353535
     margin 0 30px
     border 2px solid color
   .main-title
+    margin-bottom 5px
+    .songNum
+      font-size 12px
+      margin-left 20px
+      color #888888
     :last-child
       float right
       font-size 12px

@@ -60,6 +60,7 @@ export default {
   name: 'singer',
   created () {
     this.firstShow()
+    this.$store.commit('editActiveName', 'singer')
   },
   components: {
     songOutline

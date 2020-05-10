@@ -110,6 +110,7 @@ export default {
     this.getAlbum()
     this.getMv()
     this.getDesc()
+    this.$store.commit('editActiveName', 'singer')
   },
   data () {
     return {

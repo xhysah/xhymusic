@@ -11,7 +11,7 @@
         <template v-for="(item, index) in songMenu">
           <song-outline :key="index" length="150px" height="150px">
             <template v-slot:img>
-              <img :src="item.coverImgUrl" alt="">
+              <img :src="item.coverImgUrl" alt=""  @click="songsDetail(item.id)">
             </template>
             <template v-slot:sentence>
               <div>{{item.name}}</div>
@@ -55,6 +55,7 @@ export default {
       this.cate(this.$route.query.name)
       console.log('aada')
     }
+    this.$store.commit('editActiveName', 'songMenu')
   },
   data () {
     return {
@@ -64,7 +65,7 @@ export default {
       sub: {},
       // 分类对话框是否显示
       categoriesVisible: false,
-      // 精品歌单
+      // 歌单
       songMenu: {},
       icon: [
         'el-icon-edit',
@@ -116,6 +117,14 @@ export default {
         }
         this.songMenu = data.playlists
         console.log(data)
+      })
+    },
+    songsDetail (id) {
+      this.$router.push({
+        path: '/songMenuDetail',
+        query: {
+          id
+        }
       })
     }
   },

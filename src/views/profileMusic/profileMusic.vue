@@ -16,6 +16,9 @@
 import songOutline from '../../components/songOutline /songOutline'
 export default {
   name: 'profileMusic',
+  created () {
+    this.$store.commit('editActiveName', 'profileMusic')
+  },
   data () {
     return {}
   },

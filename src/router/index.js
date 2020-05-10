@@ -71,13 +71,13 @@ const routes = [
         path: '/artist/:sid',
         name: 'singerInformation',
         component: singerInformation
+      },
+      {
+        path: '/songMenuDetail',
+        name: 'songMenuDetail',
+        component: detail
       }
     ]
-  },
-  {
-    path: '/songMenuDetail',
-    name: 'songMenuDetail',
-    component: detail
   },
   {
     path: '/register',
@@ -96,4 +96,9 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+// router.afterEach((to, from) => {
+//   console.log(to.name)
+//   console.log(Vue.$store.state.active)
+//   this.$store.commit('editActiveName', to.name)
+// })
 export default router

@@ -15,7 +15,8 @@ export default new Vuex.Store({
     audio: {},
     active: 0,
     metaDuration: 0,
-    metaCurrentTime: 0
+    metaCurrentTime: 0,
+    activeName: ''
   },
   getters: {
     percentage (state) {
@@ -108,6 +109,9 @@ export default new Vuex.Store({
     },
     editActive (state, num) {
       state.active = num
+    },
+    editActiveName (state, name) {
+      state.activeName = name
     }
   },
   actions: {

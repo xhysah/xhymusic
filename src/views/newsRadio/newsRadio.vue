@@ -1,16 +1,37 @@
 <template>
   <div>
-
+    <div>
+      <div v-for="(item, index) in djCategories" :key="index">
+        <i class="el-icon-edit"></i>
+        <span>{{item.name}}</span>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'newsRadio',
-  data () {
-    return {}
+  created () {
+    this.$store.commit('editActiveName', 'newsRadio')
+    this.getDjCateList()
   },
-  methods: {},
+  data () {
+    return {
+      djCategories: {}
+    }
+  },
+  methods: {
+    getDjCateList () {
+      this.$http.get('/dj/catelist').then(({ data }) => {
+        if (data.code !== 200) {
+          return this.$message.error('获取电台分类失败')
+        }
+        this.djCategories = data.categories
+        console.log(data)
+      })
+    }
+  },
   computed: {}
 }
 </script>

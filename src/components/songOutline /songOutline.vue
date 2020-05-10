@@ -41,8 +41,10 @@ export default {
       color white
       font-size 10px
       cursor pointer
-      white-space nowrap
-      overflow hidden
+      div
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
   .sentence:hover
     text-decoration underline
 </style>

@@ -5,8 +5,8 @@
         <td>{{index+1}}</td>
 <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>-->
         <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>
-        <td>{{item.name}}</td>
-        <td>{{item.al.name}}</td>
+        <td class="td"><div>{{item.name}}</div></td>
+        <td class="td"><div>{{item.al.name}}</div></td>
       </tr>
     </table>
   </div>
@@ -71,4 +71,11 @@ export default {
     padding 5px
   i
     font-size 1.5em
+  .td
+    width 45%
+    div
+      width 200px
+      overflow hidden
+      text-overflow ellipsis
+      white-space nowrap
 </style>
