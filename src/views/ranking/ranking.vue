@@ -64,7 +64,7 @@ export default {
     songTable
   },
   created () {
-    this.$http.all([this.getRanking(), this.getMyselfRanking(3)])
+    this.$http.all([this.getRanking(), this.getFirstRanking(3)])
       .then(this.$http.spread(({ data: ranking }, { data: myselfRanking }) => {
         if (ranking.code !== 200 || myselfRanking.code !== 200) {
           return this.$message.error('获取数据失败')
@@ -105,9 +105,19 @@ export default {
       return this.$http.get('/toplist/detail')
     },
     // 根据id获取排行榜详细数据
-    getMyselfRanking (idx) {
+    getFirstRanking (idx) {
       this.active = idx
       return this.$http.get('/top/list', { params: { idx: idx } })
+    },
+    getMyselfRanking (idx) {
+      this.active = idx
+      return this.$http.get('/top/list', { params: { idx: idx } }).then(({ data }) => {
+        if (data.code !== 200) {
+          return this.$message.error('获取数据失败')
+        }
+        this.activeRanking = data.playlist
+        this.ranking = data.playlist.tracks
+      })
     }
   },
   computed: {
