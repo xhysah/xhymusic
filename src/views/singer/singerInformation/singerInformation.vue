@@ -74,7 +74,7 @@
           <template v-for="(item, index) in simArtists">
             <song-outline :key="index" length="50px" height="50px">
               <template v-slot:img>
-                <img :src="item.img1v1Url" alt="">
+                <img :src="item.img1v1Url" alt="" @click="goSinger(item.id)">
               </template>
               <template v-slot:sentence>
                 <div>{{item.name}}</div>
@@ -105,11 +105,11 @@ export default {
     songTable
   },
   created () {
-    this.getSimSinger()
-    this.getSingerInformation()
-    this.getAlbum()
-    this.getMv()
-    this.getDesc()
+    this.getSimSinger(this.sid)
+    this.getSingerInformation(this.sid)
+    this.getAlbum(this.sid)
+    this.getMv(this.sid)
+    this.getDesc(this.sid)
     this.$store.commit('editActiveName', 'singer')
   },
   data () {
@@ -133,8 +133,8 @@ export default {
   },
   methods: {
     // 获取歌手信息
-    getSingerInformation () {
-      this.$http.get(`/artists?id=${this.sid}`).then(({ data }) => {
+    getSingerInformation (id) {
+      this.$http.get(`/artists?id=${id}`).then(({ data }) => {
         if (data.code !== 200) {
           return this.$message.error('获取歌手详细信息失败')
         }
@@ -144,8 +144,8 @@ export default {
       })
     },
     // 获取专辑数据
-    getAlbum () {
-      this.$http.get(`/artist/album?id=${this.sid}`).then(({ data }) => {
+    getAlbum (id) {
+      this.$http.get(`/artist/album?id=${id}`).then(({ data }) => {
         if (data.code !== 200) {
           return this.$message.error('获取专辑信息失败')
         }
@@ -154,8 +154,8 @@ export default {
       })
     },
     // 获取mv数据
-    getMv () {
-      this.$http.get(`/artist/mv?id=${this.sid}`).then(({ data }) => {
+    getMv (id) {
+      this.$http.get(`/artist/mv?id=${id}`).then(({ data }) => {
         if (data.code !== 200) {
           return this.$message.error('获取MV信息失败')
         }
@@ -164,8 +164,8 @@ export default {
       })
     },
     // 获取歌手描述信息
-    getDesc () {
-      this.$http.get(`/artist/desc?id=${this.sid}`).then(({ data }) => {
+    getDesc (id) {
+      this.$http.get(`/artist/desc?id=${id}`).then(({ data }) => {
         if (data.code !== 200) {
           return this.$message.error('获取歌手描述信息失败')
         }
@@ -176,14 +176,21 @@ export default {
       })
     },
     // 获得相似的歌手
-    getSimSinger () {
-      this.$http.get(`/simi/artist?id=${this.sid}`).then(({ data }) => {
+    getSimSinger (id) {
+      this.$http.get(`/simi/artist?id=${id}`).then(({ data }) => {
         if (data.code !== 200) {
           return this.$message.error('获取相似歌手信息失败')
         }
         this.simArtists = data.artists.slice(0, 6)
         console.log(data.artists.slice(0, 8))
       })
+    },
+    goSinger (id) {
+      this.getSimSinger(id)
+      this.getSingerInformation(id)
+      this.getAlbum(id)
+      this.getMv(id)
+      this.getDesc(id)
     }
   },
   computed: {

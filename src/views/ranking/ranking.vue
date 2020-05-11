@@ -64,8 +64,15 @@ export default {
     songTable
   },
   created () {
-    this.getRanking()
-    this.getMyselfRanking(3)
+    this.$http.all([this.getRanking(), this.getMyselfRanking(3)])
+      .then(this.$http.spread(({ data: ranking }, { data: myselfRanking }) => {
+        if (ranking.code !== 200 || myselfRanking.code !== 200) {
+          return this.$message.error('获取数据失败')
+        }
+        this.rankingList = ranking.list
+        this.activeRanking = myselfRanking.playlist
+        this.ranking = myselfRanking.playlist.tracks
+      }))
     this.$store.commit('editActiveName', 'ranking')
   },
   data () {
@@ -95,82 +102,13 @@ export default {
   methods: {
     // 获取排行榜数据
     getRanking () {
-      this.$http.get('/toplist/detail').then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取排行榜数据失败')
-        }
-        this.rankingList = data.list
-        console.log(data.list)
-      })
+      return this.$http.get('/toplist/detail')
     },
     // 根据id获取排行榜详细数据
     getMyselfRanking (idx) {
       this.active = idx
-      this.$http.get('/top/list', { params: { idx: idx } }).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取排行榜数据失败')
-        }
-        this.activeRanking = data.playlist
-        this.ranking = data.playlist.tracks
-        console.log(data)
-      })
+      return this.$http.get('/top/list', { params: { idx: idx } })
     }
-    // 得到该单曲的音乐播放地址
-    // editUrl (value, img, name, singer) {
-    //   this.playSong.url = value
-    //   this.playSong.img = img
-    //   this.playSong.name = name
-    //   this.playSong.singer = singer
-    //   this.playIf = true
-    //   console.log(img)
-    // },
-    // ended () {
-    //   this.playIf = false
-    //   console.log(this.$refs.songTable.active--)
-    // },
-    // playMusic () {
-    //   if (this.playUrl !== '') {
-    //     const audio = this.$refs.audio
-    //     audio.play()
-    //     this.playIf = true
-    //     console.log(this.$refs.songTable.active--)
-    //   }
-    // },
-    // pauseMusic () {
-    //   const audio1 = this.$refs.audio
-    //   this.playIf = false
-    //   audio1.pause()
-    //   console.log(this.$refs.songTable.active++)
-    // },
-    // pauseMusics () {
-    //   const audio1 = this.$refs.audio
-    //   this.playIf = false
-    //   audio1.pause()
-    // },
-    // playMusics () {
-    //   if (this.playUrl !== '') {
-    //     const audio = this.$refs.audio
-    //     audio.play()
-    //     this.playIf = true
-    //   }
-    // },
-    // getDuration () {
-    //   const audio2 = this.$refs.audio
-    //   this.metaDuration = audio2.duration
-    //   this.duration = `${this.double(Math.floor(audio2.duration / 60))}:${this.double(Math.floor(audio2.duration % 60))}`
-    // },
-    // getCurrentTime () {
-    //   const audio3 = this.$refs.audio
-    //   this.metaCurrentTime = audio3.currentTime
-    //   this.currentTime = `${this.double(Math.floor(audio3.currentTime / 60))}:${this.double(Math.floor(audio3.currentTime % 60))}`
-    // },
-    // // 返回两位数
-    // double (num) {
-    //   if (num.toString().length !== 2) {
-    //     return '0' + num
-    //   }
-    //   return num
-    // }
   },
   computed: {
     // 对更新时间做计算
@@ -182,10 +120,6 @@ export default {
     }
   },
   watch: {
-    // currentTime () {
-    //   this.percentage = Math.floor(this.metaCurrentTime / this.metaDuration * 100)
-    //   console.log(Math.floor(this.metaCurrentTime / this.metaDuration * 100))
-    // }
   }
 }
 </script>
@@ -217,7 +151,7 @@ color=#353535
     height 150px
     border 2px solid color
     margin 3px
-    box-shadow 0px 0px 10px color
+    box-shadow 0 0 10 color
   .main
     display flex
     justify-content center

@@ -174,12 +174,12 @@ export default {
     margin 0 auto
     .el-aside
       padding 20px
-      border 1px solid #353535
+      border 2px solid #353535
       .header
         font-size 20px
       .main
         font-size 12px
-        padding 2px 0
+        padding 7px 0
         cursor pointer
   .spell-item:hover,.main:hover
     text-decoration underline
@@ -219,7 +219,7 @@ export default {
     margin 10px
   .active
     border-radius 20px
-    background-color #1c1c1c
+    background-color black
     box-shadow 0 0 8px red
   .actives
     border-radius 5px

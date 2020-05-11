@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <div v-for="(item, index) in djCategories" :key="index">
+      <div v-for="(item, index) in djCategories" :key="index" class="box">
         <i class="el-icon-edit"></i>
         <span>{{item.name}}</span>
       </div>
@@ -37,5 +37,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+  .box
+    border 1px solid red
+    width 80px
+    height 80px
 </style>

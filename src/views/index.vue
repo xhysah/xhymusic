@@ -124,14 +124,6 @@ export default {
       this.loginIf = 1
     }
   },
-  // created () {
-  //   // this.$nextTick(function () {
-  //   //   console.log(this.$refs.login)
-  //   // })
-  //   setTimeout(function () {
-  //     console.log(this.$refs.login)
-  //   }, 1)
-  // },
   mounted () {
     // 判断音乐栏是否显示
     function show () {
@@ -142,12 +134,6 @@ export default {
       }
     }
     window.addEventListener('mousemove', show.bind(this))
-    // window.addEventListener('beforeunload', function () {
-    //   window.sessionStorage.setItem('url', this.$store.state.playSong.url)
-    //   window.sessionStorage.setItem('img', this.$store.state.playSong.img)
-    //   window.sessionStorage.setItem('name', this.$store.state.playSong.name)
-    //   window.sessionStorage.setItem('singer', this.$store.state.playSong.singer)
-    // })
   },
   components: {
     phoneLogin,

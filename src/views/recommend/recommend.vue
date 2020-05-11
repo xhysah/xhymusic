@@ -50,38 +50,30 @@ export default {
     }
   },
   created () {
-    // 获取banner的数据
-    this.getBanner()
-    this.getHot()
-    this.getTop()
+    // 处理请求
+    this.$http.all([this.getBanner(), this.getHot(), this.getTop()])
+      .then(this.$http.spread(({ data: data1 }, { data: data2 }, { data: data3 }) => {
+        if (data1.code !== 200 || data2.code !== 200 || data3.code !== 200) {
+          return this.$message.error('获取数据失败')
+        }
+        this.banners = data1.banners
+        this.playlist = data2.tags
+        this.toplist = data3.playlists
+      }))
     this.$store.commit('editActiveName', 'recommend')
   },
   methods: {
+    // 获取banner数据
     getBanner () {
-      this.$http.get('/banner').then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取banner数据失败')
-        }
-        this.banners = data.banners
-        console.log(data)
-      })
+      return this.$http.get('/banner')
     },
+    // 获取热门分类数据
     getHot () {
-      this.$http.get('/playlist/hot').then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取热门推荐数据失败')
-        }
-        this.playlist = data.tags
-      })
+      return this.$http.get('/playlist/hot')
     },
+    // 获取热门歌单
     getTop () {
-      this.$http.get('/top/playlist/highquality?limit=15').then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取网友精选数据失败')
-        }
-        this.toplist = data.playlists
-        console.log(data.playlists)
-      })
+      return this.$http.get('/top/playlist/highquality?limit=15')
     },
     songlist (id) {
       this.$store.commit('editActiveName', 'songMenu')
