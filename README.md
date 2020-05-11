@@ -7,6 +7,6 @@
 ![songMenu](https://github.com/xhysah/xhymusic/blob/master/src/assets/img/songMenu.png)
 ![songMenuDetail](https://github.com/xhysah/xhymusic/blob/master/src/assets/img/songMenuDetail.png)
 ![search](https://github.com/xhysah/xhymusic/blob/master/src/assets/img/search.png)
-<img scr="https://github.com/xhysah/xhymusic/blob/master/src/assets/img/search.png" width="400px" height="350px>
+<img scr="https://github.com/xhysah/xhymusic/blob/master/src/assets/img/search.png" width="400" height="350">
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
