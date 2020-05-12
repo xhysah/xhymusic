@@ -42,6 +42,7 @@ export default {
           if (data.code !== 200) {
             return this.$message.error('获取歌信息失败')
           }
+          console.log(data)
           // this.active = id
           this.$store.commit('editActive', id)
           this.$store.commit('playUrl', { url: data.data[0].url, img, name, singer })

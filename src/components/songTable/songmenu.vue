@@ -3,10 +3,10 @@
     <table>
       <tr v-for="(item, index) in songs" :key="index">
 <!--        <td>{{index+1}}</td>-->
-        <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>-->
+        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>
 <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.track,item.name,item.album.name)"></i>-->
         <td><img :src="item.coverImgUrl" alt=""></td>
-        <td>{{item.name}}</td>
+        <td @click="goSongMenu(item.id)" class="go">{{item.name}}</td>
         <td>{{item.creator.nickname}}</td>
       </tr>
     </table>
@@ -44,10 +44,19 @@ export default {
             return this.$message.error('获取歌信息失败')
           }
           // this.active = id
+          console.log(data)
           this.$store.commit('editActive', id)
           this.$store.commit('playUrl', { url: data.data[0].url, img, name, singer })
         })
       }
+    },
+    goSongMenu (id) {
+      this.$router.push({
+        path: '/songMenuDetail',
+        query: {
+          id
+        }
+      })
     }
   },
   computed: {
@@ -70,9 +79,14 @@ export default {
   td,i
     cellspacing 10
     padding 5px
+    vertical-align middle
   i
+    margin-top 10px
     font-size 1.5em
   img
+    vertical-align middle
     width 40px
     height 40px
+  .go
+    cursor pointer
 </style>
