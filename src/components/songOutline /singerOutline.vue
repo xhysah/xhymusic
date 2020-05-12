@@ -1,15 +1,7 @@
 <template>
   <div class="img-item">
-    <div :style="{width:newLength, height:newHeight}" class="img" @mouseenter="enter" @mouseleave="leave">
-      <transition name="creator">
-        <div v-if="newActive" class="hover">
-          <div><slot name="creator"></slot></div>
-        </div>
-      </transition>
+    <div :style="{width:newLength, height:newHeight}" class="img">
       <slot name="img"></slot>
-      <transition name="icon">
-          <i class="el-icon-video-play" v-if="newActive" :style="{'font-size':newFont}"></i>
-      </transition>
     </div>
     <div class="sentence" :style="{width:newLength}">
       <slot name="sentence"></slot>
@@ -19,7 +11,7 @@
 
 <script>
 export default {
-  name: 'songOutline',
+  name: 'singerOutline',
   props: {
     length: {
       type: String,
@@ -33,22 +25,12 @@ export default {
   data () {
     return {
       newLength: this.length,
-      newHeight: this.height,
-      newActive: false
+      newHeight: this.height
     }
   },
   methods: {
-    enter () {
-      this.newActive = true
-    },
-    leave () {
-      this.newActive = false
-    }
   },
   computed: {
-    newFont () {
-      return `${parseInt(this.newLength) * 0.25}px`
-    }
   }
 }
 </script>

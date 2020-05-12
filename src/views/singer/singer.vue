@@ -33,14 +33,14 @@
       <!--        歌手信息-->
         <div class="flex">
           <template v-for="item in singers">
-            <song-outline :key="item.id" length="100px" height="100px">
+            <singer-outline :key="item.id" length="100px" height="100px">
               <template v-slot:img>
                 <img :src="item.img1v1Url" alt="" @click="showInformation(item.id)">
               </template>
               <template v-slot:sentence>
                 <div @click="showInformation(item.id)">{{item.name}}</div>
               </template>
-            </song-outline>
+            </singer-outline>
           </template>
         </div>
         <div class="line"></div>
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import songOutline from '../../components/songOutline /songOutline'
+import singerOutline from '../../components/songOutline /singerOutline'
 export default {
   name: 'singer',
   created () {
@@ -63,7 +63,7 @@ export default {
     this.$store.commit('editActiveName', 'singer')
   },
   components: {
-    songOutline
+    singerOutline
   },
   data () {
     return {

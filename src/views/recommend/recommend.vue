@@ -18,9 +18,12 @@
     <!--    网友精选-->
     <div class="flex">
       <template v-for="(item, index) in toplist">
-        <song-outline :key="index" length="150px" height="150px">
+        <song-outline :key="index" length="150px" height="150px" active="active">
           <template v-slot:img>
             <img :src="item.coverImgUrl" alt="" @click="songlist(item.id)">
+          </template>
+          <template v-slot:creator>
+            <span>by {{item.creator.nickname}}</span>
           </template>
           <template v-slot:sentence>
             <div>{{item.name}}</div>
@@ -59,6 +62,7 @@ export default {
         this.banners = data1.banners
         this.playlist = data2.tags
         this.toplist = data3.playlists
+        console.log(data3)
       }))
     this.$store.commit('editActiveName', 'recommend')
   },

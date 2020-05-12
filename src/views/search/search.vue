@@ -14,38 +14,38 @@
           </el-tab-pane>
           <el-tab-pane label="歌手" name="singer" :lazy="true">
             <template v-for="(item, index) in searchResult[1].artists">
-              <song-outline :key="index" length="150px" height="150px">
+              <singer-outline :key="index" length="150px" height="150px">
                 <template v-slot:img>
                   <img :src="item.img1v1Url" alt="" @click="songlist(item.id)">
                 </template>
                 <template v-slot:sentence>
                   <div>{{item.name}}</div>
                 </template>
-              </song-outline>
+              </singer-outline>
             </template>
           </el-tab-pane>
           <el-tab-pane label="专辑" name="album" :lazy="true">
             <template v-for="(item, index) in searchResult[2].albums">
-              <song-outline :key="index" length="150px" height="150px">
+              <album-outline :key="index" length="150px" height="150px">
                 <template v-slot:img>
                   <img :src="item.blurPicUrl" alt="" @click="songlist(item.id)">
                 </template>
                 <template v-slot:sentence>
                   <div>{{item.name}}</div>
                 </template>
-              </song-outline>
+              </album-outline>
             </template>
           </el-tab-pane>
           <el-tab-pane label="视频" name="mv" :lazy="true">
             <template v-for="(item, index) in searchResult[3].videos">
-              <song-outline :key="index" length="150px">
+              <album-outline :key="index" length="150px" height="90px">
                 <template v-slot:img>
                   <img :src="item.coverUrl" alt="" @click="songlist(item.id)">
                 </template>
                 <template v-slot:sentence>
                   <div>{{item.title}}</div>
                 </template>
-              </song-outline>
+              </album-outline>
             </template>
           </el-tab-pane>
           <el-tab-pane label="歌词" name="lyric" :lazy="true">
@@ -78,6 +78,8 @@
 </template>
 
 <script>
+import albumOutline from '../../components/songOutline /albumOutline'
+import singerOutline from '../../components/songOutline /singerOutline'
 import user from '../../components/songTable/user'
 import songmenu from '../../components/songTable/songmenu'
 import lyric from '../../components/lyric/lyric'
@@ -90,7 +92,9 @@ export default {
     songOutline,
     lyric,
     songmenu,
-    user
+    user,
+    singerOutline,
+    albumOutline
   },
   created () {
     this.search(1, 0)

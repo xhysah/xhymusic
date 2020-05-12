@@ -13,6 +13,9 @@
             <template v-slot:img>
               <img :src="item.coverImgUrl" alt=""  @click="songsDetail(item.id)">
             </template>
+            <template v-slot:creator>
+              <span>by {{item.creator.nickname}}</span>
+            </template>
             <template v-slot:sentence>
               <div>{{item.name}}</div>
             </template>

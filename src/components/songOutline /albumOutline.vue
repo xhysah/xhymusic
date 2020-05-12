@@ -1,14 +1,9 @@
 <template>
   <div class="img-item">
-    <div :style="{width:newLength, height:newHeight}" class="img" @mouseenter="enter" @mouseleave="leave">
-      <transition name="creator">
-        <div v-if="newActive" class="hover">
-          <div><slot name="creator"></slot></div>
-        </div>
-      </transition>
+    <div :style="{width:newLength, height:newHeight}" class="imgs" @mouseenter="enter" @mouseleave="leave">
       <slot name="img"></slot>
       <transition name="icon">
-          <i class="el-icon-video-play" v-if="newActive" :style="{'font-size':newFont}"></i>
+        <i class="el-icon-video-play" v-if="newActive" :style="{'font-size':newFont, top:yCenter, left:xCenter}"></i>
       </transition>
     </div>
     <div class="sentence" :style="{width:newLength}">
@@ -19,7 +14,7 @@
 
 <script>
 export default {
-  name: 'songOutline',
+  name: 'albumOutline',
   props: {
     length: {
       type: String,
@@ -47,7 +42,13 @@ export default {
   },
   computed: {
     newFont () {
-      return `${parseInt(this.newLength) * 0.25}px`
+      return `${parseInt(this.newHeight) * 0.4}px`
+    },
+    xCenter () {
+      return `${(parseInt(this.newLength) - parseInt(this.newHeight) * 0.4) / 2}px`
+    },
+    yCenter () {
+      return `${parseInt(this.newHeight) * 0.6 / 2}px`
     }
   }
 }
@@ -57,7 +58,7 @@ export default {
   .img-item
     display inline-block
     margin 20px
-    .img
+    .imgs
       position relative
     .sentence
       color white
@@ -71,24 +72,7 @@ export default {
     transition opacity 0.5s
   .icon-enter, .icon-leave-to
     opacity 0
-  .hover
-    div
-      width 100%
-      padding 6px 0 6px 0
-      position absolute
-      left 0
-      top 0
-      font-size 10px
-      text-indent 2em
-      background: rgba(0,0,0,0.6)
   i
     position absolute
-    bottom 0
-    right 0
     margin 5px
-  .creator-enter-active, .creator-leave-active
-    transition all 0.5s
-  .creator-enter, .creator-leave-to
-    opacity 0
-    transform translateY(-7px)
 </style>

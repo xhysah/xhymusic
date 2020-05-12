@@ -24,28 +24,28 @@
           <el-tab-pane label="所有专辑">
             <div class="flex">
               <template v-for="(item, index) in album">
-                <song-outline :key="index" length="150px" height="150px">
+                <album-outline :key="index" length="150px" height="150px">
                   <template v-slot:img>
                     <img :src="item.picUrl" alt="">
                   </template>
                   <template v-slot:sentence>
                     <div>{{item.name}}</div>
                   </template>
-                </song-outline>
+                </album-outline>
               </template>
             </div>
           </el-tab-pane>
           <el-tab-pane label="相关mv">
             <div class="flex">
               <template v-for="(item, index) in mv">
-                <song-outline :key="index" length="260px">
+                <album-outline :key="index" length="260px" height="150px">
                   <template v-slot:img>
                     <img :src="item.imgurl16v9" alt="">
                   </template>
                   <template v-slot:sentence>
                     <div>{{item.name}}</div>
                   </template>
-                </song-outline>
+                </album-outline>
               </template>
             </div>
           </el-tab-pane>
@@ -72,14 +72,14 @@
         <div class="line"></div>
         <div class="flex">
           <template v-for="(item, index) in simArtists">
-            <song-outline :key="index" length="50px" height="50px">
+            <singer-outline :key="index" length="50px" height="50px">
               <template v-slot:img>
                 <img :src="item.img1v1Url" alt="" @click="goSinger(item.id)">
               </template>
               <template v-slot:sentence>
                 <div>{{item.name}}</div>
               </template>
-            </song-outline>
+            </singer-outline>
           </template>
         </div>
       </el-aside>
@@ -96,13 +96,15 @@
 </template>
 
 <script>
-import songOutline from '../../../components/songOutline /songOutline'
+import albumOutline from '../../../components/songOutline /albumOutline'
+import singerOutline from '../../../components/songOutline /singerOutline'
 import songTable from '../../../components/songTable/songTable'
 export default {
   name: 'singerInformation',
   components: {
-    songOutline,
-    songTable
+    songTable,
+    singerOutline,
+    albumOutline
   },
   created () {
     this.getSimSinger(this.sid)
@@ -219,9 +221,9 @@ export default {
       height 300px
       overflow hidden
       img
+        bottom 120px
         display block
         position relative
-        bottom  120px
         height auto
   .el-aside
     border-left  1px solid color
