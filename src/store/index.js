@@ -16,7 +16,8 @@ export default new Vuex.Store({
     active: 0,
     metaDuration: 0,
     metaCurrentTime: 0,
-    activeName: ''
+    activeName: '',
+    info: {}
   },
   getters: {
     percentage (state) {
@@ -71,8 +72,12 @@ export default new Vuex.Store({
     },
     ended (state) {
       // 让musicPlayer里面的播放标签变为停止标签
+      // state.playSong.url = state.info
+      state.playSong.img = state.info.al.picUrl
+      state.playSong.name = state.info.name
+      state.playSong.singer = state.info.al.name
       state.playIf = false
-      state.active--
+      state.active = 0
       // console.log(this.$refs.songTable.active--)
     },
     getDuration (state, audio) {
@@ -112,6 +117,9 @@ export default new Vuex.Store({
     },
     editActiveName (state, name) {
       state.activeName = name
+    },
+    getInfo (state, info) {
+      state.info = info
     }
   },
   actions: {

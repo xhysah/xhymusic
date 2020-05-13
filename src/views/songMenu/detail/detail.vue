@@ -11,7 +11,7 @@
             <span>{{createTime}}创建</span>
           </div>
           <div class="button-group">
-            <el-button size="mini" type="primary" icon="el-icon-video-play" plain>播放</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-video-play" plain>播放全部</el-button>
             <el-button size="mini" type="danger" :round="true" plain icon="el-icon-chat-line-square">
             </el-button>
             <el-button size="mini" type="danger" :round="true" plain icon="el-icon-share">
@@ -85,6 +85,7 @@ export default {
             return this.$message.error('获取数据失败')
           }
           this.songMenuDetail = detail.playlist
+          console.log(this.songMenuDetail)
           this.relateSongMenu = relate.playlists
         }))
     }

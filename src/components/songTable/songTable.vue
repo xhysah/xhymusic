@@ -4,7 +4,7 @@
       <tr v-for="(item, index) in songs" :key="index">
         <td>{{index+1}}</td>
 <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>-->
-        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>
+        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name,songs[index+1])"></i>
         <td class="td"><div>{{item.name}}</div></td>
         <td class="td"><div>{{item.al.name}}</div></td>
       </tr>
@@ -26,7 +26,8 @@ export default {
   },
   methods: {
     // 播放歌曲
-    play (id, img, name, singer) {
+    play (id, img, name, singer, info) {
+      console.log(info)
       if (this.active === id) {
         this.$store.commit('editActive', id + 1)
         // this.active = id + 1
@@ -46,8 +47,12 @@ export default {
           // this.active = id
           this.$store.commit('editActive', id)
           this.$store.commit('playUrl', { url: data.data[0].url, img, name, singer })
+          this.$store.commit('getInfo', info)
         })
       }
+    },
+    hh () {
+      console.log('sasdad')
     }
   },
   computed: {
