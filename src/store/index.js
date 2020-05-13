@@ -73,12 +73,12 @@ export default new Vuex.Store({
     ended (state) {
       // 让musicPlayer里面的播放标签变为停止标签
       // state.playSong.url = state.info
-      state.playSong.img = state.info.al.picUrl
-      state.playSong.name = state.info.name
-      state.playSong.singer = state.info.al.name
+      // state.playSong.img = state.info.al.picUrl
+      // state.playSong.name = state.info.name
+      // state.playSong.singer = state.info.al.name
       state.playIf = false
       state.active = 0
-      // console.log(this.$refs.songTable.active--)
+      console.log(this.$refs.songTable.active--)
     },
     getDuration (state, audio) {
       // state.duration = `${Math.floor(audio.duration / 60)}:${Math.floor(audio.duration % 60)}`
@@ -117,10 +117,10 @@ export default new Vuex.Store({
     },
     editActiveName (state, name) {
       state.activeName = name
-    },
-    getInfo (state, info) {
-      state.info = info
     }
+    // getInfo (state, info) {
+    //   state.info = info
+    // }
   },
   actions: {
   },

@@ -283,9 +283,10 @@ export default {
     top 52px
     right 24%
     width 220px
-    background-color purple
+    background-color black
+    border 3px solid #252525
     z-index 20
-    padding 20px
+    padding 10px
     border-radius 5px
     .item
       width 130px

@@ -83,14 +83,6 @@
           </template>
         </div>
       </el-aside>
-      <!--    <div class="audio">-->
-      <!--      <img :src="img" alt="">-->
-      <!--      <i class="el-icon-caret-left"></i>-->
-      <!--      <i class="el-icon-video-pause" v-if="playIf" @click="pauseMusic"></i>-->
-      <!--      <i class="el-icon-video-play" v-else @click="playMusic"></i>-->
-      <!--      <i class="el-icon-caret-right"></i>-->
-      <!--      <audio :src="playUrl" autoplay="autoplay" ref="audio" @ended="ended"></audio>-->
-      <!--    </div>-->
     </el-container>
   </div>
 </template>
@@ -238,4 +230,8 @@ export default {
   .simiHeader
     margin-top 80px
     margin-bottom 10px
+  .tabs>>>.el-tabs__item.is-active
+    color red
+  .tabs>>>.el-tabs__item:hover
+    color red !important
 </style>

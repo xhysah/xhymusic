@@ -3,7 +3,7 @@
     <el-main>
       <el-row>
         <span class="all">{{cateName}}</span>
-        <el-button size="mini" @click="categoriesVisible=true">选择分类</el-button>
+        <el-button type="danger" plain size="mini" @click="categoriesVisible=true">选择分类</el-button>
         <span class="hot" @click="cateHot">热门</span>
       </el-row>
       <div class="line"></div>
@@ -25,7 +25,7 @@
     </el-main>
     <!--    分类对话框-->
     <el-dialog center :visible.sync="categoriesVisible" width="50%" :modal="false">
-      <el-button type="primary" plain size="mini" @click="highQuality">全部</el-button>
+      <el-button type="danger" plain size="mini" @click="highQuality">全部</el-button>
       <div v-for="(item, index) in categories" :key="index">
         <div  class="category">
           <i :class="icon[index]"></i>
