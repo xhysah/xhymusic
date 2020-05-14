@@ -9,7 +9,6 @@
       text-color="white"
       active-text-color="red">
       <el-menu-item index="recommend" @click="go('/recommend')">推荐</el-menu-item>
-      <el-menu-item index="profileMusic" @click="go('/profileMusic')">我的音乐</el-menu-item>
       <el-menu-item index="ranking" @click="go('/ranking')">排行榜</el-menu-item>
       <el-menu-item index="songMenu" @click="go('/songMenu')">歌单</el-menu-item>
       <el-menu-item index="newsRadio" @click="go('/newsRadio')">主播电台</el-menu-item>

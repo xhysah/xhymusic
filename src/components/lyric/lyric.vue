@@ -1,13 +1,12 @@
 <template>
   <div>
-    <div>{{songItem.name}}</div>
-    <div>
-      <template v-for="(item, index) in songItem.artists">
-        <span :key="index">{{item.name}}</span>
-      </template>
-    </div>
-    <div>{{songItem.album.name}}</div>
-    <div>{{songItem.lyrics.txt}}</div>
+      <div>{{songItem.name}}</div>
+        <template v-for="(item, index) in songItem.artists">
+          <span :key="index" v-if="index===0">{{item.name}}</span>
+          <span :key="index" v-else>/{{item.name}}</span>
+        </template>
+      <div>{{songItem.album.name}}</div>
+      <div>{{songItem.lyrics.txt}}</div>
   </div>
 </template>
 
@@ -25,11 +24,9 @@ export default {
     }
   },
   methods: {},
-  computed: {
-  }
+  computed: {}
 }
 </script>
 
 <style lang="stylus" scoped>
-
 </style>

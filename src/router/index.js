@@ -4,7 +4,6 @@ const phoneLogin = () => import('../views/Login/phoneLogin')
 const register = () => import('../views/register/register')
 const index = () => import('../views/index')
 const recommend = () => import('../views/recommend/recommend')
-const profileMusic = () => import('../views/profileMusic/profileMusic')
 const ranking = () => import('../views/ranking/ranking')
 const songMenu = () => import('../views/songMenu/songMenu')
 const newsRadio = () => import('../views/newsRadio/newsRadio')
@@ -28,11 +27,6 @@ const routes = [
         path: '/recommend',
         name: 'recommend',
         component: recommend
-      },
-      {
-        path: '/profileMusic',
-        name: 'profileMusic',
-        component: profileMusic
       },
       {
         path: '/ranking',

@@ -121,7 +121,7 @@ export default {
           return this.$message.error('搜索失败')
         }
         this.searchResult[i] = data.result
-        console.log(this.searchResult)
+        console.log(this.searchResult[4])
       })
     },
     songlist (id) {

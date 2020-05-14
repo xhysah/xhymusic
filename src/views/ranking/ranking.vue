@@ -19,7 +19,7 @@
           <span class="active">{{activeRanking.name}}
           <span>最近更新：{{updateTime}}</span>
         </span>
-          <div>
+          <div class="btn-group">
             <el-button size="mini" type="primary" icon="el-icon-video-play" plain>播放</el-button>
             <el-button size="mini" type="danger" :round="true" plain icon="el-icon-chat-line-square">
               ({{activeRanking.commentCount}})
@@ -235,4 +235,6 @@ color=#353535
       color #888888
   .check
     background-color #1c1c1c
+  .btn-group
+    display inline-block
 </style>

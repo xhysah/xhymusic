@@ -9,15 +9,15 @@ export default new Vuex.Store({
       url: window.sessionStorage.getItem('url'),
       img: window.sessionStorage.getItem('img'),
       name: window.sessionStorage.getItem('name'),
-      singer: window.sessionStorage.getItem('singer')
+      singer: window.sessionStorage.getItem('singer'),
+      lyric: window.sessionStorage.getItem('lyric')
     },
     playIf: false,
     audio: {},
     active: 0,
     metaDuration: 0,
     metaCurrentTime: 0,
-    activeName: '',
-    info: {}
+    activeName: ''
   },
   getters: {
     percentage (state) {
@@ -64,11 +64,14 @@ export default new Vuex.Store({
       state.playSong.img = payload.img
       state.playSong.name = payload.name
       state.playSong.singer = payload.singer
+      state.playSong.lyric = payload.lyric
       state.playIf = true
       window.sessionStorage.setItem('url', payload.url)
       window.sessionStorage.setItem('img', payload.img)
       window.sessionStorage.setItem('name', payload.name)
       window.sessionStorage.setItem('singer', payload.singer)
+      window.sessionStorage.setItem('lyric', payload.lyric)
+      console.log(state.playSong.lyric)
     },
     ended (state) {
       // 让musicPlayer里面的播放标签变为停止标签

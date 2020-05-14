@@ -39,16 +39,25 @@ export default {
         // this.active = id
         this.$store.commit('editActive', id)
       } else {
-        this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
-          if (data.code !== 200) {
-            return this.$message.error('获取歌信息失败')
-          }
-          console.log(data)
-          // this.active = id
-          this.$store.commit('editActive', id)
-          this.$store.commit('playUrl', { url: data.data[0].url, img, name, singer })
-          // this.$store.commit('getInfo', info)
-        })
+        this.$http.all([this.$http.get(`/song/url?id=${id}`), this.$http.get(`/lyric?id=${id}`)])
+          .then(this.$http.spread(({ data: url }, { data: lyric }) => {
+            if (url.code !== 200 || lyric.code !== 200) {
+              return this.$message.error('获取歌信息失败')
+            }
+            console.log(lyric)
+            this.$store.commit('editActive', id)
+            this.$store.commit('playUrl', { url: url.data[0].url, img, name, singer, lyric: lyric })
+          }))
+        // this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
+        //   if (data.code !== 200) {
+        //     return this.$message.error('获取歌信息失败')
+        //   }
+        //   console.log(data)
+        //   // this.active = id
+        //   this.$store.commit('editActive', id)
+        //   this.$store.commit('playUrl', { url: data.data[0].url, img, name, singer })
+        //   // this.$store.commit('getInfo', info)
+        // })
       }
     },
     hh () {
