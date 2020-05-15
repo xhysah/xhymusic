@@ -81,7 +81,7 @@ export default new Vuex.Store({
       // state.playSong.singer = state.info.al.name
       state.playIf = false
       state.active = 0
-      console.log(this.$refs.songTable.active--)
+      // console.log(this.$refs.songTable.active--)
     },
     getDuration (state, audio) {
       // state.duration = `${Math.floor(audio.duration / 60)}:${Math.floor(audio.duration % 60)}`

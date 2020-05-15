@@ -3,20 +3,22 @@
     <el-main>
       <el-row>
         <div class="search">
-        <el-input v-model="keywords"><el-button slot="append" icon="el-icon-search"></el-button></el-input>
+          <el-input v-model="keywords">
+            <el-button slot="append" icon="el-icon-search" @keyup.enter.native="searchInf(input)"></el-button>
+          </el-input>
         </div>
       </el-row>
       <div class="tabs">
         <div class="title">搜索"{{keywords}}", 找到</div>
-        <el-tabs type="card" v-model="activeName" :stretch="true">
-          <el-tab-pane label="单曲" name="songs">
+        <el-tabs type="border-card" style="background-color: black" :stretch="true">
+          <el-tab-pane label="单曲">
             <songs :songs="searchResult[0].songs"></songs>
           </el-tab-pane>
-          <el-tab-pane label="歌手" name="singer" :lazy="true">
+          <el-tab-pane label="歌手">
             <template v-for="(item, index) in searchResult[1].artists">
               <singer-outline :key="index" length="150px" height="150px">
                 <template v-slot:img>
-                  <img :src="item.img1v1Url" alt="" @click="songlist(item.id)">
+                  <img :src="item.img1v1Url" alt="" @click="goSinger(item.id)">
                 </template>
                 <template v-slot:sentence>
                   <div>{{item.name}}</div>
@@ -24,51 +26,57 @@
               </singer-outline>
             </template>
           </el-tab-pane>
-          <el-tab-pane label="专辑" name="album" :lazy="true">
-            <template v-for="(item, index) in searchResult[2].albums">
-              <album-outline :key="index" length="150px" height="150px">
-                <template v-slot:img>
-                  <img :src="item.blurPicUrl" alt="" @click="songlist(item.id)">
-                </template>
-                <template v-slot:sentence>
-                  <div>{{item.name}}</div>
-                </template>
-              </album-outline>
-            </template>
+          <el-tab-pane label="专辑">
+            <div class="flex">
+              <template v-for="(item, index) in searchResult[2].albums">
+                <album-outline :key="index" length="150px" height="150px">
+                  <template v-slot:img>
+                    <img :src="item.blurPicUrl" alt="" @click="songlist(item.id)">
+                  </template>
+                  <template v-slot:sentence>
+                    <div>{{item.name}}</div>
+                  </template>
+                </album-outline>
+              </template>
+            </div>
           </el-tab-pane>
-          <el-tab-pane label="视频" name="mv" :lazy="true">
-            <template v-for="(item, index) in searchResult[3].videos">
-              <album-outline :key="index" length="150px" height="90px">
-                <template v-slot:img>
-                  <img :src="item.coverUrl" alt="" @click="songlist(item.id)">
-                </template>
-                <template v-slot:sentence>
-                  <div>{{item.title}}</div>
-                </template>
-              </album-outline>
-            </template>
+          <el-tab-pane label="视频">
+            <div class="flex">
+              <template v-for="(item, index) in searchResult[3].videos">
+                <album-outline :key="index" length="150px" height="90px">
+                  <template v-slot:img>
+                    <img :src="item.coverUrl" alt="" @click="songlist(item.id)">
+                  </template>
+                  <template v-slot:sentence>
+                    <div>{{item.title}}</div>
+                  </template>
+                </album-outline>
+              </template>
+            </div>
           </el-tab-pane>
-          <el-tab-pane label="歌词" name="lyric" :lazy="true">
+          <el-tab-pane label="歌词">
             <template v-for="(item , index) in searchResult[4].songs">
               <lyric :key="index" :song="item"></lyric>
             </template>
           </el-tab-pane>
-          <el-tab-pane label="歌单" name="songList" :lazy="true">
+          <el-tab-pane label="歌单">
             <songmenu :songs="searchResult[5].playlists"></songmenu>
           </el-tab-pane>
-          <el-tab-pane label="主播电台" name="station" :lazy="true">
-            <template v-for="(item, index) in searchResult[6].djRadios">
-              <song-outline :key="index" length="150px">
-                <template v-slot:img>
-                  <img :src="item.picUrl" alt="" @click="songlist(item.id)">
-                </template>
-                <template v-slot:sentence>
-                  <div>{{item.desc}}</div>
-                </template>
-              </song-outline>
-            </template>
+          <el-tab-pane label="主播电台">
+            <div class="flex">
+              <template v-for="(item, index) in searchResult[6].djRadios">
+                <song-outline :key="index" length="150px">
+                  <template v-slot:img>
+                    <img :src="item.picUrl" alt="" @click="songlist(item.id)">
+                  </template>
+                  <template v-slot:sentence>
+                    <div>{{item.desc}}</div>
+                  </template>
+                </song-outline>
+              </template>
+            </div>
           </el-tab-pane>
-          <el-tab-pane label="用户" name="user">
+          <el-tab-pane label="用户">
             <user :users="searchResult[7].userprofiles"></user>
           </el-tab-pane>
         </el-tabs>
@@ -108,7 +116,6 @@ export default {
   },
   data () {
     return {
-      activeName: 'songs',
       searchResult: [
         {}, {}, {}, {}, {}, {}, {}, {}
       ]
@@ -120,12 +127,16 @@ export default {
         if (data.code !== 200) {
           return this.$message.error('搜索失败')
         }
-        this.searchResult[i] = data.result
-        console.log(this.searchResult[4])
+        this.$set(this.searchResult, i, data.result)
+        // this.searchResult.splice(i, 0, data.result)
+        // console.log(this.searchResult[4])
       })
     },
     songlist (id) {
       this.$router.push({ name: 'songMenuDetail', query: { path: '/top/playlist/id=', id: id } })
+    },
+    goSinger (id) {
+      this.$router.push({ name: 'singerInformation', params: { sid: id } })
     }
   },
   computed: {
@@ -148,13 +159,17 @@ export default {
   .tabs
     width 70%
     margin 0 auto
-    >>>.el-tabs__item
-      color white
-    >>>.is-active
-      color red
+    /*>>>.el-tabs__item*/
+    /*  color white*/
+    /*>>>.is-active*/
+    /*  color red*/
     .title
       color #909399
       font-size 14px
       margin-bottom 6px
       padding-left 10px
+  .tabs>>>.el-tabs__item.is-active
+    color red
+  .tabs>>>.el-tabs__item:hover
+    color red !important
 </style>

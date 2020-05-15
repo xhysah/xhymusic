@@ -181,8 +181,14 @@ export default {
         font-size 12px
         padding 7px 0
         cursor pointer
-  .spell-item:hover,.main:hover
-    text-decoration underline
+  .spell-item:hover
+    border-radius 2px
+    background-color black
+    box-shadow 0 0 3px red
+  .main:hover
+    border-radius 20px
+    background-color black
+    box-shadow 0 0 8px red
   .point
     display inline-block
     width 5px
@@ -226,7 +232,4 @@ export default {
     background-color red
     box-shadow 0 0 8px red
     border 1px solid red
-  img:hover
-    border 1px solid red
-    box-shadow 0 0 20px red
 </style>

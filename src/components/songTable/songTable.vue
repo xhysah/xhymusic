@@ -1,10 +1,10 @@
 <template>
   <div class="flex">
     <table>
-      <tr v-for="(item, index) in songs" :key="index">
+      <tr v-for="(item, index) in songs" :key="item.id">
         <td>{{index+1}}</td>
 <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>-->
-        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>
+        <i :ref="item.id" class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>
         <td class="td"><div>{{item.name}}</div></td>
         <td class="td"><div>{{item.al.name}}</div></td>
       </tr>
@@ -67,6 +67,15 @@ export default {
   computed: {
     active () {
       return this.$store.state.active
+    }
+  },
+  watch: {
+    active (newValue, oldValue) {
+      if (newValue === 0) {
+        // console.log(newValue)
+        // console.log(oldValue)
+        // console.log(this.$refs[oldValue].this.play())
+      }
     }
   }
 }

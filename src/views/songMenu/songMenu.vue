@@ -24,7 +24,7 @@
       </div>
     </el-main>
     <!--    分类对话框-->
-    <el-dialog center :visible.sync="categoriesVisible" width="50%" :modal="false">
+    <el-dialog center :visible.sync="categoriesVisible" width="50%" :modal="false" class="dialog">
       <el-button type="danger" plain size="mini" @click="highQuality">全部</el-button>
       <div v-for="(item, index) in categories" :key="index">
         <div  class="category">
@@ -173,15 +173,33 @@ export default {
   .category-item
     display flex
     flex-wrap wrap
-    margin-right 80px
+    margin-right 55px
   .category-item-item
     cursor pointer
     position relative
-    margin 2px 0px
-    font-size 10px
+    margin 3px 0
+    font-size 12px
+    line-height 18px
     left 80px
     top -25px
   .el-button
     position relative
     top -20px
+  .category-item-item:hover
+    font-size 15px
+    text-decoration underline
+  .dialog
+    /*color white*/
+    margin-top 10px
+    >>>.el-dialog__header
+      background-color black
+      border 1px solid red
+      border-bottom none
+      padding 5px
+    >>>.el-dialog__body
+      background-color black
+      border 1px solid red
+      border-top none
+      color white
+      padding 25px 25px 0 25px
 </style>

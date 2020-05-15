@@ -4,8 +4,8 @@
       <!--    侧边栏部分-->
       <el-aside width="300px">
         <template v-for="(item, index) in rankingList">
-          <div :key="item.coverImgId" @click="getMyselfRanking(idx[index])" :class="{check:active===idx[index]}">
-            <el-image :src="item.coverImgUrl"></el-image>
+          <div :key="item.coverImgId" @click="getMyselfRanking(idx[index])" :class="{check:active===idx[index]}" class="categories">
+            <el-image :src="item.coverImgUrl" :class="{imgChange:active===idx[index]}"></el-image>
             <span class="first">{{item.name}}</span>
             <div style="position: relative"><span class="small">{{item.updateFrequency}}</span></div>
           </div>
@@ -142,6 +142,11 @@ color=#353535
     margin-top 50px
     .el-aside
       border 2px solid color
+      .categories:hover
+        .el-image
+          width 70px
+          height 70px
+          box-shadow 0 0 10px red
   .el-image
     width 60px
     height 60px
@@ -237,4 +242,7 @@ color=#353535
     background-color #1c1c1c
   .btn-group
     display inline-block
+  .imgChange
+    width 70px
+    height 70px
 </style>

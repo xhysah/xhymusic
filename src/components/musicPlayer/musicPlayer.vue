@@ -17,7 +17,7 @@
         <audio :src="playSong.url" autoplay="autoplay" ref="audio" @ended="ended" @canplay="getDuration"
                @timeupdate="getCurrentTime"></audio>
       </div>
-      <div class="lyric" v-if="playSong.lyric.hasOwnProperty('lrc')">{{playSong.lyric.lrc.lyric}}</div>
+<!--      <div class="lyric" v-if="playSong.lyric.hasOwnProperty('lrc')">{{playSong.lyric.lrc.lyric}}</div>-->
     </div>
   </div>
 </template>

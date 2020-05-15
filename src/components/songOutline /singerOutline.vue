@@ -49,28 +49,12 @@ export default {
         overflow hidden
         text-overflow ellipsis
         white-space nowrap
-  .icon-enter-active, .icon-leave-active
-    transition opacity 0.5s
-  .icon-enter, .icon-leave-to
-    opacity 0
-  .hover
-    div
-      width 100%
-      padding 6px 0 6px 0
-      position absolute
-      left 0
-      top 0
-      font-size 10px
-      text-indent 2em
-      background: rgba(0,0,0,0.6)
-  i
-    position absolute
-    bottom 0
-    right 0
-    margin 5px
-  .creator-enter-active, .creator-leave-active
-    transition all 0.5s
-  .creator-enter, .creator-leave-to
-    opacity 0
-    transform translateY(-7px)
+  .img:hover
+    img
+      width 120%
+      height 120%
+      border 1px solid red
+      box-shadow 0 0 10px red
+    +.sentence
+      visibility hidden
 </style>

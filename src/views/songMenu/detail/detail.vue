@@ -215,4 +215,10 @@ export default {
         ~span
           font-size 12px
           color #888888
+  .sim:hover
+    img
+      width 70px
+      height 70px
+    div
+      left 80px
 </style>
