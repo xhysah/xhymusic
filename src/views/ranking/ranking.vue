@@ -20,7 +20,7 @@
           <span>最近更新：{{updateTime}}</span>
         </span>
           <div class="btn-group">
-            <el-button size="mini" type="primary" icon="el-icon-video-play" plain>播放</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play(0)">播放</el-button>
             <el-button size="mini" type="danger" :round="true" plain icon="el-icon-chat-line-square">
               ({{activeRanking.commentCount}})
             </el-button>
@@ -118,6 +118,18 @@ export default {
         this.activeRanking = data.playlist
         this.ranking = data.playlist.tracks
       })
+    },
+    play (i) {
+      console.log(this.ranking)
+      this.$http.all([this.$http.get(`/song/url?id=${this.ranking[i].id}`), this.$http.get(`/lyric?id=${this.ranking[i].id}`)])
+        .then(this.$http.spread(({ data: url }, { data: lyric }) => {
+          if (url.code !== 200 || lyric.code !== 200) {
+            return this.$message.error('获取歌信息失败')
+          }
+          console.log(lyric)
+          this.$store.commit('editActive', this.ranking[i].id)
+          this.$store.commit('playUrl', { url: url.data[0].url, img: this.ranking[i].al.picUrl, name: this.ranking[i].name, singer: this.ranking[i].al.name, lyric: lyric, num: i })
+        }))
     }
   },
   computed: {
@@ -127,9 +139,15 @@ export default {
       time.setTime(this.activeRanking.updateTime)
       console.log(time.toLocaleDateString())
       return time.toLocaleDateString()
+    },
+    num () {
+      return this.$store.state.playSong.num
     }
   },
   watch: {
+    num (newValue) {
+      this.play(newValue)
+    }
   }
 }
 </script>

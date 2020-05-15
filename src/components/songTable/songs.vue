@@ -4,7 +4,7 @@
       <tr v-for="(item, index) in songs" :key="index">
         <td>{{index+1}}</td>
         <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>-->
-        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.artists[0].img1v1Url,item.name,item.album.name)"></i>
+        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.artists[0].img1v1Url,item.name,item.artists[0].name,index)"></i>
         <td  class="td"><div>{{item.name}}</div></td>
         <td  class="td">
           <div>
@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     // 播放歌曲
-    play (id, img, name, singer) {
+    play (id, img, name, singer, index) {
       if (this.active === id) {
         this.$store.commit('editActive', id + 1)
         // this.active = id + 1
@@ -53,7 +53,7 @@ export default {
           console.log(data)
           // this.active = id
           this.$store.commit('editActive', id)
-          this.$store.commit('playUrl', { url: data.data[0].url, img, name, singer })
+          this.$store.commit('playUrl', { url: data.data[0].url, img, name, singer, num: index })
         })
       }
     }

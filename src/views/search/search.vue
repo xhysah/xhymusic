@@ -62,22 +62,8 @@
           <el-tab-pane label="歌单">
             <songmenu :songs="searchResult[5].playlists"></songmenu>
           </el-tab-pane>
-          <el-tab-pane label="主播电台">
-            <div class="flex">
-              <template v-for="(item, index) in searchResult[6].djRadios">
-                <song-outline :key="index" length="150px">
-                  <template v-slot:img>
-                    <img :src="item.picUrl" alt="" @click="songlist(item.id)">
-                  </template>
-                  <template v-slot:sentence>
-                    <div>{{item.desc}}</div>
-                  </template>
-                </song-outline>
-              </template>
-            </div>
-          </el-tab-pane>
           <el-tab-pane label="用户">
-            <user :users="searchResult[7].userprofiles"></user>
+            <user :users="searchResult[6].userprofiles"></user>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -91,13 +77,11 @@ import singerOutline from '../../components/songOutline /singerOutline'
 import user from '../../components/songTable/user'
 import songmenu from '../../components/songTable/songmenu'
 import lyric from '../../components/lyric/lyric'
-import songOutline from '../../components/songOutline /songOutline'
 import songs from '../../components/songTable/songs'
 export default {
   name: 'search',
   components: {
     songs,
-    songOutline,
     lyric,
     songmenu,
     user,
@@ -111,13 +95,12 @@ export default {
     this.search(1014, 3)
     this.search(1006, 4)
     this.search(1000, 5)
-    this.search(1009, 6)
-    this.search(1002, 7)
+    this.search(1002, 6)
   },
   data () {
     return {
       searchResult: [
-        {}, {}, {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}, {}
       ]
     }
   },
@@ -129,7 +112,7 @@ export default {
         }
         this.$set(this.searchResult, i, data.result)
         // this.searchResult.splice(i, 0, data.result)
-        // console.log(this.searchResult[4])
+        console.log(this.searchResult[0])
       })
     },
     songlist (id) {
@@ -137,11 +120,31 @@ export default {
     },
     goSinger (id) {
       this.$router.push({ name: 'singerInformation', params: { sid: id } })
+    },
+    play (i) {
+      // console.log(this.ranking)
+      this.$http.all([this.$http.get(`/song/url?id=${this.searchResult[0].songs[i].id}`), this.$http.get(`/lyric?id=${this.searchResult[0].songs[i].id}`)])
+        .then(this.$http.spread(({ data: url }, { data: lyric }) => {
+          if (url.code !== 200 || lyric.code !== 200) {
+            return this.$message.error('获取歌信息失败')
+          }
+          console.log(lyric)
+          this.$store.commit('editActive', this.searchResult[0].songs[i].id)
+          this.$store.commit('playUrl', { url: url.data[0].url, img: this.searchResult[0].songs[i].artists[0].img1v1Url, name: this.searchResult[0].songs[i].name, singer: this.searchResult[0].songs[i].artists[0].name, lyric: lyric, num: i })
+        }))
     }
   },
   computed: {
     keywords () {
       return this.$route.query.keywords
+    },
+    num () {
+      return this.$store.state.playSong.num
+    }
+  },
+  watch: {
+    num (newValue) {
+      this.play(newValue)
     }
   }
 }

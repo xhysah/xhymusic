@@ -11,7 +11,6 @@
       <el-menu-item index="recommend" @click="go('/recommend')">推荐</el-menu-item>
       <el-menu-item index="ranking" @click="go('/ranking')">排行榜</el-menu-item>
       <el-menu-item index="songMenu" @click="go('/songMenu')">歌单</el-menu-item>
-      <el-menu-item index="newsRadio" @click="go('/newsRadio')">主播电台</el-menu-item>
       <el-menu-item index="singer" @click="go('/singer')">歌手</el-menu-item>
       <el-input class="input" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户"
                 prefix-icon="el-icon-search" @keyup.enter.native="searchInf(input)"

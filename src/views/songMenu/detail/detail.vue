@@ -11,7 +11,7 @@
             <span>{{createTime}}创建</span>
           </div>
           <div class="button-group">
-            <el-button size="mini" type="primary" icon="el-icon-video-play" plain>播放全部</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play(0)">播放全部</el-button>
             <el-button size="mini" type="danger" :round="true" plain icon="el-icon-chat-line-square">
             </el-button>
             <el-button size="mini" type="danger" :round="true" plain icon="el-icon-share">
@@ -87,6 +87,18 @@ export default {
           this.songMenuDetail = detail.playlist
           console.log(this.songMenuDetail)
           this.relateSongMenu = relate.playlists
+        }))
+    },
+    play (i) {
+      // console.log(this.ranking)
+      this.$http.all([this.$http.get(`/song/url?id=${this.songMenuDetail.tracks[i].id}`), this.$http.get(`/lyric?id=${this.songMenuDetail.tracks[i].id}`)])
+        .then(this.$http.spread(({ data: url }, { data: lyric }) => {
+          if (url.code !== 200 || lyric.code !== 200) {
+            return this.$message.error('获取歌信息失败')
+          }
+          console.log(lyric)
+          this.$store.commit('editActive', this.songMenuDetail.tracks[i].id)
+          this.$store.commit('playUrl', { url: url.data[0].url, img: this.songMenuDetail.tracks[i].al.picUrl, name: this.songMenuDetail.tracks[i].name, singer: this.songMenuDetail.tracks[i].al.name, lyric: lyric, num: i })
         }))
     }
   },

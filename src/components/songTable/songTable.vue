@@ -4,7 +4,7 @@
       <tr v-for="(item, index) in songs" :key="item.id">
         <td>{{index+1}}</td>
 <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>-->
-        <i :ref="item.id" class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>
+        <i :ref="item.id" class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name,index)"></i>
         <td class="td"><div>{{item.name}}</div></td>
         <td class="td"><div>{{item.al.name}}</div></td>
       </tr>
@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     // 播放歌曲
-    play (id, img, name, singer) {
+    play (id, img, name, singer, index) {
       // console.log(info)
       if (this.active === id) {
         this.$store.commit('editActive', id + 1)
@@ -46,7 +46,7 @@ export default {
             }
             console.log(lyric)
             this.$store.commit('editActive', id)
-            this.$store.commit('playUrl', { url: url.data[0].url, img, name, singer, lyric: lyric })
+            this.$store.commit('playUrl', { url: url.data[0].url, img, name, singer, lyric: lyric, num: index })
           }))
         // this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
         //   if (data.code !== 200) {

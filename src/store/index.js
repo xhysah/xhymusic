@@ -10,7 +10,8 @@ export default new Vuex.Store({
       img: window.sessionStorage.getItem('img'),
       name: window.sessionStorage.getItem('name'),
       singer: window.sessionStorage.getItem('singer'),
-      lyric: window.sessionStorage.getItem('lyric')
+      lyric: window.sessionStorage.getItem('lyric'),
+      num: 0
     },
     playIf: false,
     audio: {},
@@ -65,6 +66,9 @@ export default new Vuex.Store({
       state.playSong.name = payload.name
       state.playSong.singer = payload.singer
       state.playSong.lyric = payload.lyric
+      state.playSong.num = payload.num
+      console.log(state.playSong.num)
+      console.log(state.playSong.singer)
       state.playIf = true
       window.sessionStorage.setItem('url', payload.url)
       window.sessionStorage.setItem('img', payload.img)
@@ -73,12 +77,13 @@ export default new Vuex.Store({
       window.sessionStorage.setItem('lyric', payload.lyric)
       console.log(state.playSong.lyric)
     },
-    ended (state) {
+    ended (state, num) {
       // 让musicPlayer里面的播放标签变为停止标签
       // state.playSong.url = state.info
       // state.playSong.img = state.info.al.picUrl
       // state.playSong.name = state.info.name
       // state.playSong.singer = state.info.al.name
+      state.playSong.num = num + 1
       state.playIf = false
       state.active = 0
       // console.log(this.$refs.songTable.active--)
@@ -120,6 +125,12 @@ export default new Vuex.Store({
     },
     editActiveName (state, name) {
       state.activeName = name
+    },
+    editPreNum (state) {
+      state.playSong.num--
+    },
+    editNextNum (state) {
+      state.playSong.num++
     }
     // getInfo (state, info) {
     //   state.info = info

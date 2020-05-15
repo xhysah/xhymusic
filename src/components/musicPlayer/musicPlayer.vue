@@ -3,10 +3,10 @@
     <div class="audio1">
       <div class="audio">
         <div class="i-group">
-          <i class="el-icon-caret-left"></i>
+          <i class="el-icon-caret-left" @click="preSong"></i>
           <i class="el-icon-video-pause" v-if="playIf" @click="pauseMusic"></i>
           <i class="el-icon-video-play" v-else @click="playMusic"></i>
-          <i class="el-icon-caret-right"></i>
+          <i class="el-icon-caret-right" @click="nextSong"></i>
         </div>
         <img :src="playSong.img" alt="">
         <div class="i">
@@ -32,7 +32,7 @@ export default {
   methods: {
     // 当音乐播放完毕后
     ended () {
-      this.$store.commit('ended')
+      this.$store.commit('ended', this.playSong.num)
     },
     // 当音乐准备好开始播放
     getDuration () {
@@ -49,6 +49,12 @@ export default {
     // 当点击了播放按钮
     playMusic () {
       this.$store.commit('playSong')
+    },
+    preSong () {
+      this.$store.commit('editPreNum')
+    },
+    nextSong () {
+      this.$store.commit('editNextNum')
     }
   },
   computed: {
