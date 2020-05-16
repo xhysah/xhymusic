@@ -156,6 +156,9 @@ export default new Vuex.Store({
       window.sessionStorage.setItem('songs', songs)
       state.songs = songs
       // this.play(0)
+    },
+    editName (state, name) {
+      state.name = name
     }
     // getInfo (state, info) {
     //   state.info = info
@@ -170,7 +173,7 @@ export default new Vuex.Store({
           }
           console.log(lyric)
           context.commit('editActive', context.state.songs[payload.num].id)
-          context.state.name = payload.name
+          context.commit('editName', payload.name)
           window.sessionStorage.setItem('name', payload.name)
           if (payload.name === 'songs') {
             context.commit('playUrl', { url: url.data[0].url, img: context.state.songs[payload.num].artists[0].img1v1Url, name: context.state.songs[payload.num].name, singer: context.state.songs[payload.num].artists[0].name, lyric: lyric, num: payload.num })
