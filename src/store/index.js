@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -11,14 +12,17 @@ export default new Vuex.Store({
       name: window.sessionStorage.getItem('name'),
       singer: window.sessionStorage.getItem('singer'),
       lyric: window.sessionStorage.getItem('lyric'),
-      num: 0
+      num: -1
     },
     playIf: false,
     audio: {},
     active: 0,
     metaDuration: 0,
     metaCurrentTime: 0,
-    activeName: ''
+    activeName: '',
+    songs: window.sessionStorage.getItem('songs'),
+    total: window.sessionStorage.getItem('total'),
+    name: window.sessionStorage.getItem('name')
   },
   getters: {
     percentage (state) {
@@ -83,7 +87,11 @@ export default new Vuex.Store({
       // state.playSong.img = state.info.al.picUrl
       // state.playSong.name = state.info.name
       // state.playSong.singer = state.info.al.name
-      state.playSong.num = num + 1
+      if (state.playSong.num === state.total - 1) {
+        state.playSong.num = 0
+      } else {
+        state.playSong.num = num + 1
+      }
       state.playIf = false
       state.active = 0
       // console.log(this.$refs.songTable.active--)
@@ -126,17 +134,51 @@ export default new Vuex.Store({
     editActiveName (state, name) {
       state.activeName = name
     },
+    getTotal (state, total) {
+      window.sessionStorage.setItem('total', total)
+      state.total = total
+    },
     editPreNum (state) {
-      state.playSong.num--
+      if (state.playSong.num === 0) {
+        state.playSong.num = state.total - 1
+      } else {
+        state.playSong.num--
+      }
     },
     editNextNum (state) {
-      state.playSong.num++
+      if (state.playSong.num === state.total - 1) {
+        state.playSong.num = 0
+      } else {
+        state.playSong.num++
+      }
+    },
+    getSongs (state, songs) {
+      window.sessionStorage.setItem('songs', songs)
+      state.songs = songs
+      // this.play(0)
     }
     // getInfo (state, info) {
     //   state.info = info
     // }
   },
   actions: {
+    play (context, payload) {
+      axios.all([axios.get(`/song/url?id=${context.state.songs[payload.num].id}`), axios.get(`/lyric?id=${context.state.songs[payload.num].id}`)])
+        .then(axios.spread(({ data: url }, { data: lyric }) => {
+          if (url.code !== 200 || lyric.code !== 200) {
+            return
+          }
+          console.log(lyric)
+          context.commit('editActive', context.state.songs[payload.num].id)
+          context.state.name = payload.name
+          window.sessionStorage.setItem('name', payload.name)
+          if (payload.name === 'songs') {
+            context.commit('playUrl', { url: url.data[0].url, img: context.state.songs[payload.num].artists[0].img1v1Url, name: context.state.songs[payload.num].name, singer: context.state.songs[payload.num].artists[0].name, lyric: lyric, num: payload.num })
+          } else {
+            context.commit('playUrl', { url: url.data[0].url, img: context.state.songs[payload.num].al.picUrl, name: context.state.songs[payload.num].name, singer: context.state.songs[payload.num].al.name, lyric: lyric, num: payload.num })
+          }
+        }))
+    }
   },
   modules: {
   }

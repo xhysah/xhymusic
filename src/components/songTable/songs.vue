@@ -4,7 +4,7 @@
       <tr v-for="(item, index) in songs" :key="index">
         <td>{{index+1}}</td>
         <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>-->
-        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.artists[0].img1v1Url,item.name,item.artists[0].name,index)"></i>
+        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, index)"></i>
         <td  class="td"><div>{{item.name}}</div></td>
         <td  class="td">
           <div>
@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     // 播放歌曲
-    play (id, img, name, singer, index) {
+    play (id, index) {
       if (this.active === id) {
         this.$store.commit('editActive', id + 1)
         // this.active = id + 1
@@ -46,15 +46,21 @@ export default {
         // this.active = id
         this.$store.commit('editActive', id)
       } else {
-        this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
-          if (data.code !== 200) {
-            return this.$message.error('获取歌信息失败')
-          }
-          console.log(data)
-          // this.active = id
-          this.$store.commit('editActive', id)
-          this.$store.commit('playUrl', { url: data.data[0].url, img, name, singer, num: index })
-        })
+        if (window.sessionStorage.getItem('songs') !== this.songs) {
+          this.$store.commit('getSongs', this.songs)
+        }
+        this.$store.commit('getTotal', this.songs.length)
+        this.$store.commit('editActive', id)
+        this.$store.dispatch('play', { num: index, name: 'songs' })
+        // this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
+        //   if (data.code !== 200) {
+        //     return this.$message.error('获取歌信息失败')
+        //   }
+        //   console.log(data)
+        //   // this.active = id
+        //   this.$store.commit('editActive', id)
+        //   this.$store.commit('playUrl', { url: data.data[0].url, img, name, singer, num: index })
+        // })
       }
     }
   },

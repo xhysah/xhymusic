@@ -179,6 +179,7 @@ export default {
         console.log(data.artists.slice(0, 8))
       })
     },
+    // 点击相似歌手，数据跟着变化
     goSinger (id) {
       this.getSimSinger(id)
       this.getSingerInformation(id)
@@ -188,6 +189,7 @@ export default {
     }
   },
   computed: {
+    // 对歌手id进行赋值
     sid () {
       return this.$route.params.sid
     }

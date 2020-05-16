@@ -118,6 +118,7 @@ export default {
     }
   },
   created () {
+    // 判断session里面是否存在数据，有数据，就不用登录了
     if (window.sessionStorage.getItem('phone') && window.sessionStorage.getItem('password')) {
       this.loginIf = 1
     }
@@ -162,6 +163,7 @@ export default {
       this.active = value
       this.title = title
     },
+    // 登录成功后
     login (value) {
       this.loginVisible = false
       this.headImgUrl = value
@@ -182,6 +184,7 @@ export default {
       })
       this.result = {}
     },
+    // 监听input值的改变
     changeValue (value) {
       if (value === '') {
         this.result = {}
@@ -189,6 +192,7 @@ export default {
       }
       this.search(value)
     },
+    // 失去焦点时
     blur () {
       this.result = {}
       this.input = ''

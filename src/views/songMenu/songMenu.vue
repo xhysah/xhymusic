@@ -1,12 +1,15 @@
 <template>
   <div>
     <el-main>
+      <!--      选择栏-->
       <el-row>
         <span class="all">{{cateName}}</span>
         <el-button type="danger" plain size="mini" @click="categoriesVisible=true">选择分类</el-button>
         <span class="hot" @click="cateHot">热门</span>
       </el-row>
+      <!--      分割线-->
       <div class="line"></div>
+      <!--      歌单列表-->
       <div class="flex">
         <template v-for="(item, index) in songMenu">
           <song-outline :key="index" length="150px" height="150px">
@@ -51,6 +54,7 @@ export default {
   created () {
     // 获取歌单分类数据
     this.getSongMenu()
+    // 判断是当前路由有没有定义name值，如果没有，则显示全部精品歌单数据，如果有，则根据name值来显示
     if (this.$route.query.name === undefined) {
       this.highQuality()
       console.log('ewe')
@@ -91,6 +95,7 @@ export default {
         console.log(data)
       })
     },
+    // 获取精品歌单
     highQuality () {
       this.$http.get('/top/playlist').then(({ data }) => {
         if (data.code !== 200) {
@@ -102,6 +107,7 @@ export default {
         console.log(data)
       })
     },
+    // 根据cat值，来获取对应歌单
     cate (cat) {
       this.$http.get(`/top/playlist?cat=${cat}`).then(({ data }) => {
         if (data.code !== 200) {
@@ -113,6 +119,7 @@ export default {
         console.log(data)
       })
     },
+    // 根据当前的cateName值，获取热门数据，其实和cate一样，只不过可以点热门了
     cateHot () {
       this.$http.get(`/top/playlist?cat=${this.cateName}`).then(({ data }) => {
         if (data.code !== 200) {
@@ -122,6 +129,7 @@ export default {
         console.log(data)
       })
     },
+    // 根据歌单的id，去往歌单详细信息页面
     songsDetail (id) {
       this.$router.push({
         path: '/songMenuDetail',

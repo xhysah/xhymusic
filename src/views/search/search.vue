@@ -97,6 +97,10 @@ export default {
     this.search(1000, 5)
     this.search(1002, 6)
   },
+  mounted () {
+    this.$store.commit('getSongs', this.searchResult[0].songs)
+    this.$store.commit('getTotal', this.searchResult[0].songs.length)
+  },
   data () {
     return {
       searchResult: [
@@ -105,6 +109,7 @@ export default {
     }
   },
   methods: {
+    // 根据type值，来获取搜索信息的type数据
     search (type, i) {
       this.$http.get(`/search?keywords=${this.keywords}&type=${type}`).then(({ data }) => {
         if (data.code !== 200) {
@@ -115,37 +120,21 @@ export default {
         console.log(this.searchResult[0])
       })
     },
+    // 去往歌单详细信息
     songlist (id) {
       this.$router.push({ name: 'songMenuDetail', query: { path: '/top/playlist/id=', id: id } })
     },
+    // 去往歌手详细信息
     goSinger (id) {
       this.$router.push({ name: 'singerInformation', params: { sid: id } })
-    },
-    play (i) {
-      // console.log(this.ranking)
-      this.$http.all([this.$http.get(`/song/url?id=${this.searchResult[0].songs[i].id}`), this.$http.get(`/lyric?id=${this.searchResult[0].songs[i].id}`)])
-        .then(this.$http.spread(({ data: url }, { data: lyric }) => {
-          if (url.code !== 200 || lyric.code !== 200) {
-            return this.$message.error('获取歌信息失败')
-          }
-          console.log(lyric)
-          this.$store.commit('editActive', this.searchResult[0].songs[i].id)
-          this.$store.commit('playUrl', { url: url.data[0].url, img: this.searchResult[0].songs[i].artists[0].img1v1Url, name: this.searchResult[0].songs[i].name, singer: this.searchResult[0].songs[i].artists[0].name, lyric: lyric, num: i })
-        }))
     }
   },
   computed: {
     keywords () {
       return this.$route.query.keywords
-    },
-    num () {
-      return this.$store.state.playSong.num
     }
   },
   watch: {
-    num (newValue) {
-      this.play(newValue)
-    }
   }
 }
 </script>

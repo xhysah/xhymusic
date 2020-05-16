@@ -43,7 +43,9 @@
             </singer-outline>
           </template>
         </div>
+        <!--        分割线-->
         <div class="line"></div>
+        <!--        不展示图片的歌手-->
         <div  class="rest">
           <template v-for="(item, index) in restSingers">
             <span @click="showInformation(item.id)" :key="index" class="rest-item">{{item.name}}</span>
@@ -160,6 +162,7 @@ export default {
         this.restSingers = data.artists.slice(10)
       })
     },
+    // 根据id，去往歌手详细信息页面
     showInformation (id) {
       this.$router.push({ name: 'singerInformation', params: { sid: id } })
     }

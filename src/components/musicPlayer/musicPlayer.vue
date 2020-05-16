@@ -74,6 +74,17 @@ export default {
     percentage () {
       // console.log(this.$store.getters.percentage)
       return this.$store.getters.percentage
+    },
+    num () {
+      return this.$store.state.playSong.num
+    },
+    name () {
+      return this.$store.state.name
+    }
+  },
+  watch: {
+    num (newValue) {
+      this.$store.dispatch('play', { num: newValue, name: this.name })
     }
   }
 }

@@ -4,7 +4,7 @@
     <el-carousel :interval="5000" indicator-position="outside">
       <audio :src="playurl" autoplay="autoplay"></audio>
       <el-carousel-item v-for="(item, index) in banners" :key="index">
-        <img class="banner" :src="item.imageUrl" :alt="item.typeTitle" @click="play(item.targetId)">
+        <img class="banner" :src="item.imageUrl" :alt="item.typeTitle">
       </el-carousel-item>
     </el-carousel>
     <!--    热门-->
@@ -79,19 +79,12 @@ export default {
     getTop () {
       return this.$http.get('/top/playlist/highquality?limit=15')
     },
+    // 去往歌单详情页
     songlist (id) {
       this.$store.commit('editActiveName', 'songMenu')
       this.$router.push({ path: '/songMenuDetail', query: { id } })
     },
-    play (id) {
-      this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取歌曲失败')
-        }
-        this.playurl = data.data[0].url
-        console.log(data)
-      })
-    },
+    // 根据热门分类，去往对应歌单分类
     goSongMenu (name) {
       console.log(name)
       this.$router.push({
@@ -101,6 +94,7 @@ export default {
         }
       })
     },
+    // 获取精选分类数据
     handleCurrentChange () {
       this.$http.get(`/top/playlist/highquality?before=${this.toplist[this.toplist.length - 1].updateTime}&limit=15`).then(({ data }) => {
         if (data.code !== 200) {
