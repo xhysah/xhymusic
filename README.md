@@ -4,30 +4,30 @@
 
 ## 项目搭建
 - ### 基本项目
-	 **安装脚手架**：npm install -g  @vue/cli
-  	**创建一个新项目**： vue create my-project(自己想取的项目名称)
-	 1.Please pick a preset？(选择手动的，可以自己想要的配置)-------manully
+	 **安装脚手架**：npm install -g  @vue/cli  
+  	**创建一个新项目**： vue create my-project(自己想取的项目名称)  
+	 1.Please pick a preset？(选择手动的，可以自己想要的配置)-------manully  
 	 2.Check the features needed for your project(询问项目需求)：我选择的如下图
- ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516185345802.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
-	 2. Use history mode for router(路由模式是否使用history)? -------yes
-	 3. Pick a CSS pre-processor(询问项目的css预处理器)：--------Stylus 
-	 4.  Pick a linter / formatter config(询问项目的格式校验方式)：------Standard 
-	 5.  Pick additional lint features:(询问项目是什么时候校验格式)------lint on save(保存时就校验，哈哈哈哈，因为我不知道怎么写代码是规范的，需要他实时约束我)
-	 6.  Where do you prefer placing config for Babel, ESLint, etc.?（询问项目的配置文件放在那里）-----In dedicated config files
-	 7.  Save this as a preset for future projects? (是否保存该配置，若是，你以后创建新项目的时候，就会看见这个配置)----no
- 然后vue-cli就开始自己下载了，等待他
+ ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516185345802.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)  
+	 2. Use history mode for router(路由模式是否使用history)? -------yes  
+	 3. Pick a CSS pre-processor(询问项目的css预处理器)：--------Stylus   
+	 4.  Pick a linter / formatter config(询问项目的格式校验方式)：------Standard   
+	 5.  Pick additional lint features:(询问项目是什么时候校验格式)------lint on save(保存时就校验，哈哈哈哈，因为我不知道怎么写代码是规范的，需要他实时约束我)  
+	 6.  Where do you prefer placing config for Babel, ESLint, etc.?（询问项目的配置文件放在那里）-----In dedicated config files  
+	 7.  Save this as a preset for future projects? (是否保存该配置，若是，你以后创建新项目的时候，就会看见这个配置)----no  
+ 然后vue-cli就开始自己下载了，等待他  
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516185345739.png)
 -  ### 引入项目中使用的东西------axios，element-Ul
-	 **1.axios**
- 	下载npm install axios --save，运行时也会使用，所有要保存在你的运行时依赖中
- 	在src/main.js中：导入import axios from ‘axios’，
-	 挂载到vue原型上Vue.prototype.$http = axios----使用的时候，就可以this.$http
- 	全局配置axios.defaults.baseURL = 'http://192.168.1.5:3000'
-	 axios.defaults.withCredentials = true 表示跨域请求时是否需要使用凭证
- 	**2.element-UI**
- 	下载npm i element-ui -save
- 	我是在src下面建了一个elementUI文件夹，再建了一个element.js文件
- 	在这个文件中，按需引入elementUI
+	 **1.axios**  
+ 	下载npm install axios --save，运行时也会使用，所有要保存在你的运行时依赖中  
+ 	在src/main.js中：导入import axios from ‘axios’，  
+	 挂载到vue原型上Vue.prototype.$http = axios----使用的时候，就可以this.$http  
+ 	全局配置axios.defaults.baseURL = 'http://192.168.1.5:3000'  
+	 axios.defaults.withCredentials = true 表示跨域请求时是否需要使用凭证  
+ 	**2.element-UI**  
+ 	下载npm i element-ui -save  
+ 	我是在src下面建了一个elementUI文件夹，再建了一个element.js文件  
+ 	在这个文件中，按需引入elementUI  
  ```javacsipt
  import Vue from 'vue'
  import {
@@ -39,7 +39,7 @@
   ```
   再在main.js中引入import './elementUi/element'
  最后删掉views，components里面原本存在的vue文件，连同src/router/index.js里的路由一起删掉----然后做完这些，我就开始研究文档了，一开始真的好难上手
- [网易云github地址](https://github.com/Binaryify/NeteaseCloudMusicApi).
+ [网易云github地址](https://github.com/Binaryify/NeteaseCloudMusicApi).  
  下载后 node app.js 就可以了
 ## 遇到的问题
 - ### 播放音乐
@@ -62,10 +62,10 @@
 - 项目属性
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516200935595.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
 - ### 定位
-relative：相对定位，不脱离文档流，参考自身的静态位置
-absolute：绝对定位，参考最近一个不为static的父级元素的位置
-fixed：固定定位，参照对象为可视窗口
-static ：默认，按照正常流进行排列
+- relative：相对定位，不脱离文档流，参考自身的静态位置
+- absolute：绝对定位，参考最近一个不为static的父级元素的位置
+- fixed：固定定位，参照对象为可视窗口
+- static ：默认，按照正常流进行排列
 ## 项目截图
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516191250866.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516191250802.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
