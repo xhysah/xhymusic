@@ -70,7 +70,7 @@
       <el-aside width="280px">
         <div class="simiHeader">相似歌手</div>
         <div class="line"></div>
-        <div class="flex">
+        <div class="flex" v-if="Object.keys(simArtists).length !== 0">
           <template v-for="(item, index) in simArtists">
             <singer-outline :key="index" length="50px" height="50px">
               <template v-slot:img>
@@ -82,6 +82,7 @@
             </singer-outline>
           </template>
         </div>
+        <div v-else class="center">暂无相似歌手</div>
       </el-aside>
     </el-container>
   </div>
@@ -236,4 +237,7 @@ export default {
     color red
   .tabs>>>.el-tabs__item:hover
     color red !important
+  .center
+    margin 10px
+    color #888888
 </style>

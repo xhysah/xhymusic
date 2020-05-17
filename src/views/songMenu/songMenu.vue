@@ -5,7 +5,7 @@
       <el-row>
         <span class="all">{{cateName}}</span>
         <el-button type="danger" plain size="mini" @click="categoriesVisible=true">选择分类</el-button>
-        <span class="hot" @click="cateHot">热门</span>
+        <span class="hot" @click="cate(cateName)">热门</span>
       </el-row>
       <!--      分割线-->
       <div class="line"></div>
@@ -41,6 +41,17 @@
         </div>
       </div>
     </el-dialog>
+    <!--    分页-->
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :page-size="20"
+      :total="total"
+      @prev-click="pre"
+      @next-click="next"
+      @current-change="current"
+      :current-page.sync="currentPage">
+    </el-pagination>
   </div>
 </template>
 
@@ -66,7 +77,7 @@ export default {
   },
   data () {
     return {
-      // 歌单分类数据
+      // 歌单分类数据名称
       cateName: '',
       categories: {},
       sub: {},
@@ -80,7 +91,11 @@ export default {
         'el-icon-headset',
         'el-icon-sunny',
         'el-icon-scissors'
-      ]
+      ],
+      // 当前的页码值
+      currentPage: 1,
+      // 总的页码值
+      total: 0
     }
   },
   methods: {
@@ -97,10 +112,12 @@ export default {
     },
     // 获取精品歌单
     highQuality () {
-      this.$http.get('/top/playlist').then(({ data }) => {
+      this.$http.get('/top/playlist?limit=20').then(({ data }) => {
         if (data.code !== 200) {
           return this.$message.error('获取精品歌单数据失败')
         }
+        this.currentPage = 1
+        this.total = data.total
         this.songMenu = data.playlists
         this.cateName = '全部'
         this.categoriesVisible = false
@@ -108,24 +125,23 @@ export default {
       })
     },
     // 根据cat值，来获取对应歌单
-    cate (cat) {
-      this.$http.get(`/top/playlist?cat=${cat}`).then(({ data }) => {
+    cate (cat, offset) {
+      let info = ''
+      console.log(offset)
+      if (offset !== undefined) {
+        info = `/top/playlist?cat=${cat}&limit=20&offset=${20 * (offset - 1)}`
+      } else {
+        info = `/top/playlist?cat=${cat}&limit=20`
+        this.currentPage = 1
+      }
+      this.$http.get(info).then(({ data }) => {
         if (data.code !== 200) {
           return this.$message.error('获取分类数据失败')
         }
+        this.total = data.total
         this.songMenu = data.playlists
         this.categoriesVisible = false
         this.cateName = cat
-        console.log(data)
-      })
-    },
-    // 根据当前的cateName值，获取热门数据，其实和cate一样，只不过可以点热门了
-    cateHot () {
-      this.$http.get(`/top/playlist?cat=${this.cateName}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取分类数据失败')
-        }
-        this.songMenu = data.playlists
         console.log(data)
       })
     },
@@ -137,6 +153,15 @@ export default {
           id
         }
       })
+    },
+    pre (a) {
+      this.cate(this.cateName, a)
+    },
+    next (a) {
+      this.cate(this.cateName, a)
+    },
+    current (a) {
+      this.cate(this.cateName, a)
     }
   },
   computed: {
@@ -165,6 +190,7 @@ export default {
       font-size 13px
       padding 3px 10px
       border-radius 5px
+      cursor pointer
     .all
       font-size 25px
       margin-left 50px
@@ -210,4 +236,9 @@ export default {
       border-top none
       color white
       padding 25px 25px 0 25px
+  .el-pagination
+    display flex
+    justify-content center
+    position relative
+    top -20px
 </style>

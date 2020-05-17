@@ -44,14 +44,14 @@ export default {
         }
         this.$http.get('/login/cellphone', { params: this.loginForm }).then(({ data }) => {
           if (data.code === 200) {
-            document.cookie = data.token
+            window.localStorage.setItem('token', data.token)
             console.log(data)
             console.log(data.account.id)
             console.log(data.profile.avatarUrl)
             // console.log(data.backgroundUrl)
-            window.sessionStorage.setItem('phone', this.loginForm.phone)
-            window.sessionStorage.setItem('password', this.loginForm.password)
-            window.sessionStorage.setItem('imgUrl', data.profile.avatarUrl)
+            window.localStorage.setItem('phone', this.loginForm.phone)
+            window.localStorage.setItem('password', this.loginForm.password)
+            window.localStorage.setItem('imgUrl', data.profile.avatarUrl)
             this.$emit('success', data.profile.avatarUrl)
           }
         })

@@ -66,6 +66,12 @@
 - absolute：绝对定位，参考最近一个不为static的父级元素的位置
 - fixed：固定定位，参照对象为可视窗口
 - static ：默认，按照正常流进行排列
+- ### 修饰符sync
+在我使用elementUI时，我发现经常有数据，会加上这个修饰符.sync,一直不明白是什么意思
+
+- 其实sync是一个语法糖，是什么语法糖呢？
+- 在子组件中不能修改父组件中的值，要想修改父组件中的值，必须向父组件发射一个方法this.$emit('方法名',‘修改的的值);，然后父组件接收这个方法@方法名=‘处理数据操作’
+- 如果使用.sync,就不用上面操作了，在子组件中修改的值，父组件也会同步变化
 ## 项目截图
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516191250866.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516191250802.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)

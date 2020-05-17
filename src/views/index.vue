@@ -14,7 +14,7 @@
       <el-menu-item index="singer" @click="go('/singer')">歌手</el-menu-item>
       <el-input class="input" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户"
                 prefix-icon="el-icon-search" @keyup.enter.native="searchInf(input)"
-                @input="changeValue" @blur="blur"
+                @input="changeValue" ref="input"
       ></el-input>
       <span @click="loginVisible=true" v-if="loginIf === 0" ref="login">登录</span>
       <!--        登录后显示-->
@@ -58,33 +58,33 @@
       <div v-if="result.songs">
         <i class="el-icon-headset"></i>单曲
         <div v-for="(item, index) in result.songs" :key="index">
-          <div class="item">{{item.name}}-
+          <div class="item" @click="changeInputValue(item.name)">{{item.name}}-
             <template v-for="(item1, index) in item.artists"><span :key="index"></span>{{item1.name}}</template>
           </div>
         </div>
-        <div class="line"></div>
+        <div  v-if="result.artists||result.albums||result.mvs" class="line"></div>
       </div>
       <!--        歌手-->
       <div v-if="result.artists">
         <i class="el-icon-user"></i>歌手
         <div v-for="(item, index) in result.artists" :key="index">
-          <div class="item">{{item.name}}</div>
+          <div class="item"  @click="changeInputValue(item.name)">{{item.name}}</div>
         </div>
-        <div class="line"></div>
+        <div v-if="result.albums||result.mvs" class="line"></div>
       </div>
       <!--        专辑-->
       <div v-if="result.albums">
         <i class="el-icon-star-off"></i>专辑
         <div v-for="(item, index) in result.albums" :key="index">
-          <div class="item">{{item.name}}-{{item.artist.name}}</div>
+          <div class="item"  @click="changeInputValue(item.name)">{{item.name}}-{{item.artist.name}}</div>
         </div>
-        <div class="line"></div>
+        <div v-if="result.mvs" class="line"></div>
       </div>
       <!--        mv-->
       <div v-if="result.mvs">
         <i class="el-icon-s-platform"></i>视频
         <template v-for="(item, index) in result.mvs">
-          <div class="item" :key="index">{{item.name}}-
+          <div class="item" :key="index"  @click="changeInputValue(item.name)">{{item.name}}-
             <template v-for="(item1, index) in item.artists"><span :key="index"></span>{{item1.name}}</template>
           </div>
         </template>
@@ -119,14 +119,14 @@ export default {
   },
   created () {
     // 判断session里面是否存在数据，有数据，就不用登录了
-    if (window.sessionStorage.getItem('phone') && window.sessionStorage.getItem('password')) {
+    if (window.localStorage.getItem('phone') && window.localStorage.getItem('password')) {
       this.loginIf = 1
     }
   },
   mounted () {
     // 判断音乐栏是否显示
     function show () {
-      if ((window.innerHeight - event.clientY) < 200) {
+      if ((window.innerHeight - event.clientY) < 2) {
         this.show = true
       } else {
         this.show = false
@@ -172,6 +172,7 @@ export default {
     // 去往哪一个子页面
     go (value) {
       this.$router.push(value)
+      console.log(this.$router)
     },
     // 在input里面写值并按enter键，进入serch页面
     searchInf (value) {
@@ -193,17 +194,23 @@ export default {
       this.search(value)
     },
     // 失去焦点时
-    blur () {
+    // blur () {
+    //   this.result = {}
+    //   this.input = ''
+    // },
+    changeInputValue (value) {
       this.result = {}
-      this.input = ''
+      this.$refs.input.focus()
+      this.input = value
+      this.searchInf(value)
     }
   },
   computed: {
     // 头像地址
     headImgUrl: {
       get () {
-        if (window.sessionStorage.getItem('phone') && window.sessionStorage.getItem('password')) {
-          return window.sessionStorage.getItem('imgUrl')
+        if (window.localStorage.getItem('phone') && window.localStorage.getItem('password')) {
+          return window.localStorage.getItem('imgUrl')
         }
         return ''
       },
@@ -288,7 +295,7 @@ export default {
     background-color black
     border 3px solid #252525
     z-index 20
-    padding 10px
+    padding 10px 10px 0 10px
     border-radius 5px
     .item
       width 130px
@@ -302,7 +309,10 @@ export default {
       top -20px
       font-size 12px
       cursor pointer
+      padding 0 5px
     .line
       position relative
       top -10px
+  .item:hover
+    box-shadow 0 0 10px red
 </style>
