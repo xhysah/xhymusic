@@ -52,7 +52,6 @@ export default {
           this.$store.commit('getSongs', this.songs)
         }
         this.$store.commit('getTotal', this.songs.length)
-        this.$store.commit('editActive', id)
         this.$store.dispatch('play', { num: index, name: 'songTable' })
         // this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
         //   if (data.code !== 200) {
@@ -74,11 +73,11 @@ export default {
   },
   watch: {
     active (newValue, oldValue) {
-      if (newValue === 0) {
-        // console.log(newValue)
-        // console.log(oldValue)
-        // console.log(this.$refs[oldValue].this.play())
-      }
+      // if (newValue === 0) {
+      //   // console.log(newValue)
+      //   // console.log(oldValue)
+      //   // console.log(this.$refs[oldValue].this.play())
+      //   }
     }
   }
 }

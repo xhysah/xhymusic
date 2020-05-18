@@ -31,27 +31,6 @@
         <img :src="headImgUrl" alt="hhh" slot="reference">
       </el-popover>
     </el-menu>
-    <!--    显示的页面-->
-    <router-view/>
-    <!--    显示登录对话框-->
-    <div class="dialog">
-      <el-dialog
-        :visible.sync="loginVisible"
-        width="400px"
-        :title="title"
-        @close="change(0,'没有账号？请先注册')">
-        <div class="button-group" v-if="active == 0">
-          <el-button size="medium" round @click="change(1, '手机登录')">手机登录</el-button>
-          <el-button round size="medium" @click="change(2, '注册')">注册</el-button>
-        </div>
-        <phone-login v-else-if="active == 1" @register="editActive" @success="login"></phone-login>
-        <register v-else @login="editActive"></register>
-      </el-dialog>
-    </div>
-    <!--    音乐栏显示-->
-    <transition name="music">
-      <music-player class="music" v-show="show"></music-player>
-    </transition>
     <!--    显示搜索框-->
     <div v-show="Object.keys(result).length !== 0" class="search">
       <!--          歌曲-->
@@ -90,6 +69,27 @@
         </template>
       </div>
     </div>
+    <!--    显示的页面-->
+    <router-view/>
+    <!--    显示登录对话框-->
+    <div class="dialog">
+      <el-dialog
+        :visible.sync="loginVisible"
+        width="400px"
+        :title="title"
+        @close="change(0,'没有账号？请先注册')">
+        <div class="button-group" v-if="active == 0">
+          <el-button size="medium" round @click="change(1, '手机登录')">手机登录</el-button>
+          <el-button round size="medium" @click="change(2, '注册')">注册</el-button>
+        </div>
+        <phone-login v-else-if="active == 1" @register="editActive" @success="login"></phone-login>
+        <register v-else @login="editActive"></register>
+      </el-dialog>
+    </div>
+    <!--    音乐栏显示-->
+    <transition name="music">
+      <music-player class="music" v-show="show"></music-player>
+    </transition>
   </div>
 </template>
 
@@ -126,7 +126,7 @@ export default {
   mounted () {
     // 判断音乐栏是否显示
     function show () {
-      if ((window.innerHeight - event.clientY) < 2) {
+      if ((window.innerHeight - event.clientY) < 200) {
         this.show = true
       } else {
         this.show = false
@@ -288,9 +288,8 @@ export default {
   .music-enter, .music-leave-to
     opacity 0
   .search
-    position fixed
-    top 52px
-    right 24%
+    position absolute
+    left 750px
     width 220px
     background-color black
     border 3px solid #252525

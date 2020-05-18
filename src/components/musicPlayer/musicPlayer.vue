@@ -44,11 +44,11 @@ export default {
     },
     // 当点击了停止按钮
     pauseMusic () {
-      this.$store.commit('pauseSong')
+      this.$store.commit('pauseSongs')
     },
     // 当点击了播放按钮
     playMusic () {
-      this.$store.commit('playSong')
+      this.$store.commit('playSongs')
     },
     preSong () {
       this.$store.commit('editPreNum')
@@ -79,11 +79,14 @@ export default {
       return this.$store.state.playSong.num
     },
     name () {
-      return this.$store.state.name
+      return this.$store.state.tableName
     }
   },
   watch: {
     num (newValue) {
+      console.log('11')
+      console.log(newValue)
+      console.log(this.name)
       this.$store.dispatch('play', { num: newValue, name: this.name })
     }
   }

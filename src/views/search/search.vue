@@ -15,16 +15,18 @@
             <songs :songs="searchResult[0].songs"></songs>
           </el-tab-pane>
           <el-tab-pane label="歌手">
-            <template v-for="(item, index) in searchResult[1].artists">
-              <singer-outline :key="index" length="150px" height="150px">
-                <template v-slot:img>
-                  <img :src="item.img1v1Url" alt="" @click="goSinger(item.id)">
-                </template>
-                <template v-slot:sentence>
-                  <div>{{item.name}}</div>
-                </template>
-              </singer-outline>
-            </template>
+            <div class="flex">
+              <template v-for="(item, index) in searchResult[1].artists">
+                <singer-outline :key="index" length="150px" height="150px">
+                  <template v-slot:img>
+                    <img :src="item.img1v1Url" alt="" @click="goSinger(item.id)">
+                  </template>
+                  <template v-slot:sentence>
+                    <div>{{item.name}}</div>
+                  </template>
+                </singer-outline>
+              </template>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="专辑">
             <div class="flex">
