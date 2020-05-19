@@ -1,5 +1,5 @@
 <template>
-  <div class="center">
+  <div class="container">
     <el-container>
       <el-main>
         <div class="header">
@@ -31,6 +31,27 @@
           <span>播放：<span>{{songMenuDetail.playCount}}</span><span>次</span></span>
         </div>
         <song-table :songs="songMenuDetail.tracks"></song-table>
+        <!--        评论-->
+        <div>全部评论</div>
+        <div>
+          <template v-for="item in comments">
+            <div :key="item.commentId">
+              <div class="simLine"></div>
+              <comments-table :comment="item"></comments-table>
+            </div>
+          </template>
+        </div>
+        <el-pagination
+          v-if="total/5>1"
+          background
+          layout="prev, pager, next"
+          :page-size="5"
+          :total="total"
+          @prev-click="pre"
+          @next-click="next"
+          @current-change="current"
+          :current-page.sync="currentPage">
+        </el-pagination>
       </el-main>
       <el-aside width="280px">
         <div class="simiHeader">相似歌单</div>
@@ -48,11 +69,13 @@
 </template>
 
 <script>
+import commentsTable from '../../../components/commentsTable/commentsTable'
 import songTable from '../../../components/songTable/songTable'
 export default {
   name: 'detail',
   components: {
-    songTable
+    songTable,
+    commentsTable
   },
   created () {
     // this.getDetail(this.sid)
@@ -66,7 +89,11 @@ export default {
       songMenuDetail: {
         creator: {}
       },
-      relateSongMenu: {}
+      relateSongMenu: {},
+      comments: {},
+      currentPage: 1,
+      currentId: 0,
+      total: 0
     }
   },
   methods: {
@@ -78,16 +105,33 @@ export default {
     getRelateSongMenu (id) {
       return this.$http.get(`/related/playlist?id=${id}`)
     },
+    // 根据歌单id获取歌单评论
+    getComments (id) {
+      return this.$http.get(`/comment/playlist?id=${id}&limit=5`)
+    },
     goDetail (id) {
-      this.$http.all([this.getDetail(id), this.getRelateSongMenu(id)])
-        .then(this.$http.spread(({ data: detail }, { data: relate }) => {
-          if (detail.code !== 200 || relate.code !== 200) {
+      this.$http.all([this.getDetail(id), this.getRelateSongMenu(id), this.getComments(id)])
+        .then(this.$http.spread(({ data: detail }, { data: relate }, { data: comments }) => {
+          if (detail.code !== 200 || relate.code !== 200 || comments.code !== 200) {
             return this.$message.error('获取数据失败')
           }
+          this.currentId = id
           this.songMenuDetail = detail.playlist
           console.log(this.songMenuDetail)
           this.relateSongMenu = relate.playlists
+          this.total = comments.total
+          this.currentPage = 1
+          this.comments = comments.comments
+          console.log(comments)
         }))
+    },
+    getnextComments (value) {
+      this.$http.get(`/comment/playlist?id=${this.currentId}&limit=5&offset=${(value - 1) * 5}`).then(({ data }) => {
+        if (data.code !== 200) {
+          return this.$message.error('获取数据失败')
+        }
+        this.comments = data.comments
+      })
     },
     play () {
       // console.log(this.ranking)
@@ -104,6 +148,18 @@ export default {
       this.$store.commit('getTotal', this.songMenuDetail.trackCount)
       this.$store.commit('getSongs', this.songMenuDetail.tracks)
       this.$store.dispatch('play', { num: 0, name: 'songTable' })
+    },
+    pre (a) {
+      // this.cate(this.cateName, a)
+      this.getnextComments(a)
+    },
+    next (a) {
+      // this.cate(this.cateName, a)
+      this.getnextComments(a)
+    },
+    current (a) {
+      this.getnextComments(a)
+      // this.cate(this.cateName, a)
     }
   },
   computed: {
@@ -121,7 +177,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .center
+  .container
     width 70%
     margin 20px auto
     .header
@@ -237,4 +293,10 @@ export default {
       height 70px
     div
       left 80px
+  .el-pagination
+    display flex
+    justify-content center
+  .el-pagination.is-background .el-pager li:not(.disabled)
+  >>>.active
+    background-color red !important
 </style>

@@ -27,3 +27,6 @@ li{
 audio{
   width: 100%
 }
+.simLine{
+  border: .5px solid #888888
+}
