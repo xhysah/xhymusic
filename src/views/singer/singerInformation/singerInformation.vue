@@ -5,20 +5,15 @@
         <div class="header">{{artist.name}}</div>
         <div class="img">
           <img :src="artist.picUrl" alt="">
+          <el-button v-if="collected===true" size="mini" type="danger" icon="el-icon-folder-add" @click="collect(2)">
+            已收藏
+          </el-button>
+          <el-button  v-else size="mini" type="danger" icon="el-icon-folder-add" plain @click="collect(1)">
+            收藏
+          </el-button>
         </div>
         <el-tabs type="border-card" style="background-color: black" :stretch="true" class="tabs">
           <el-tab-pane label="热门作品">
-            <!--        <div v-for="(item, index) in hotSongs" :key="index">-->
-            <!--          <div @click="play(item.id)">{{item.name}}&#45;&#45;&#45;&#45;&#45;&#45;{{item.al.name}}</div>-->
-            <!--        </div>-->
-            <!--        <table>-->
-            <!--          <tr v-for="(item, index) in hotSongs" :key="index">-->
-            <!--            <td>{{index+1}}</td>-->
-            <!--            <i class="el-icon-video-play" :class="{'el-icon-video-pause':active == item.id}" @click="play(item.id)"></i>-->
-            <!--            <td>{{item.name}}</td>-->
-            <!--            <td>{{item.al.name}}</td>-->
-            <!--          </tr>-->
-            <!--        </table>-->
             <song-table :songs="hotSongs"></song-table>
           </el-tab-pane>
           <el-tab-pane label="所有专辑">
@@ -100,11 +95,7 @@ export default {
     albumOutline
   },
   created () {
-    this.getSimSinger(this.sid)
-    this.getSingerInformation(this.sid)
-    this.getAlbum(this.sid)
-    this.getMv(this.sid)
-    this.getDesc(this.sid)
+    this.goSinger(this.sid)
     this.$store.commit('editActiveName', 'singer')
   },
   data () {
@@ -123,16 +114,15 @@ export default {
         introduction: {}
       },
       // 相似歌手
-      simArtists: {}
+      simArtists: {},
+      collected: false,
+      currentId: 0
     }
   },
   methods: {
     // 获取歌手信息
     getSingerInformation (id) {
-      this.$http.get(`/artists?id=${id}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取歌手详细信息失败')
-        }
+      this.$http.get(`/artists?id=${id}`).then(data => {
         this.artist = data.artist
         this.hotSongs = data.hotSongs
         // console.log(data.hotSongs)
@@ -140,59 +130,77 @@ export default {
     },
     // 获取专辑数据
     getAlbum (id) {
-      this.$http.get(`/artist/album?id=${id}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取专辑信息失败')
-        }
-        // console.log(data)
+      this.$http.get(`/artist/album?id=${id}`).then(data => {
         this.album = data.hotAlbums
       })
     },
     // 获取mv数据
     getMv (id) {
-      this.$http.get(`/artist/mv?id=${id}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取MV信息失败')
-        }
+      this.$http.get(`/artist/mv?id=${id}`).then(data => {
         this.mv = data.mvs
-        // console.log(data.mvs)
       })
     },
     // 获取歌手描述信息
     getDesc (id) {
-      this.$http.get(`/artist/desc?id=${id}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取歌手描述信息失败')
-        }
+      this.$http.get(`/artist/desc?id=${id}`).then(data => {
         console.log(data)
         this.disc.briefDesc = data.briefDesc
         this.disc.introduction = data.introduction
-        // console.log(data.introduction[3].txt.split(' 2'))
       })
     },
     // 获得相似的歌手
     getSimSinger (id) {
-      this.$http.get(`/simi/artist?id=${id}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取相似歌手信息失败')
-        }
+      this.$http.get(`/simi/artist?id=${id}`).then(data => {
         this.simArtists = data.artists.slice(0, 6)
         console.log(data.artists.slice(0, 8))
       })
     },
     // 点击相似歌手，数据跟着变化
     goSinger (id) {
+      this.currentId = id
       this.getSimSinger(id)
       this.getSingerInformation(id)
       this.getAlbum(id)
       this.getMv(id)
       this.getDesc(id)
+      this.getCollectedValue(id)
+    },
+    getCollectedValue (id) {
+      this.collected = false
+      if (this.accountId) {
+        this.$http.get(`/artist/sublist?uid=${this.accountId}`).then(data => {
+          for (const key of data.data) {
+            if (Number(id) === key.id) {
+              this.collected = true
+            }
+          }
+          console.log(data)
+        })
+      }
+    },
+    collect (value) {
+      if (this.accountId) {
+        this.$http.get(`/artist/sub?t=${value}&id=${this.currentId}`).then(data => {
+          if (data.code === 200) {
+            if (value === 1) {
+              this.collected = true
+            } else {
+              this.collected = false
+            }
+          }
+        })
+      } else {
+        console.log('hdjahd')
+      }
     }
   },
   computed: {
     // 对歌手id进行赋值
     sid () {
       return this.$route.params.sid
+    },
+    accountId () {
+      return this.$store.state.accountId
     }
   }
 }
@@ -240,4 +248,9 @@ export default {
   .center
     margin 10px
     color #888888
+  .el-button
+    position relative
+    z-index 100
+    top -280px
+    left 530px
 </style>

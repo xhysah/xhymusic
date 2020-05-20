@@ -31,7 +31,10 @@ export default new Vuex.Store({
     // 总歌曲数
     total: window.sessionStorage.getItem('total'),
     // songstable还是songs
-    tableName: window.sessionStorage.getItem('tableName')
+    tableName: window.sessionStorage.getItem('tableName'),
+    // 判断用户是否登录
+    accountId: window.localStorage.getItem('accountId'),
+    songMenuId: window.localStorage.getItem('songMenuId')
   },
   getters: {
     // 播放进度
@@ -88,10 +91,6 @@ export default new Vuex.Store({
     // 一首音乐结束操作
     ended (state, num) {
       // 让musicPlayer里面的播放标签变为停止标签
-      // state.playSong.url = state.info
-      // state.playSong.img = state.info.al.picUrl
-      // state.playSong.name = state.info.name
-      // state.playSong.singer = state.info.al.name
       if (state.playSong.num === state.total - 1) {
         state.playSong.num = 0
       } else {
@@ -99,18 +98,15 @@ export default new Vuex.Store({
       }
       state.playIf = false
       state.active = 0
-      // console.log(this.$refs.songTable.active--)
     },
     // 得到元总时长
     getDuration (state, audio) {
-      // state.duration = `${Math.floor(audio.duration / 60)}:${Math.floor(audio.duration % 60)}`
       state.metaDuration = audio.duration
       state.metaCurrentTime = audio.currentTime
       state.audio = audio
     },
     // 得到元已经播放的时间
     getCurrentTime (state) {
-      // state.currentTime = `${Math.floor(state.audio.currentTime / 60)}:${Math.floor(state.audio.currentTime % 60)}`
       state.metaCurrentTime = state.audio.currentTime
     },
     // 暂停音乐
@@ -173,32 +169,24 @@ export default new Vuex.Store({
     },
     editName (state, name) {
       state.tableName = name
+    },
+    getAccountId (state, value) {
+      state.accountId = value
     }
-    // getInfo (state, info) {
-    //   state.info = info
-    // }
   },
   actions: {
     play (context, payload) {
       axios.all([axios.get(`/song/url?id=${context.state.songs[payload.num].id}`), axios.get(`/lyric?id=${context.state.songs[payload.num].id}`)])
-        .then(axios.spread(({ data: url }, { data: lyric }) => {
-          if (url.code !== 200 || lyric.code !== 200) {
-            console.log('sassss')
-            return
-          }
+        .then(axios.spread((songUrl, lyric) => {
           console.log(lyric)
           window.sessionStorage.setItem('active', context.state.songs[payload.num].id)
           context.commit('editActive', context.state.songs[payload.num].id)
           context.commit('editName', payload.name)
           window.sessionStorage.setItem('tableName', payload.name)
           if (payload.name === 'songs') {
-            context.commit('playUrl', { url: url.data[0].url, img: context.state.songs[payload.num].artists[0].img1v1Url, name: context.state.songs[payload.num].name, singer: context.state.songs[payload.num].artists[0].name, lyric: lyric, num: payload.num })
-            // context.commit('ended', payload.num)
-            // context.commit('playSongs')
+            context.commit('playUrl', { url: songUrl.data[0].url, img: context.state.songs[payload.num].artists[0].img1v1Url, name: context.state.songs[payload.num].name, singer: context.state.songs[payload.num].artists[0].name, lyric: lyric, num: payload.num })
           } else {
-            context.commit('playUrl', { url: url.data[0].url, img: context.state.songs[payload.num].al.picUrl, name: context.state.songs[payload.num].name, singer: context.state.songs[payload.num].al.name, lyric: lyric, num: payload.num })
-            // context.commit('ended', payload.num)
-            // context.commit('playSongs')
+            context.commit('playUrl', { url: songUrl.data[0].url, img: context.state.songs[payload.num].al.picUrl, name: context.state.songs[payload.num].name, singer: context.state.songs[payload.num].al.name, lyric: lyric, num: payload.num })
           }
         }))
     }

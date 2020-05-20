@@ -54,30 +54,29 @@ export default {
   },
   created () {
     // 处理请求
-    this.$http.all([this.getBanner(), this.getHot(), this.getTop()])
-      .then(this.$http.spread(({ data: data1 }, { data: data2 }, { data: data3 }) => {
-        if (data1.code !== 200 || data2.code !== 200 || data3.code !== 200) {
-          return this.$message.error('获取数据失败')
-        }
-        this.banners = data1.banners
-        this.playlist = data2.tags
-        this.toplist = data3.playlists
-        console.log(data3)
-      }))
+    this.getBanner()
+    this.getHot()
+    this.getTop()
     this.$store.commit('editActiveName', 'recommend')
   },
   methods: {
     // 获取banner数据
     getBanner () {
-      return this.$http.get('/banner')
+      this.$http.get('/banner').then(data => {
+        this.banners = data.banners
+      })
     },
     // 获取热门分类数据
     getHot () {
-      return this.$http.get('/playlist/hot')
+      this.$http.get('/playlist/hot').then(data => {
+        this.playlist = data.tags
+      })
     },
     // 获取热门歌单
     getTop () {
-      return this.$http.get('/top/playlist/highquality?limit=15')
+      this.$http.get('/top/playlist/highquality?limit=15').then(data => {
+        this.toplist = data.playlists
+      })
     },
     // 去往歌单详情页
     songlist (id) {
@@ -96,10 +95,7 @@ export default {
     },
     // 获取精选分类数据
     handleCurrentChange () {
-      this.$http.get(`/top/playlist/highquality?before=${this.toplist[this.toplist.length - 1].updateTime}&limit=15`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取网友精选数据失败')
-        }
+      this.$http.get(`/top/playlist/highquality?before=${this.toplist[this.toplist.length - 1].updateTime}&limit=15`).then(data => {
         this.toplist = data.playlists
         console.log(data.playlists)
       })

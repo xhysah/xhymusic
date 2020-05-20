@@ -113,10 +113,7 @@ export default {
   methods: {
     // 根据type值，来获取搜索信息的type数据
     search (type, i) {
-      this.$http.get(`/search?keywords=${this.keywords}&type=${type}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('搜索失败')
-        }
+      this.$http.get(`/search?keywords=${this.keywords}&type=${type}`).then(data => {
         this.$set(this.searchResult, i, data.result)
         // this.searchResult.splice(i, 0, data.result)
         console.log(this.searchResult[0])

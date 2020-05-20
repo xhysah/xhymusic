@@ -4,7 +4,7 @@
       <img :src="singleComment.user.avatarUrl" alt="">
     </div>
     <span class="nickname">{{singleComment.user.nickname}}</span>
-    <span class="content">{{singleComment.content}}</span>
+    <span class="content" :style="{width:newWidth}">{{singleComment.content}}</span>
     <span class="time">{{commentTime}}</span>
   </div>
 </template>
@@ -15,11 +15,16 @@ export default {
   props: {
     comment: {
       type: Object
+    },
+    width: {
+      type: String,
+      default: '530px'
     }
   },
   data () {
     return {
-      singleComment: this.comment
+      singleComment: this.comment,
+      newWidth: this.width
     }
   },
   methods: {},
@@ -53,7 +58,6 @@ export default {
     position absolute
     top 30px
     left 70px
-    width 530px
     overflow hidden
     text-overflow ellipsis
     white-space nowrap

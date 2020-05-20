@@ -101,10 +101,7 @@ export default {
   methods: {
     // 分类数据
     getSongMenu () {
-      this.$http.get('/playlist/catlist').then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取歌单分类数据失败')
-        }
+      this.$http.get('/playlist/catlist').then(data => {
         this.categories = data.categories
         this.sub = data.sub
         console.log(data)
@@ -112,16 +109,12 @@ export default {
     },
     // 获取精品歌单
     highQuality () {
-      this.$http.get('/top/playlist?limit=20').then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取精品歌单数据失败')
-        }
+      this.$http.get('/top/playlist?limit=20').then(data => {
         this.currentPage = 1
         this.total = data.total
         this.songMenu = data.playlists
         this.cateName = '全部'
         this.categoriesVisible = false
-        console.log(data)
       })
     },
     // 根据cat值，来获取对应歌单
@@ -134,10 +127,7 @@ export default {
         info = `/top/playlist?cat=${cat}&limit=20`
         this.currentPage = 1
       }
-      this.$http.get(info).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取分类数据失败')
-        }
+      this.$http.get(info).then(data => {
         this.total = data.total
         this.songMenu = data.playlists
         this.categoriesVisible = false

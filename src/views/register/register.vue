@@ -73,12 +73,9 @@ export default {
         if (!valid) {
           return this.$message.error('请填写完整信息')
         }
-        this.$http.get('/captcha/sent', { params: this.phoneForm }).then(response => {
-          const { data } = response
-          if (data.code === 200) {
-            this.show = false
-            this.registerForm.phone = this.phoneForm.phone
-          }
+        this.$http.get('/captcha/sent', { params: this.phoneForm }).then(data => {
+          this.show = false
+          this.registerForm.phone = this.phoneForm.phone
         })
       })
     },

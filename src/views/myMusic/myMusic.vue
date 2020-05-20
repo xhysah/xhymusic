@@ -1,6 +1,15 @@
 <template>
-  <div class="container">
+  <div>
     <el-container>
+      <el-aside>
+        <div v-for="(item, index) in playlists" :key="index" class="aside" @click="goDetail(item.id)">
+          <img :src="item.coverImgUrl" alt="">
+          <div>
+            <span>{{item.name}}</span><br>
+            <span>{{item.trackCount}}首 by{{item.creator.nickname}}</span>
+          </div>
+        </div>
+      </el-aside>
       <el-main>
         <div class="header">
           <img :src="songMenuDetail.coverImgUrl" alt="">
@@ -12,8 +21,8 @@
           </div>
           <div class="button-group">
             <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play()">播放全部</el-button>
-            <i v-if="collected===false" class="el-icon-star-off" @click="collect(1)"><span>收藏</span></i>
-            <i v-else class="el-icon-star-on" @click="collect(2)"><span>已收藏</span></i>
+            <i v-if="collected===false" class="el-icon-star-off"><span>收藏</span></i>
+            <i v-else class="el-icon-star-on"><span>已收藏</span></i>
           </div>
           <div class="tags">标签:
             <template v-for="(item, index) in songMenuDetail.tags">
@@ -28,66 +37,50 @@
         </div>
         <song-table :songs="songMenuDetail.tracks"></song-table>
         <!--        评论-->
-        <div class="comments">
-          <div class="all">全部评论</div>
-          <div>
-            <template v-for="item in comments">
-              <div :key="item.commentId">
-                <div class="simLine"></div>
-                <comments-table :comment="item"></comments-table>
-              </div>
-            </template>
-          </div>
-          <el-pagination
-            v-if="total/5>1"
-            background
-            layout="prev, pager, next"
-            :page-size="5"
-            :total="total"
-            @prev-click="pre"
-            @next-click="next"
-            @current-change="current"
-            :current-page.sync="currentPage">
-          </el-pagination>
+        <div>全部评论</div>
+        <div>
+          <template v-for="item in comments">
+            <div :key="item.commentId">
+              <div class="simLine"></div>
+              <comments-table :comment="item"></comments-table>
+            </div>
+          </template>
         </div>
+        <el-pagination
+          v-if="total/5>1"
+          background
+          layout="prev, pager, next"
+          :page-size="5"
+          :total="total"
+          @prev-click="pre"
+          @next-click="next"
+          @current-change="current"
+          :current-page.sync="currentPage">
+        </el-pagination>
       </el-main>
-      <el-aside width="280px">
-        <div class="simiHeader">相似歌单</div>
-        <div class="line"></div>
-        <div v-for="(item, index) in relateSongMenu" :key="index" class="sim"  @click="goDetail(item.id)">
-          <img :src="item.coverImgUrl" alt="">
-          <div>
-            <span>{{item.name}}</span><br>
-            <span>by{{item.creator.nickname}}</span>
-          </div>
-        </div>
-      </el-aside>
+
     </el-container>
   </div>
 </template>
 
 <script>
-import commentsTable from '../../../components/commentsTable/commentsTable'
-import songTable from '../../../components/songTable/songTable'
+import commentsTable from '../../components/commentsTable/commentsTable'
+import songTable from '../../components/songTable/songTable'
 export default {
-  name: 'detail',
+  name: 'myMusic',
   components: {
     songTable,
     commentsTable
   },
   created () {
-    // this.getDetail(this.sid)
-    this.$store.commit('editActiveName', 'songMenu')
-    // this.getRelateSongMenu(this.sid)
-    this.goDetail(this.did)
+    this.getInf()
   },
   data () {
     return {
-      // 描述信息
+      playlists: {},
       songMenuDetail: {
         creator: {}
       },
-      relateSongMenu: {},
       comments: {},
       currentPage: 1,
       currentId: 0,
@@ -97,21 +90,18 @@ export default {
       collected: false
     }
   },
-  // mounted () {
-  //   this.getCollectedValue()
-  // },
   methods: {
+    getInf () {
+      this.$http.get(`/user/playlist?uid=${this.accountId}`).then(data => {
+        this.playlists = data.playlist
+        console.log(data)
+      })
+    },
     // 根据id获取歌单的详细信息
     getDetail (id) {
       this.$http.get(`/playlist/detail?id=${id}`).then(data => {
         this.currentId = id
         this.songMenuDetail = data.playlist
-      })
-    },
-    // 根据歌单的id获取歌单的相似歌单
-    getRelateSongMenu (id) {
-      return this.$http.get(`/related/playlist?id=${id}`).then(data => {
-        this.relateSongMenu = data.playlists
       })
     },
     // 根据歌单id获取歌单评论
@@ -124,9 +114,7 @@ export default {
     },
     goDetail (id) {
       this.getDetail(id)
-      this.getRelateSongMenu(id)
       this.getComments(id)
-      this.getCollectedValue(id)
     },
     getnextComments (value) {
       this.$http.get(`/comment/playlist?id=${this.currentId}&limit=5&offset=${(value - 1) * 5}`).then(data => {
@@ -146,57 +134,26 @@ export default {
     },
     current (a) {
       this.getnextComments(a)
-    },
-    // 收藏该歌单
-    collect (value) {
-      if (this.accountId) {
-        this.$http.get(`/playlist/subscribe?t=${value}&id=${this.currentId}`).then(data => {
-          if (data.code === 200) {
-            if (value === 1) {
-              this.collected = true
-            } else {
-              this.collected = false
-            }
-          }
-        })
-      } else {
-        console.log('hdjahd')
-      }
-    },
-    getCollectedValue (id) {
-      if (this.accountId) {
-        this.collected = false
-        this.$http.get(`/user/playlist?uid=${this.accountId}`).then(data => {
-          for (const key of data.playlist) {
-            if (Number(id) === key.id) {
-              this.collected = true
-            }
-          }
-        })
-      }
     }
   },
   computed: {
-    did () {
-      return this.$route.query.id
+    accountId () {
+      return this.$store.state.accountId
     },
     createTime () {
       const time = new Date()
       time.setTime(this.songMenuDetail.createTime)
       console.log(time.toLocaleDateString())
       return time.toLocaleDateString()
-    },
-    accountId () {
-      return this.$store.state.accountId
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-  .container
+  .el-container
     width 70%
-    margin 20px auto
+    margin auto
     .header
       margin 20px 0
       height 220px
@@ -258,6 +215,31 @@ export default {
             display inline-block
             border 11px solid
             border-color transparent transparent transparent red
+  .aside
+    margin 10px 10px 0 10px
+    height 80px
+    img
+      width 60px
+      height 60px
+    div
+      position relative
+      left 70px
+      top -60px
+      span
+        display inline-block
+        width 190px
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+        ~span
+          font-size 12px
+          color #888888
+  .aside:hover
+    img
+      width 70px
+      height 70px
+    div
+      left 80px
   .songHead
     margin-bottom 10px
     font-size 20px
@@ -282,34 +264,6 @@ export default {
     // 一个块元素显示的文本的行数
     -webkit-line-clamp 2
     overflow hidden
-  .simiHeader
-    margin-top 80px
-    margin-bottom 10px
-  .sim
-    margin 10px 10px 0 10px
-    height 80px
-    img
-      width 60px
-      height 60px
-    div
-      position relative
-      left 70px
-      top -60px
-      span
-        display inline-block
-        width 190px
-        overflow hidden
-        text-overflow ellipsis
-        white-space nowrap
-        ~span
-          font-size 12px
-          color #888888
-  .sim:hover
-    img
-      width 70px
-      height 70px
-    div
-      left 80px
   .el-pagination
     display flex
     justify-content center
@@ -321,8 +275,4 @@ export default {
     span
       font-size 10px
       margin-left 2px
-  .comments
-    margin-top 20px
-    .all
-      margin-bottom 10px
 </style>

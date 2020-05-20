@@ -9,6 +9,7 @@
       text-color="white"
       active-text-color="red">
       <el-menu-item index="recommend" @click="go('/recommend')">推荐</el-menu-item>
+      <el-menu-item index="myMusic" @click="go('/myMusic')">我的音乐</el-menu-item>
       <el-menu-item index="ranking" @click="go('/ranking')">排行榜</el-menu-item>
       <el-menu-item index="songMenu" @click="go('/songMenu')">歌单</el-menu-item>
       <el-menu-item index="singer" @click="go('/singer')">歌手</el-menu-item>
@@ -26,7 +27,7 @@
           <li><i class="el-icon-user"></i>我的主页</li>
           <li><i class="el-icon-message"></i>我的消息</li>
           <li><i class="el-icon-setting"></i>个人设置</li>
-          <li><i class="el-icon-circle-close"></i>退出</li>
+          <li><i class="el-icon-circle-close" @click="loginOut"></i>退出</li>
         </ul>
         <img :src="headImgUrl" alt="hhh" slot="reference">
       </el-popover>
@@ -150,13 +151,17 @@ export default {
       if (value === '') {
         return
       }
-      this.$http.get(`/search/suggest?keywords=${value}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('搜索失败')
-        }
+      this.$http.get(`/search/suggest?keywords=${value}`).then(data => {
         this.result = data.result
         console.log(data.result)
       })
+      // this.$http.get(`/search/suggest?keywords=${value}`).then(response => {
+      //   if (response.code !== 200) {
+      //     return this.$message.error('搜索失败')
+      //   }
+      //   this.result = response.data.result
+      //   console.log(response.data.result)
+      // })
     },
     // 在登录框中，为显示哪个做改变
     change (value, title) {
@@ -203,6 +208,14 @@ export default {
       this.$refs.input.focus()
       this.input = value
       this.searchInf(value)
+    },
+    loginOut () {
+      window.localStorage.removeItem('token')
+      window.localStorage.removeItem('phone')
+      window.localStorage.removeItem('password')
+      window.localStorage.removeItem('imgUrl')
+      window.localStorage.removeItem('accountId')
+      window.localStorage.removeItem('getAccountId')
     }
   },
   computed: {

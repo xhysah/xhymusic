@@ -42,18 +42,24 @@ export default {
         if (!valid) {
           return this.$message.error('请填写完整信息')
         }
-        this.$http.get('/login/cellphone', { params: this.loginForm }).then(({ data }) => {
-          if (data.code === 200) {
-            window.localStorage.setItem('token', data.token)
+        this.$http.get('/login/cellphone', { params: this.loginForm }).then(data => {
+          window.localStorage.setItem('token', data.token)
+          console.log(data)
+          console.log(data.account.id)
+          console.log(data.profile.avatarUrl)
+          this.$http.get(`/user/playlist?uid=${data.account.id}`).then(data => {
+            console.log(data.playlist[0].id)
+            window.localStorage.setItem('songMenuId', data.playlist[0].id)
+            this.playlists = data.playlist
             console.log(data)
-            console.log(data.account.id)
-            console.log(data.profile.avatarUrl)
-            // console.log(data.backgroundUrl)
-            window.localStorage.setItem('phone', this.loginForm.phone)
-            window.localStorage.setItem('password', this.loginForm.password)
-            window.localStorage.setItem('imgUrl', data.profile.avatarUrl)
-            this.$emit('success', data.profile.avatarUrl)
-          }
+          })
+          // console.log(data.backgroundUrl)
+          this.$store.commit('getAccountId', data.account.id)
+          window.localStorage.setItem('accountId', data.account.id)
+          window.localStorage.setItem('phone', this.loginForm.phone)
+          window.localStorage.setItem('password', this.loginForm.password)
+          window.localStorage.setItem('imgUrl', data.profile.avatarUrl)
+          this.$emit('success', data.profile.avatarUrl)
         })
       })
     },

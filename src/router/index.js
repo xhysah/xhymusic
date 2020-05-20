@@ -10,6 +10,7 @@ const singer = () => import('../views/singer/singer')
 const detail = () => import('../views/songMenu/detail/detail')
 const singerInformation = () => import('../views/singer/singerInformation/singerInformation')
 const search = () => import('../views/search/search')
+const myMusic = () => import('../views/myMusic/myMusic')
 
 Vue.use(VueRouter)
 
@@ -26,6 +27,11 @@ const routes = [
         path: '/recommend',
         name: 'recommend',
         component: recommend
+      },
+      {
+        path: '/myMusic',
+        name: 'myMusic',
+        component: myMusic
       },
       {
         path: '/ranking',
@@ -88,5 +94,14 @@ const router = new VueRouter({
 //   console.log(to.name)
 //   console.log(Vue.$store.state.active)
 //   this.$store.commit('editActiveName', to.name)
+// })
+// router.beforeEach((to, from, next) => {
+//   if (window.localStorage.getItem('token')) {
+//     store.commit('getLoginIf', true)
+//     next()
+//   } else {
+//     store.commit('getLoginIf', false)
+//     next()
+//   }
 // })
 export default router

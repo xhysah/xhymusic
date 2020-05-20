@@ -16,20 +16,22 @@
         <!--      主体上面部分-->
         <div>
           <img :src="activeRanking.coverImgUrl" alt="">
-          <span class="active">{{activeRanking.name}}
+          <span class="actives">{{activeRanking.name}}
           <span>最近更新：{{updateTime}}</span>
         </span>
           <div class="btn-group">
             <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play()">播放</el-button>
-            <el-button size="mini" type="danger" :round="true" plain icon="el-icon-chat-line-square">
-              ({{activeRanking.commentCount}})
-            </el-button>
-            <el-button size="mini" type="danger" :round="true" plain icon="el-icon-share">
-              ({{activeRanking.shareCount}})
-            </el-button>
-            <el-button size="mini" type="danger" :round="true" plain icon="el-icon-folder-add">
-              ({{activeRanking.subscribedCount}})
-            </el-button>
+<!--            <el-button size="mini" type="danger" :round="true" plain icon="el-icon-chat-line-square">-->
+<!--              ({{activeRanking.commentCount}})-->
+<!--            </el-button>-->
+            <i v-if="collected===false" class="el-icon-star-off" @click="collect(1)"><span>收藏</span></i>
+            <i v-else class="el-icon-star-on" @click="collect(2)"><span>已收藏</span></i>
+<!--            <el-button size="mini" type="danger" :round="true" plain icon="el-icon-share">-->
+<!--              ({{activeRanking.shareCount}})-->
+<!--            </el-button>-->
+<!--            <el-button size="mini" type="danger" :round="true" plain icon="el-icon-folder-add">-->
+<!--              ({{activeRanking.subscribedCount}})-->
+<!--            </el-button>-->
           </div>
         </div>
         <!--      主体下面部分-->
@@ -40,16 +42,28 @@
             <span>播放：<span>{{activeRanking.playCount}}</span><span>次</span></span>
           </div>
           <song-table :songs="ranking"></song-table>
-<!--          <song-table :songs="ranking" @playurl="editUrl" @pause="pauseMusics" @play="playMusics"-->
-<!--                      ref="songTable"></song-table>-->
-          <!--        <template v-for="(item, index) in ranking">-->
-          <!--        <div :key="index" class="img-item">-->
-          <!--&lt;!&ndash;          <img :src="item.al.picUrl" alt="">&ndash;&gt;-->
-          <!--          <span>{{item.name}}</span>-->
-          <!--          <span>{{item.alia[0]}}</span>-->
-          <!--          <span>{{item.ar[0].name}}</span>-->
-          <!--        </div>-->
-          <!--      </template>-->
+        </div>
+        <div class="comments">
+          <div class="all">全部评论</div>
+          <div>
+            <template v-for="item in comments">
+              <div :key="item.commentId">
+                <div class="simLine"></div>
+                <comments-table :comment="item" width="400px"></comments-table>
+              </div>
+            </template>
+          </div>
+          <el-pagination
+            v-if="total/5>1"
+            background
+            layout="prev, pager, next"
+            :page-size="5"
+            :total="total"
+            @prev-click="pre"
+            @next-click="next"
+            @current-change="current"
+            :current-page.sync="currentPage">
+          </el-pagination>
         </div>
       </el-main>
     </el-container>
@@ -57,23 +71,18 @@
 </template>
 
 <script>
+import commentsTable from '../../components/commentsTable/commentsTable'
 import songTable from '../../components/songTable/songTable'
 export default {
   name: 'ranking',
   components: {
-    songTable
+    songTable,
+    commentsTable
   },
   created () {
     // 得到排行数据和第一个排行的详细数据
-    this.$http.all([this.getRanking(), this.getFirstRanking(3)])
-      .then(this.$http.spread(({ data: ranking }, { data: myselfRanking }) => {
-        if (ranking.code !== 200 || myselfRanking.code !== 200) {
-          return this.$message.error('获取数据失败')
-        }
-        this.rankingList = ranking.list
-        this.activeRanking = myselfRanking.playlist
-        this.ranking = myselfRanking.playlist.tracks
-      }))
+    this.getRanking()
+    this.getMyselfRanking(3)
     this.$store.commit('editActiveName', 'ranking')
   },
   data () {
@@ -84,58 +93,90 @@ export default {
       activeRanking: {},
       // 正在查看的排行榜数据
       ranking: [],
-      // playSong: {
-      //   url: '',
-      //   img: '',
-      //   name: '',
-      //   singer: ''
-      // },
-      // playIf: false,
       idx: [3, 0, 2, 1, 23, 24, 25, 26, 27, 22, 28, 36, 29, 30, 5, 6, 21, 7, 8, 10, 9, 20, 31, 32, 19, 35],
-      active: 3
-      // duration: '00:00',
-      // metaDuration: 0,
-      // currentTime: '00:00',
-      // metaCurrentTime: 0,
-      // percentage: 0
+      active: 3,
+      comments: {},
+      currentPage: 1,
+      currentId: 0,
+      // 总的评论数量
+      total: 0,
+      collected: false
     }
   },
   methods: {
     // 获取排行榜数据
     getRanking () {
-      return this.$http.get('/toplist/detail')
+      this.$http.get('/toplist/detail').then(data => {
+        this.rankingList = data.list
+      })
     },
-    // 根据id获取排行榜详细数据，用于create
-    getFirstRanking (idx) {
-      this.active = idx
-      return this.$http.get('/top/list', { params: { idx: idx } })
-    },
-    // 根据id获取详细排行数据，用于点击事件
+    // 根据id获取排行榜详细数据
     getMyselfRanking (idx) {
       this.active = idx
-      return this.$http.get('/top/list', { params: { idx: idx } }).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取数据失败')
-        }
+      this.$http.get('/top/list', { params: { idx: idx } }).then(data => {
         this.activeRanking = data.playlist
         this.ranking = data.playlist.tracks
+        this.currentId = data.playlist.id
+        this.getComments(data.playlist.id)
+        this.getCollectedValue(data.playlist.id)
+        console.log(data)
+      })
+    },
+    // 根据歌单id获取歌单评论
+    getComments (id) {
+      return this.$http.get(`/comment/playlist?id=${id}&limit=5`).then(data => {
+        this.total = data.total
+        this.currentPage = 1
+        this.comments = data.comments
       })
     },
     // 全部播放时的操作
     play () {
-      // console.log(this.ranking)
-      // this.$http.all([this.$http.get(`/song/url?id=${this.ranking[i].id}`), this.$http.get(`/lyric?id=${this.ranking[i].id}`)])
-      //   .then(this.$http.spread(({ data: url }, { data: lyric }) => {
-      //     if (url.code !== 200 || lyric.code !== 200) {
-      //       return this.$message.error('获取歌信息失败')
-      //     }
-      //     console.log(lyric)
-      //     this.$store.commit('editActive', this.ranking[i].id)
-      //     this.$store.commit('playUrl', { url: url.data[0].url, img: this.ranking[i].al.picUrl, name: this.ranking[i].name, singer: this.ranking[i].al.name, lyric: lyric, num: i })
-      //   }))
       this.$store.commit('getTotal', this.activeRanking.trackCount)
       this.$store.commit('getSongs', this.ranking)
       this.$store.dispatch('play', { num: 0, name: 'songTable' })
+    },
+    getnextComments (value) {
+      this.$http.get(`/comment/playlist?id=${this.currentId}&limit=5&offset=${(value - 1) * 5}`).then(data => {
+        this.comments = data.comments
+      })
+    },
+    pre (a) {
+      this.getnextComments(a)
+    },
+    next (a) {
+      this.getnextComments(a)
+    },
+    current (a) {
+      this.getnextComments(a)
+    },
+    // 收藏该歌单
+    collect (value) {
+      if (this.accountId) {
+        this.$http.get(`/playlist/subscribe?t=${value}&id=${this.currentId}`).then(data => {
+          if (data.code === 200) {
+            if (value === 1) {
+              this.collected = true
+            } else {
+              this.collected = false
+            }
+          }
+        })
+      } else {
+        console.log('hdjahd')
+      }
+    },
+    getCollectedValue (id) {
+      if (this.accountId) {
+        this.collected = false
+        this.$http.get(`/user/playlist?uid=${this.accountId}`).then(data => {
+          for (const key of data.playlist) {
+            if (Number(id) === key.id) {
+              this.collected = true
+            }
+          }
+        })
+      }
     }
   },
   computed: {
@@ -143,8 +184,11 @@ export default {
     updateTime () {
       const time = new Date()
       time.setTime(this.activeRanking.updateTime)
-      console.log(time.toLocaleDateString())
+      // console.log(time.toLocaleDateString())
       return time.toLocaleDateString()
+    },
+    accountId () {
+      return this.$store.state.accountId
     }
   },
   watch: {
@@ -191,15 +235,15 @@ color=#353535
     flex-wrap wrap
     flex-direction column
     margin -20px 20px
-  .active
+  .actives
     position relative
     top -120px
     font-size 25px
     margin 20px
     +div
       position relative
-      left 150px
-      top -90px
+      left -190px
+      top -50px
       margin 20px
     span
       font-size 12px
@@ -263,4 +307,19 @@ color=#353535
   .imgChange
     width 70px
     height 70px
+  .el-pagination
+    display flex
+    justify-content center
+  .el-pagination.is-background .el-pager li:not(.disabled)
+  >>>.active
+    background-color red !important
+  .comments
+    margin-top 30px
+    .all
+      margin-bottom 10px
+  i
+    margin-left 10px
+    span
+      font-size 10px
+      margin-left 2px
 </style>

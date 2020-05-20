@@ -4,9 +4,11 @@
       <tr v-for="(item, index) in songs" :key="item.id">
         <td>{{index+1}}</td>
 <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>-->
-        <i :ref="item.id" class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, index)"></i>
+        <td><i :ref="item.id" class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, index)"></i></td>
         <td class="td"><div>{{item.name}}</div></td>
         <td class="td"><div>{{item.al.name}}</div></td>
+        <td class="collect"> <i v-if="collected===false" class="el-icon-star-off" @click="collect('add', item.id)"><span>收藏</span></i>
+          <i v-else class="el-icon-star-on" @click="collect('del', item.id)"><span>已收藏</span></i></td>
       </tr>
     </table>
   </div>
@@ -22,6 +24,7 @@ export default {
   },
   data () {
     return {
+      collected: false
     }
   },
   methods: {
@@ -64,6 +67,21 @@ export default {
         //   // this.$store.commit('getInfo', info)
         // })
       }
+    },
+    collect (value, id) {
+      if (this.accountId) {
+        this.$http.get(`/playlist/tracks?op=${value}&pid=${this.songMenuId}&tracks=${id}`).then(data => {
+          if (data.code === 200) {
+            if (value === 1) {
+              this.collected = true
+            } else {
+              this.collected = false
+            }
+          }
+        })
+      } else {
+        console.log('hdjahd')
+      }
     }
   },
   computed: {
@@ -78,6 +96,12 @@ export default {
       //   // console.log(oldValue)
       //   // console.log(this.$refs[oldValue].this.play())
       //   }
+    },
+    songMenuId () {
+      return this.$store.state.songMenuId
+    },
+    accountId () {
+      return this.$store.state.accountId
     }
   }
 }
@@ -98,10 +122,23 @@ export default {
   i
     font-size 1.5em
   .td
-    width 45%
+    width 35%
     div
       width 200px
       overflow hidden
       text-overflow ellipsis
       white-space nowrap
+  .collect
+    i
+      visibility hidden
+      font-size 16px
+      width 50px
+      margin-left 10px
+      span
+        font-size 12px
+        margin-left 2px
+  table tr:hover
+    .collect
+      i
+        visibility visible
 </style>

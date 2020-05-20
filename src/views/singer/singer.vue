@@ -129,10 +129,7 @@ export default {
       this.activeId.areaId = areaId
       this.activeId.headerName = headerName
       this.currentId = '' + typeId + areaId
-      this.$http.get(`/artist/list?type=${typeId}&area=${areaId}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取歌手信息失败')
-        }
+      this.$http.get(`/artist/list?type=${typeId}&area=${areaId}`).then(data => {
         this.singers = data.artists.slice(0, 10)
         this.restSingers = data.artists.slice(10)
         // console.log(this.restSingers)
@@ -141,10 +138,7 @@ export default {
     // 根据字母获取歌手信息
     searchSinger (value) {
       this.currentId2 = value
-      this.$http.get(`/artist/list?type=${this.activeId.typeId}&area=${this.activeId.areaId}&initial=${value}`).then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('搜索歌手信息失败')
-        }
+      this.$http.get(`/artist/list?type=${this.activeId.typeId}&area=${this.activeId.areaId}&initial=${value}`).then(data => {
         this.singers = data.artists.slice(0, 10)
         this.restSingers = data.artists.slice(10)
       })
@@ -154,10 +148,7 @@ export default {
       this.activeId.headerName = '热门歌手'
       this.activeId.typeId = 0
       this.currentId = 0
-      this.$http.get('/top/artists').then(({ data }) => {
-        if (data.code !== 200) {
-          return this.$message.error('获取歌手信息失败')
-        }
+      this.$http.get('/top/artists').then(data => {
         this.singers = data.artists.slice(0, 10)
         this.restSingers = data.artists.slice(10)
       })
