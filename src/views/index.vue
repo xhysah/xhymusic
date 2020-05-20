@@ -27,7 +27,7 @@
           <li><i class="el-icon-user"></i>我的主页</li>
           <li><i class="el-icon-message"></i>我的消息</li>
           <li><i class="el-icon-setting"></i>个人设置</li>
-          <li><i class="el-icon-circle-close" @click="loginOut"></i>退出</li>
+          <li @click="loginOut"><i class="el-icon-circle-close"></i>退出</li>
         </ul>
         <img :src="headImgUrl" alt="hhh" slot="reference">
       </el-popover>
@@ -327,4 +327,8 @@ export default {
       top -10px
   .item:hover
     box-shadow 0 0 10px red
+  .el-popover
+    margin 0
+    li:hover
+      background-color #eeeeee
 </style>

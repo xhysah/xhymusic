@@ -27,6 +27,9 @@ export default {
       collected: false
     }
   },
+  created () {
+    this.getCollectedValue()
+  },
   methods: {
     // 播放歌曲
     play (id, index) {
@@ -81,6 +84,19 @@ export default {
         })
       } else {
         console.log('hdjahd')
+      }
+    },
+    getCollectedValue () {
+      if (this.accountId) {
+        this.collected = false
+        this.$http.get(`/playlist/detail?id=${this.songMenuId}`).then(data => {
+          // for (const key of data.playlist) {
+          //   if (Number(id) === key.id) {
+          //     this.collected = true
+          //   }
+          // }
+          console.log(data)
+        })
       }
     }
   },
