@@ -153,7 +153,6 @@ export default {
       }
       this.$http.get(`/search/suggest?keywords=${value}`).then(data => {
         this.result = data.result
-        console.log(data.result)
       })
       // this.$http.get(`/search/suggest?keywords=${value}`).then(response => {
       //   if (response.code !== 200) {
@@ -177,7 +176,6 @@ export default {
     // 去往哪一个子页面
     go (value) {
       this.$router.push(value)
-      console.log(this.$router)
     },
     // 在input里面写值并按enter键，进入serch页面
     searchInf (value) {
@@ -194,7 +192,6 @@ export default {
     changeValue (value) {
       if (value === '') {
         this.result = {}
-        console.log('sdd')
       }
       this.search(value)
     },
@@ -210,12 +207,14 @@ export default {
       this.searchInf(value)
     },
     loginOut () {
+      this.loginIf = 0
       window.localStorage.removeItem('token')
       window.localStorage.removeItem('phone')
       window.localStorage.removeItem('password')
       window.localStorage.removeItem('imgUrl')
       window.localStorage.removeItem('accountId')
       window.localStorage.removeItem('getAccountId')
+      window.location.reload()
     }
   },
   computed: {

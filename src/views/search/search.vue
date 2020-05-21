@@ -116,7 +116,7 @@ export default {
       this.$http.get(`/search?keywords=${this.keywords}&type=${type}`).then(data => {
         this.$set(this.searchResult, i, data.result)
         // this.searchResult.splice(i, 0, data.result)
-        console.log(this.searchResult[0])
+        // console.log(this.searchResult[0])
       })
     },
     // 去往歌单详细信息

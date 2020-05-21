@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    // 当前播放音乐的地址，图片，歌曲名，歌手，在歌单里的位置
+    // 当前播放音乐的地址，图片，歌曲名，歌手，歌词，在歌单里的位置信息
     playSong: {
       url: window.sessionStorage.getItem('url'),
       img: window.sessionStorage.getItem('img'),
@@ -15,10 +15,11 @@ export default new Vuex.Store({
       lyric: window.sessionStorage.getItem('lyric'),
       num: window.sessionStorage.getItem('num')
     },
-    // 是否显示播放小图标
+    // 音乐是否处于播放状态，决定小图标该显示哪一个
     playIf: false,
     // 获取的audio dom 元素
     audio: {},
+    // 记录audio的状态，id值加一代表处于暂停状态
     active: window.sessionStorage.getItem('active') + 1,
     // 元总播放时长
     metaDuration: 0,
@@ -32,8 +33,9 @@ export default new Vuex.Store({
     total: window.sessionStorage.getItem('total'),
     // songstable还是songs
     tableName: window.sessionStorage.getItem('tableName'),
-    // 判断用户是否登录
+    // 用户id，看是否存在用户id，判断用户是否登录
     accountId: window.localStorage.getItem('accountId'),
+    // 用户的歌单id，用于添加/取消收藏歌曲
     songMenuId: window.localStorage.getItem('songMenuId')
   },
   getters: {
@@ -72,7 +74,7 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    // 提交当前播放音乐的地址，图片，歌曲名，歌手，在歌单里的位置
+    // 提交当前播放音乐的地址，图片，歌曲名，歌手，歌词，在歌单里的位置信息并存在session里面
     playUrl (state, payload) {
       state.playSong.url = payload.url
       state.playSong.img = payload.img
@@ -109,17 +111,19 @@ export default new Vuex.Store({
     getCurrentTime (state) {
       state.metaCurrentTime = state.audio.currentTime
     },
-    // 暂停音乐
+    // 暂停音乐，songTable
     pauseMusic (state) {
       state.playIf = false
       state.audio.pause()
     },
+    // 放音乐，songTable
     playMusic (state) {
       if (state.playSong !== '') {
         state.audio.play()
         state.playIf = true
       }
     },
+    // 放音乐。musicPlayer
     playSongs (state) {
       if (state.playUrl !== '') {
         state.audio.play()
@@ -127,21 +131,26 @@ export default new Vuex.Store({
         state.active = state.active - 1
       }
     },
+    // 暂停音乐，musicPlayer
     pauseSongs (state) {
       state.playIf = false
       state.audio.pause()
       state.active = state.active + 1
     },
+    // 通过控制active，来记录audio状态
     editActive (state, num) {
       state.active = num
     },
+    // 修改活跃主菜单的名称
     editActiveName (state, name) {
       state.activeName = name
     },
+    // 得到一个歌单的总的歌曲数并存在session里
     getTotal (state, total) {
       window.sessionStorage.setItem('total', total)
       state.total = total
     },
+    // 上一首播放
     editPreNum (state) {
       console.log(state.playSong.num)
       if (state.playSong.num === 0) {
@@ -152,6 +161,7 @@ export default new Vuex.Store({
         console.log('2222222')
       }
     },
+    // 下一首播放
     editNextNum (state) {
       console.log(state.playSong.num)
       if (state.playSong.num === state.total - 1) {
@@ -162,16 +172,25 @@ export default new Vuex.Store({
         console.log('2222222')
       }
     },
+    // 得到歌单的总歌曲信息并存在session里
     getSongs (state, songs) {
       window.sessionStorage.setItem('songs', songs)
       state.songs = songs
       // this.play(0)
     },
+    // 修改是哪一种类型的歌曲列表
     editName (state, name) {
       state.tableName = name
     },
+    // 得到用户id
     getAccountId (state, value) {
       state.accountId = value
+      window.localStorage.setItem('accountId', value)
+    },
+    // 得到用户歌单id
+    getSongMenuId (state, value) {
+      state.songMenuId = value
+      window.localStorage.setItem('songMenuId', value)
     }
   },
   actions: {

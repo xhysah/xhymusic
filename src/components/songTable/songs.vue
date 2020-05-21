@@ -4,7 +4,7 @@
       <tr v-for="(item, index) in songs" :key="index">
         <td>{{index+1}}</td>
         <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>-->
-        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, index)"></i>
+        <td><i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, index)"></i></td>
         <td  class="td"><div>{{item.name}}</div></td>
         <td  class="td">
           <div>
@@ -15,6 +15,10 @@
           </div>
         </td>
         <td  class="td"><div>{{item.album.name}}</div></td>
+<!--        <td class="collect">-->
+<!--          <i class="el-icon-star-on"><span>已收藏</span></i>-->
+<!--          <i class="el-icon-star-off no" ><span>收藏</span></i>-->
+<!--        </td>-->
       </tr>
     </table>
   </div>
@@ -52,15 +56,6 @@ export default {
         this.$store.commit('getTotal', this.songs.length)
         this.$store.commit('editActive', id)
         this.$store.dispatch('play', { num: index, name: 'songs' })
-        // this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
-        //   if (data.code !== 200) {
-        //     return this.$message.error('获取歌信息失败')
-        //   }
-        //   console.log(data)
-        //   // this.active = id
-        //   this.$store.commit('editActive', id)
-        //   this.$store.commit('playUrl', { url: data.data[0].url, img, name, singer, num: index })
-        // })
       }
     }
   },

@@ -83,6 +83,7 @@ export default {
     // 得到排行数据和第一个排行的详细数据
     this.getRanking()
     this.getMyselfRanking(3)
+    // 修改当前活跃的主菜单名
     this.$store.commit('editActiveName', 'ranking')
   },
   data () {
@@ -91,15 +92,21 @@ export default {
       rankingList: {},
       // 正在查看的排行榜
       activeRanking: {},
-      // 正在查看的排行榜数据
+      // 正在查看的排行榜音乐数据
       ranking: [],
+      // 根据这个值去请求排行榜数据
       idx: [3, 0, 2, 1, 23, 24, 25, 26, 27, 22, 28, 36, 29, 30, 5, 6, 21, 7, 8, 10, 9, 20, 31, 32, 19, 35],
+      // 当前排行榜的idx
       active: 3,
+      // 评论数据
       comments: {},
+      // 第一页分页
       currentPage: 1,
+      // 当前排行榜id
       currentId: 0,
       // 总的评论数量
       total: 0,
+      // 是否被收藏
       collected: false
     }
   },
@@ -118,8 +125,10 @@ export default {
         this.ranking = data.playlist.tracks
         this.currentId = data.playlist.id
         this.getComments(data.playlist.id)
-        this.getCollectedValue(data.playlist.id)
-        console.log(data)
+        // 判断是否收藏
+        if (this.accountId !== null) {
+          this.getCollectedValue(data.playlist.id)
+        }
       })
     },
     // 根据歌单id获取歌单评论
@@ -141,42 +150,51 @@ export default {
         this.comments = data.comments
       })
     },
+    // 上一页评论
     pre (a) {
       this.getnextComments(a)
     },
+    // 下一页评论
     next (a) {
       this.getnextComments(a)
     },
+    // 当前评论
     current (a) {
       this.getnextComments(a)
     },
     // 收藏该歌单
     collect (value) {
-      if (this.accountId) {
+      if (this.accountId !== null) {
         this.$http.get(`/playlist/subscribe?t=${value}&id=${this.currentId}`).then(data => {
           if (data.code === 200) {
             if (value === 1) {
+              this.$message({
+                message: '成功收藏该排行榜歌单',
+                type: 'success'
+              })
               this.collected = true
             } else {
+              this.$message({
+                message: '取消收藏该排行榜歌单',
+                type: 'warning'
+              })
               this.collected = false
             }
           }
         })
       } else {
-        console.log('hdjahd')
+        this.$message.error('请登录')
       }
     },
     getCollectedValue (id) {
-      if (this.accountId) {
-        this.collected = false
-        this.$http.get(`/user/playlist?uid=${this.accountId}`).then(data => {
-          for (const key of data.playlist) {
-            if (Number(id) === key.id) {
-              this.collected = true
-            }
+      this.collected = false
+      this.$http.get(`/user/playlist?uid=${this.accountId}`).then(data => {
+        for (const key of data.playlist) {
+          if (Number(id) === key.id) {
+            this.collected = true
           }
-        })
-      }
+        }
+      })
     }
   },
   computed: {
@@ -187,6 +205,7 @@ export default {
       // console.log(time.toLocaleDateString())
       return time.toLocaleDateString()
     },
+    // 得到用户id
     accountId () {
       return this.$store.state.accountId
     }

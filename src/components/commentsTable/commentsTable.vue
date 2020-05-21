@@ -32,7 +32,6 @@ export default {
     commentTime () {
       const time = new Date()
       time.setTime(this.singleComment.time)
-      console.log(time.toLocaleDateString())
       return time.toLocaleDateString()
     }
   }

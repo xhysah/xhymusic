@@ -7,14 +7,11 @@ axios.defaults.withCredentials = true// 跨域请求
 //   // return config
 // })
 axios.interceptors.response.use(config => {
-  console.log(config)
   if (config.status === 200) {
     return config.data
   } else {
-    console.log('dasda')
   }
 }, error => {
-  console.log(error)
   return Promise.reject(error)
 }
 )

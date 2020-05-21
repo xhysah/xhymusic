@@ -68,10 +68,8 @@ export default {
     // 判断是当前路由有没有定义name值，如果没有，则显示全部精品歌单数据，如果有，则根据name值来显示
     if (this.$route.query.name === undefined) {
       this.highQuality()
-      console.log('ewe')
     } else {
       this.cate(this.$route.query.name)
-      console.log('aada')
     }
     this.$store.commit('editActiveName', 'songMenu')
   },
@@ -104,7 +102,6 @@ export default {
       this.$http.get('/playlist/catlist').then(data => {
         this.categories = data.categories
         this.sub = data.sub
-        console.log(data)
       })
     },
     // 获取精品歌单
@@ -120,7 +117,6 @@ export default {
     // 根据cat值，来获取对应歌单
     cate (cat, offset) {
       let info = ''
-      console.log(offset)
       if (offset !== undefined) {
         info = `/top/playlist?cat=${cat}&limit=20&offset=${20 * (offset - 1)}`
       } else {
@@ -132,7 +128,6 @@ export default {
         this.songMenu = data.playlists
         this.categoriesVisible = false
         this.cateName = cat
-        console.log(data)
       })
     },
     // 根据歌单的id，去往歌单详细信息页面
@@ -144,14 +139,17 @@ export default {
         }
       })
     },
-    pre (a) {
-      this.cate(this.cateName, a)
+    // 上一页分页
+    pre (value) {
+      this.cate(this.cateName, value)
     },
-    next (a) {
-      this.cate(this.cateName, a)
+    // 下一页分页
+    next (value) {
+      this.cate(this.cateName, value)
     },
-    current (a) {
-      this.cate(this.cateName, a)
+    // 当前分页
+    current (value) {
+      this.cate(this.cateName, value)
     }
   },
   computed: {

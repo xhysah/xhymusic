@@ -76,9 +76,7 @@ export default {
     commentsTable
   },
   created () {
-    // this.getDetail(this.sid)
     this.$store.commit('editActiveName', 'songMenu')
-    // this.getRelateSongMenu(this.sid)
     this.goDetail(this.did)
   },
   data () {
@@ -87,9 +85,13 @@ export default {
       songMenuDetail: {
         creator: {}
       },
+      // 类似歌单
       relateSongMenu: {},
+      // 评论数据
       comments: {},
+      // 当前分页值
       currentPage: 1,
+      // 当前歌单id
       currentId: 0,
       // 总的评论数量
       total: 0,
@@ -97,9 +99,6 @@ export default {
       collected: false
     }
   },
-  // mounted () {
-  //   this.getCollectedValue()
-  // },
   methods: {
     // 根据id获取歌单的详细信息
     getDetail (id) {
@@ -126,7 +125,9 @@ export default {
       this.getDetail(id)
       this.getRelateSongMenu(id)
       this.getComments(id)
-      this.getCollectedValue(id)
+      if (this.accountId !== null) {
+        this.getCollectedValue(id)
+      }
     },
     getnextComments (value) {
       this.$http.get(`/comment/playlist?id=${this.currentId}&limit=5&offset=${(value - 1) * 5}`).then(data => {
@@ -138,42 +139,52 @@ export default {
       this.$store.commit('getSongs', this.songMenuDetail.tracks)
       this.$store.dispatch('play', { num: 0, name: 'songTable' })
     },
-    pre (a) {
-      this.getnextComments(a)
+    // 上一页分页
+    pre (value) {
+      this.getnextComments(value)
     },
-    next (a) {
-      this.getnextComments(a)
+    // 下一页分页
+    next (value) {
+      this.getnextComments(value)
     },
-    current (a) {
-      this.getnextComments(a)
+    // 当前分页
+    current (value) {
+      this.getnextComments(value)
     },
     // 收藏该歌单
     collect (value) {
-      if (this.accountId) {
+      if (this.accountId !== null) {
         this.$http.get(`/playlist/subscribe?t=${value}&id=${this.currentId}`).then(data => {
           if (data.code === 200) {
             if (value === 1) {
+              this.$message({
+                message: '成功收藏该歌单',
+                type: 'success'
+              })
               this.collected = true
             } else {
+              this.$message({
+                message: '取消收藏该歌单',
+                type: 'warning'
+              })
               this.collected = false
             }
           }
         })
       } else {
-        console.log('hdjahd')
+        this.$message.error('请登录')
       }
     },
+    // 判断该歌单是否被收藏
     getCollectedValue (id) {
-      if (this.accountId) {
-        this.collected = false
-        this.$http.get(`/user/playlist?uid=${this.accountId}`).then(data => {
-          for (const key of data.playlist) {
-            if (Number(id) === key.id) {
-              this.collected = true
-            }
+      this.collected = false
+      this.$http.get(`/user/playlist?uid=${this.accountId}`).then(data => {
+        for (const key of data.playlist) {
+          if (Number(id) === key.id) {
+            this.collected = true
           }
-        })
-      }
+        }
+      })
     }
   },
   computed: {
@@ -183,7 +194,6 @@ export default {
     createTime () {
       const time = new Date()
       time.setTime(this.songMenuDetail.createTime)
-      console.log(time.toLocaleDateString())
       return time.toLocaleDateString()
     },
     accountId () {

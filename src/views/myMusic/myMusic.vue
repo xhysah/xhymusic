@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-container>
+    <el-container v-if="accountId!==null">
       <el-aside>
         <div v-for="(item, index) in playlists" :key="index" class="aside" @click="goDetail(item.id)">
           <img :src="item.coverImgUrl" alt="">
@@ -21,8 +21,8 @@
           </div>
           <div class="button-group">
             <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play()">播放全部</el-button>
-            <i v-if="collected===false" class="el-icon-star-off"><span>收藏</span></i>
-            <i v-else class="el-icon-star-on"><span>已收藏</span></i>
+            <i v-if="collected===false" class="el-icon-star-off" @click="collect(1)"><span>收藏</span></i>
+            <i v-else class="el-icon-star-on" @click="collect(2)"><span>已收藏</span></i>
           </div>
           <div class="tags">标签:
             <template v-for="(item, index) in songMenuDetail.tags">
@@ -58,7 +58,10 @@
           :current-page.sync="currentPage">
         </el-pagination>
       </el-main>
-
+    </el-container>
+    <el-container class="loginFalse" v-else>
+      您未登录
+      <el-button type="danger">立即登录</el-button>
     </el-container>
   </div>
 </template>
@@ -73,16 +76,26 @@ export default {
     commentsTable
   },
   created () {
-    this.getInf()
+    this.$store.commit('editActiveName', 'myMusic')
+    // 判断是否有用户id
+    if (this.accountId !== null) {
+      this.getInf()
+    } else {
+      this.$message.error('请登录')
+    }
   },
   data () {
     return {
+      // 收藏歌单的简略信息
       playlists: {},
+      // 歌单详细信息
       songMenuDetail: {
         creator: {}
       },
       comments: {},
+      // 当前分页位置
       currentPage: 1,
+      // 当前的歌单id
       currentId: 0,
       // 总的评论数量
       total: 0,
@@ -91,10 +104,11 @@ export default {
     }
   },
   methods: {
+    // 获取用户收藏的歌单
     getInf () {
       this.$http.get(`/user/playlist?uid=${this.accountId}`).then(data => {
         this.playlists = data.playlist
-        console.log(data)
+        this.goDetail(data.playlist[1].id)
       })
     },
     // 根据id获取歌单的详细信息
@@ -112,38 +126,74 @@ export default {
         this.comments = data.comments
       })
     },
+    // 获取歌单信息和评论信息同时判断是否该歌单被收藏
     goDetail (id) {
       this.getDetail(id)
       this.getComments(id)
+      this.getCollectedValue(id)
     },
+    // 分页的处理函数
     getnextComments (value) {
       this.$http.get(`/comment/playlist?id=${this.currentId}&limit=5&offset=${(value - 1) * 5}`).then(data => {
         this.comments = data.comments
       })
     },
+    // 播放音乐
     play () {
       this.$store.commit('getTotal', this.songMenuDetail.trackCount)
       this.$store.commit('getSongs', this.songMenuDetail.tracks)
       this.$store.dispatch('play', { num: 0, name: 'songTable' })
     },
-    pre (a) {
-      this.getnextComments(a)
+    // 上面五条评论
+    pre (value) {
+      this.getnextComments(value)
     },
-    next (a) {
-      this.getnextComments(a)
+    // 下面五条评论
+    next (value) {
+      this.getnextComments(value)
     },
-    current (a) {
-      this.getnextComments(a)
+    // 当前值的评论
+    current (value) {
+      this.getnextComments(value)
+    },
+    // 收藏/取消收藏歌单
+    collect (value) {
+      this.$http.get(`/playlist/subscribe?t=${value}&id=${this.currentId}`).then(data => {
+        if (data.code === 200) {
+          if (value === 1) {
+            this.collected = true
+          } else {
+            this.$message({
+              message: '您已取消收藏该歌单',
+              type: 'warning'
+            })
+            // this.collected = false
+            window.location.reload()
+          }
+        }
+      })
+    },
+    // 判断是否收藏该歌单
+    getCollectedValue (id) {
+      this.collected = false
+      this.$http.get(`/user/playlist?uid=${this.accountId}`).then(data => {
+        for (const key of data.playlist) {
+          if (Number(id) === key.id) {
+            this.collected = true
+          }
+        }
+      })
     }
   },
   computed: {
+    // 从vuex中得到用户id
     accountId () {
       return this.$store.state.accountId
     },
+    // 计算是什么时间创建的该歌单
     createTime () {
       const time = new Date()
       time.setTime(this.songMenuDetail.createTime)
-      console.log(time.toLocaleDateString())
       return time.toLocaleDateString()
     }
   }
@@ -275,4 +325,7 @@ export default {
     span
       font-size 10px
       margin-left 2px
+  .loginFalse
+    background-color #d3cebc
+    margin-top 20px
 </style>

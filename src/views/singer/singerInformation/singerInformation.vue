@@ -116,6 +116,7 @@ export default {
       // 相似歌手
       simArtists: {},
       collected: false,
+      // 当前歌手id
       currentId: 0
     }
   },
@@ -163,23 +164,24 @@ export default {
       this.getAlbum(id)
       this.getMv(id)
       this.getDesc(id)
-      this.getCollectedValue(id)
-    },
-    getCollectedValue (id) {
-      this.collected = false
-      if (this.accountId) {
-        this.$http.get(`/artist/sublist?uid=${this.accountId}`).then(data => {
-          for (const key of data.data) {
-            if (Number(id) === key.id) {
-              this.collected = true
-            }
-          }
-          console.log(data)
-        })
+      if (this.accountId !== null) {
+        this.getCollectedValue(id)
       }
     },
+    // 判断是否收藏该歌手
+    getCollectedValue (id) {
+      this.collected = false
+      this.$http.get(`/artist/sublist?uid=${this.accountId}`).then(data => {
+        for (const key of data.data) {
+          if (Number(id) === key.id) {
+            this.collected = true
+          }
+        }
+        console.log(data)
+      })
+    },
     collect (value) {
-      if (this.accountId) {
+      if (this.accountId !== null) {
         this.$http.get(`/artist/sub?t=${value}&id=${this.currentId}`).then(data => {
           if (data.code === 200) {
             if (value === 1) {
@@ -190,7 +192,7 @@ export default {
           }
         })
       } else {
-        console.log('hdjahd')
+        this.$message.error('请登录')
       }
     }
   },
