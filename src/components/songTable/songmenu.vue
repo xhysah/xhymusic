@@ -3,11 +3,11 @@
     <table>
       <tr v-for="(item, index) in songs" :key="index">
 <!--        <td>{{index+1}}</td>-->
-        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>
+        <td @click="goSongMenu(item.id)" class="go"><i class="el-icon-video-play"></i></td>
 <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.track,item.name,item.album.name)"></i>-->
         <td><img :src="item.coverImgUrl" alt=""></td>
-        <td @click="goSongMenu(item.id)" class="go">{{item.name}}</td>
-        <td>{{item.creator.nickname}}</td>
+        <td><div>{{item.name}}</div></td>
+        <td class="creator">{{item.creator.nickname}}</td>
       </tr>
     </table>
   </div>
@@ -26,30 +26,6 @@ export default {
     }
   },
   methods: {
-    // 播放歌曲
-    play (id, img, name, singer) {
-      if (this.active === id) {
-        this.$store.commit('editActive', id + 1)
-        // this.active = id + 1
-        this.$store.commit('pauseMusic')
-        // this.$emit('pause')
-      } else if (this.active === id + 1) {
-        // this.$emit('play')
-        this.$store.commit('playMusic')
-        // this.active = id
-        this.$store.commit('editActive', id)
-      } else {
-        this.$http.get(`/song/url?id=${id}`).then(({ data }) => {
-          if (data.code !== 200) {
-            return this.$message.error('获取歌信息失败')
-          }
-          // this.active = id
-          console.log(data)
-          this.$store.commit('editActive', id)
-          this.$store.commit('playUrl', { url: data.data[0].url, img, name, singer })
-        })
-      }
-    },
     goSongMenu (id) {
       this.$router.push({
         path: '/songMenuDetail',
@@ -60,9 +36,6 @@ export default {
     }
   },
   computed: {
-    active () {
-      return this.$store.state.active
-    }
   }
 }
 </script>
@@ -81,12 +54,19 @@ export default {
     padding 5px
     vertical-align middle
   i
-    margin-top 10px
     font-size 1.5em
+  tr
+    div
+      width 300px
+      overflow hidden
+      text-overflow ellipsis
+      white-space nowrap
   img
     vertical-align middle
     width 40px
     height 40px
   .go
     cursor pointer
+  .creator
+    font-size 12px
 </style>

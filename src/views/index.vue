@@ -127,7 +127,7 @@ export default {
   mounted () {
     // 判断音乐栏是否显示
     function show () {
-      if ((window.innerHeight - event.clientY) < 2) {
+      if ((window.innerHeight - event.clientY) < 200) {
         this.show = true
       } else {
         this.show = false
@@ -225,9 +225,6 @@ export default {
           return window.localStorage.getItem('imgUrl')
         }
         return ''
-      },
-      set (newValue) {
-        console.log('sasa')
       }
     },
     activeIndex () {

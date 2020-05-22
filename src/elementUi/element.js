@@ -25,7 +25,9 @@ import {
   Tabs,
   TabPane,
   Popover,
-  Progress
+  Progress,
+  Collapse,
+  CollapseItem
 } from 'element-ui'
 
 Vue.use(Form)
@@ -53,4 +55,6 @@ Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(Popover)
 Vue.use(Progress)
+Vue.use(Collapse)
+Vue.use(CollapseItem)
 Vue.prototype.$message = Message

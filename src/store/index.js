@@ -103,6 +103,7 @@ export default new Vuex.Store({
     },
     // 得到元总时长
     getDuration (state, audio) {
+      console.log(audio.duration)
       state.metaDuration = audio.duration
       state.metaCurrentTime = audio.currentTime
       state.audio = audio
@@ -166,10 +167,8 @@ export default new Vuex.Store({
       console.log(state.playSong.num)
       if (state.playSong.num === state.total - 1) {
         state.playSong.num = 0
-        console.log('wwewe')
       } else {
         state.playSong.num++
-        console.log('2222222')
       }
     },
     // 得到歌单的总歌曲信息并存在session里
@@ -197,7 +196,6 @@ export default new Vuex.Store({
     play (context, payload) {
       axios.all([axios.get(`/song/url?id=${context.state.songs[payload.num].id}`), axios.get(`/lyric?id=${context.state.songs[payload.num].id}`)])
         .then(axios.spread((songUrl, lyric) => {
-          console.log(lyric)
           window.sessionStorage.setItem('active', context.state.songs[payload.num].id)
           context.commit('editActive', context.state.songs[payload.num].id)
           context.commit('editName', payload.name)

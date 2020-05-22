@@ -75,4 +75,12 @@ export default {
   i
     position absolute
     margin 5px
+  .imgs:hover
+    img
+      width 110%
+      height 110%
+      border 1px solid red
+      box-shadow 0 0 10px red
+    +.sentence
+      visibility hidden
 </style>

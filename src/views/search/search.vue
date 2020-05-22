@@ -57,15 +57,14 @@
             </div>
           </el-tab-pane>
           <el-tab-pane label="歌词">
-            <template v-for="(item , index) in searchResult[4].songs">
-              <lyric :key="index" :song="item"></lyric>
-            </template>
+            <el-collapse v-model="activeNames" @change="handleChange">
+              <template v-for="(item , index) in searchResult[4].songs">
+                <lyric :key="index" :song="item"></lyric>
+              </template>
+            </el-collapse>
           </el-tab-pane>
           <el-tab-pane label="歌单">
             <songmenu :songs="searchResult[5].playlists"></songmenu>
-          </el-tab-pane>
-          <el-tab-pane label="用户">
-            <user :users="searchResult[6].userprofiles"></user>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -76,7 +75,6 @@
 <script>
 import albumOutline from '../../components/songOutline /albumOutline'
 import singerOutline from '../../components/songOutline /singerOutline'
-import user from '../../components/songTable/user'
 import songmenu from '../../components/songTable/songmenu'
 import lyric from '../../components/lyric/lyric'
 import songs from '../../components/songTable/songs'
@@ -86,7 +84,6 @@ export default {
     songs,
     lyric,
     songmenu,
-    user,
     singerOutline,
     albumOutline
   },
@@ -97,17 +94,13 @@ export default {
     this.search(1014, 3)
     this.search(1006, 4)
     this.search(1000, 5)
-    this.search(1002, 6)
-  },
-  mounted () {
-    this.$store.commit('getSongs', this.searchResult[0].songs)
-    this.$store.commit('getTotal', this.searchResult[0].songs.length)
   },
   data () {
     return {
       searchResult: [
-        {}, {}, {}, {}, {}, {}, {}
-      ]
+        {}, {}, {}, {}, {}, {}
+      ],
+      activeNames: ['1']
     }
   },
   methods: {
@@ -116,7 +109,6 @@ export default {
       this.$http.get(`/search?keywords=${this.keywords}&type=${type}`).then(data => {
         this.$set(this.searchResult, i, data.result)
         // this.searchResult.splice(i, 0, data.result)
-        // console.log(this.searchResult[0])
       })
     },
     // 去往歌单详细信息
@@ -126,6 +118,9 @@ export default {
     // 去往歌手详细信息
     goSinger (id) {
       this.$router.push({ name: 'singerInformation', params: { sid: id } })
+    },
+    handleChange (val) {
+      console.log(val)
     }
   },
   computed: {
@@ -150,10 +145,6 @@ export default {
   .tabs
     width 70%
     margin 0 auto
-    /*>>>.el-tabs__item*/
-    /*  color white*/
-    /*>>>.is-active*/
-    /*  color red*/
     .title
       color #909399
       font-size 14px

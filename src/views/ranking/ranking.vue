@@ -54,10 +54,10 @@
             </template>
           </div>
           <el-pagination
-            v-if="total/5>1"
+            v-if="total/15>1"
             background
             layout="prev, pager, next"
-            :page-size="5"
+            :page-size="15"
             :total="total"
             @prev-click="pre"
             @next-click="next"
@@ -120,7 +120,7 @@ export default {
     // 根据id获取排行榜详细数据
     getMyselfRanking (idx) {
       this.active = idx
-      this.$http.get('/top/list', { params: { idx: idx } }).then(data => {
+      this.$http.get(`/top/list?idx=${idx}`).then(data => {
         this.activeRanking = data.playlist
         this.ranking = data.playlist.tracks
         this.currentId = data.playlist.id
@@ -133,7 +133,7 @@ export default {
     },
     // 根据歌单id获取歌单评论
     getComments (id) {
-      return this.$http.get(`/comment/playlist?id=${id}&limit=5`).then(data => {
+      return this.$http.get(`/comment/playlist?id=${id}&limit=15`).then(data => {
         this.total = data.total
         this.currentPage = 1
         this.comments = data.comments
@@ -146,7 +146,7 @@ export default {
       this.$store.dispatch('play', { num: 0, name: 'songTable' })
     },
     getnextComments (value) {
-      this.$http.get(`/comment/playlist?id=${this.currentId}&limit=5&offset=${(value - 1) * 5}`).then(data => {
+      this.$http.get(`/comment/playlist?id=${this.currentId}&limit=15&offset=${(value - 1) * 15}`).then(data => {
         this.comments = data.comments
       })
     },

@@ -126,7 +126,6 @@ export default {
       this.$http.get(`/artists?id=${id}`).then(data => {
         this.artist = data.artist
         this.hotSongs = data.hotSongs
-        // console.log(data.hotSongs)
       })
     },
     // 获取专辑数据
@@ -153,7 +152,6 @@ export default {
     getSimSinger (id) {
       this.$http.get(`/simi/artist?id=${id}`).then(data => {
         this.simArtists = data.artists.slice(0, 6)
-        console.log(data.artists.slice(0, 8))
       })
     },
     // 点击相似歌手，数据跟着变化
@@ -177,7 +175,6 @@ export default {
             this.collected = true
           }
         }
-        console.log(data)
       })
     },
     collect (value) {

@@ -84,9 +84,6 @@ export default {
   },
   watch: {
     num (newValue) {
-      console.log('11')
-      console.log(newValue)
-      console.log(this.name)
       this.$store.dispatch('play', { num: newValue, name: this.name })
     }
   }
