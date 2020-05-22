@@ -99,8 +99,7 @@ export default {
     return {
       searchResult: [
         {}, {}, {}, {}, {}, {}
-      ],
-      activeNames: ['1']
+      ]
     }
   },
   methods: {
@@ -126,6 +125,9 @@ export default {
   computed: {
     keywords () {
       return this.$route.query.keywords
+    },
+    activeNames () {
+      return [this.searchResult[4].songs[0].id]
     }
   },
   watch: {
