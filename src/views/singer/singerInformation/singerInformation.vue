@@ -21,7 +21,7 @@
               <template v-for="(item, index) in album">
                 <album-outline :key="index" length="150px" height="150px">
                   <template v-slot:img>
-                    <img :src="item.picUrl" alt="">
+                    <img :src="item.picUrl" alt="" @click="goAlbum(item.id)">
                   </template>
                   <template v-slot:sentence>
                     <div>{{item.name}}</div>
@@ -191,6 +191,15 @@ export default {
       } else {
         this.$message.error('请登录')
       }
+    },
+    // 去往专辑页面
+    goAlbum (id) {
+      this.$router.push({
+        path: '/album',
+        query: {
+          id
+        }
+      })
     }
   },
   computed: {

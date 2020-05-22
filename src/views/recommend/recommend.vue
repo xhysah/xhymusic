@@ -85,7 +85,6 @@ export default {
     },
     // 根据热门分类，去往对应歌单分类
     goSongMenu (name) {
-      console.log(name)
       this.$router.push({
         path: '/songMenu',
         query: {

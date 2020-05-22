@@ -11,6 +11,7 @@ const detail = () => import('../views/songMenu/detail/detail')
 const singerInformation = () => import('../views/singer/singerInformation/singerInformation')
 const search = () => import('../views/search/search')
 const myMusic = () => import('../views/myMusic/myMusic')
+const album = () => import('../views/album/album')
 
 Vue.use(VueRouter)
 
@@ -70,6 +71,11 @@ const routes = [
         path: '/songMenuDetail',
         name: 'songMenuDetail',
         component: detail
+      },
+      {
+        path: '/album',
+        name: 'album',
+        component: album
       }
     ]
   },
