@@ -252,11 +252,11 @@ export default {
     background-color black
     text-align center
     .el-button
-      background-color #252525
-      color white
+      /*background-color #252525*/
+      color #2f2f2f
       width 200px
       margin 5px 0
-      border 1px solid red
+      border 1px solid #2f2f2f
       margin-top 20px
       +.el-button
         margin-left 0

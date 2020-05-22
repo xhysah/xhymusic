@@ -1,25 +1,38 @@
 <template>
   <div class="flex">
     <table>
+      <thead>
+      <tr>
+        <td colspan="3">歌曲列表</td>
+        <td>时长</td>
+        <td>歌手</td>
+        <td colspan="3">专辑</td>
+      </tr>
+      </thead>
+      <tbody>
       <tr v-for="(item, index) in songs" :key="index">
         <td>{{index+1}}</td>
         <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>-->
         <td><i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, index)"></i></td>
-        <td  class="td"><div>{{item.name}}</div></td>
+        <td  class="td"><div class="songName">{{item.name}}</div></td>
+        <td class="td">
+          <span>{{duration(item.duration)}}</span>
+        </td>
         <td  class="td">
-          <span>
+          <div class="singer">
             <template v-for="(items, index) in item.artists">
               <span :key="items.id" v-if="index===0">{{items.name}}</span>
               <span :key="items.id" v-else>/{{items.name}}</span>
             </template>
-          </span>
+          </div>
         </td>
-        <td  class="td"><div>{{item.album.name}}</div></td>
+        <td  class="td"><div class="singer">{{item.album.name}}</div></td>
         <td class="collect">
           <i v-if="collected[item.id]!==undefined" class="el-icon-star-on" @click="collect('del', item.id)"><span>已收藏</span></i>
           <i v-else class="el-icon-star-off no" @click="collect('add', item.id)"><span>收藏</span></i>
         </td>
       </tr>
+      </tbody>
     </table>
   </div>
 </template>
@@ -92,6 +105,18 @@ export default {
           this.$set(this.collected, key.id, key.id)
         }
       })
+    },
+    double (num) {
+      if (num.toString().length !== 2) {
+        if (num === 0) {
+          return '00'
+        }
+        return '0' + num
+      }
+      return num
+    },
+    duration (time) {
+      return `${this.double(Math.floor(time / 60000))}:${this.double(Math.floor(time / 1000 % 60))}`
     }
   },
   computed: {
@@ -109,9 +134,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  table tr:nth-child(odd)
+  table tbody tr:nth-child(odd)
     background-color #1c1c1c
-  table tr:nth-child(even)
+  table tbody tr:nth-child(even)
     color #909399
   table
     font-size 14px
@@ -124,12 +149,22 @@ export default {
     font-size 1.5em
     cursor pointer
   .td
-    width 20%
-    div
-      width 260px
+    .songName
+      width 230px
       overflow hidden
       text-overflow ellipsis
       white-space nowrap
+    .singer
+      margin-left 10px
+      font-size 12px
+      width 100px
+      overflow hidden
+      text-overflow ellipsis
+      white-space nowrap
+      color #888888
+    span
+      font-size 10px
+      color #888888
   .collect
     .no
       visibility hidden
@@ -144,4 +179,8 @@ export default {
     .collect
       i
         visibility visible
+  table thead tr
+    background-color #b93e37
+    td
+      margin-left 20px
 </style>

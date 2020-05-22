@@ -2,7 +2,7 @@
   <div>
     <el-container v-if="ranking">
       <!--    侧边栏部分-->
-      <el-aside width="300px">
+      <el-aside width="260px">
         <template v-for="(item, index) in rankingList">
           <div :key="item.coverImgId" @click="getMyselfRanking(idx[index])" :class="{check:active===idx[index]}" class="categories">
             <el-image :src="item.coverImgUrl" :class="{imgChange:active===idx[index]}"></el-image>
@@ -21,17 +21,8 @@
         </span>
           <div class="btn-group">
             <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play()">播放</el-button>
-<!--            <el-button size="mini" type="danger" :round="true" plain icon="el-icon-chat-line-square">-->
-<!--              ({{activeRanking.commentCount}})-->
-<!--            </el-button>-->
             <i v-if="collected===false" class="el-icon-star-off" @click="collect(1)"><span>收藏</span></i>
             <i v-else class="el-icon-star-on" @click="collect(2)"><span>已收藏</span></i>
-<!--            <el-button size="mini" type="danger" :round="true" plain icon="el-icon-share">-->
-<!--              ({{activeRanking.shareCount}})-->
-<!--            </el-button>-->
-<!--            <el-button size="mini" type="danger" :round="true" plain icon="el-icon-folder-add">-->
-<!--              ({{activeRanking.subscribedCount}})-->
-<!--            </el-button>-->
           </div>
         </div>
         <!--      主体下面部分-->
@@ -54,10 +45,10 @@
             </template>
           </div>
           <el-pagination
-            v-if="total/15>1"
+            v-if="total/5>1"
             background
             layout="prev, pager, next"
-            :page-size="15"
+            :page-size="5"
             :total="total"
             @prev-click="pre"
             @next-click="next"
@@ -133,7 +124,7 @@ export default {
     },
     // 根据歌单id获取歌单评论
     getComments (id) {
-      return this.$http.get(`/comment/playlist?id=${id}&limit=15`).then(data => {
+      return this.$http.get(`/comment/playlist?id=${id}&limit=5`).then(data => {
         this.total = data.total
         this.currentPage = 1
         this.comments = data.comments
@@ -146,7 +137,7 @@ export default {
       this.$store.dispatch('play', { num: 0, name: 'songTable' })
     },
     getnextComments (value) {
-      this.$http.get(`/comment/playlist?id=${this.currentId}&limit=15&offset=${(value - 1) * 15}`).then(data => {
+      this.$http.get(`/comment/playlist?id=${this.currentId}&limit=5&offset=${(value - 1) * 5}`).then(data => {
         this.comments = data.comments
       })
     },
@@ -218,7 +209,7 @@ export default {
 <style lang="stylus" scoped>
 color=#353535
   .el-container
-    width 70%
+    width 74%
     margin 0 auto
     margin-top 50px
     .el-aside
@@ -233,13 +224,13 @@ color=#353535
     height 60px
     margin 10px
   .small
-    font-size 10px
+    font-size 8px
     color #909399
     position absolute
     left 90px
     top -40px
   .first
-    font-size 15px
+    font-size 13px
     position relative
     top -50px
   img
@@ -265,12 +256,13 @@ color=#353535
       top -50px
       margin 20px
     span
+      color #909399
       font-size 12px
       position absolute
       left 10px
       top 40px
   .el-main
-    margin 0 30px
+    margin 0 20px
     border 2px solid color
   .main-title
     margin-bottom 5px

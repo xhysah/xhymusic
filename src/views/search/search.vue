@@ -94,12 +94,16 @@ export default {
     this.search(1014, 3)
     this.search(1006, 4)
     this.search(1000, 5)
+    this.$nextTick(() => {
+      this.getActiveNames()
+    })
   },
   data () {
     return {
       searchResult: [
         {}, {}, {}, {}, {}, {}
-      ]
+      ],
+      activeNames: []
     }
   },
   methods: {
@@ -120,14 +124,14 @@ export default {
     },
     handleChange (val) {
       console.log(val)
+    },
+    getActiveNames () {
+      console.log(this.searchResult[4])
     }
   },
   computed: {
     keywords () {
       return this.$route.query.keywords
-    },
-    activeNames () {
-      return [this.searchResult[4].songs[0].id]
     }
   },
   watch: {

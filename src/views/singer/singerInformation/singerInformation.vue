@@ -211,7 +211,7 @@ export default {
     background-color red
     width 2px
   .el-container
-    width 70%
+    width 74%
     margin auto
   .el-tabs
     margin 0 20px
@@ -219,6 +219,7 @@ export default {
     margin  20px auto
     border-left 1px solid color
     .img
+      position relative
       margin 0 20px
       height 300px
       overflow hidden
@@ -248,8 +249,9 @@ export default {
     margin 10px
     color #888888
   .el-button
-    position relative
+    width 80px
+    position absolute
     z-index 100
-    top -280px
-    left 530px
+    top 260px
+    left 580px
 </style>

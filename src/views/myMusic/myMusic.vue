@@ -2,6 +2,7 @@
   <div>
     <el-container v-if="accountId!==null">
       <el-aside>
+        <div @click="getSinger" class="mySinger">我的歌手</div>
         <div v-for="(item, index) in playlists" :key="index" class="aside" @click="goDetail(item.id)">
           <img :src="item.coverImgUrl" alt="">
           <div>
@@ -11,57 +12,73 @@
         </div>
       </el-aside>
       <el-main>
-        <div class="header">
-          <img :src="songMenuDetail.coverImgUrl" alt="">
-          <span class="head"><span>歌单</span><div></div>{{songMenuDetail.name}}</span>
-          <div class="creator">
-            <img :src="songMenuDetail.creator.avatarUrl" alt="">
-            <span>{{songMenuDetail.creator.nickname}}</span>
-            <span>{{createTime}}创建</span>
+        <div v-if="singerIf===false">
+          <div class="header">
+            <img :src="songMenuDetail.coverImgUrl" alt="">
+            <span class="head"><span>歌单</span><div></div>{{songMenuDetail.name}}</span>
+            <div class="creator">
+              <img :src="songMenuDetail.creator.avatarUrl" alt="">
+              <span>{{songMenuDetail.creator.nickname}}</span>
+              <span>{{createTime}}创建</span>
+            </div>
+            <div class="button-group">
+              <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play()">播放全部</el-button>
+              <i v-if="collected===false" class="el-icon-star-off" @click="collect(1)"><span>收藏</span></i>
+              <i v-else class="el-icon-star-on" @click="collect(2)"><span>已收藏</span></i>
+            </div>
+            <div class="tags">标签:
+              <template v-for="(item, index) in songMenuDetail.tags">
+                <span :key="index">{{item}}</span>
+              </template>
+            </div>
+            <div class="introduce">介绍: {{songMenuDetail.description}}</div>
           </div>
-          <div class="button-group">
-            <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play()">播放全部</el-button>
-            <i v-if="collected===false" class="el-icon-star-off" @click="collect(1)"><span>收藏</span></i>
-            <i v-else class="el-icon-star-on" @click="collect(2)"><span>已收藏</span></i>
+          <div class="songHead">歌曲列表
+            <span>{{songMenuDetail.trackCount}}首歌</span>
+            <span>播放：<span>{{songMenuDetail.playCount}}</span><span>次</span></span>
           </div>
-          <div class="tags">标签:
-            <template v-for="(item, index) in songMenuDetail.tags">
-              <span :key="index">{{item}}</span>
+          <song-table :songs="songMenuDetail.tracks"></song-table>
+          <!--        评论-->
+          <div>全部评论</div>
+          <div>
+            <template v-for="item in comments">
+              <div :key="item.commentId">
+                <div class="simLine"></div>
+                <comments-table :comment="item"></comments-table>
+              </div>
             </template>
           </div>
-          <div class="introduce">介绍: {{songMenuDetail.description}}</div>
+          <el-pagination
+            v-if="total/5>1"
+            background
+            layout="prev, pager, next"
+            :page-size="5"
+            :total="total"
+            @prev-click="pre"
+            @next-click="next"
+            @current-change="current"
+            :current-page.sync="currentPage">
+          </el-pagination>
         </div>
-        <div class="songHead">歌曲列表
-          <span>{{songMenuDetail.trackCount}}首歌</span>
-          <span>播放：<span>{{songMenuDetail.playCount}}</span><span>次</span></span>
-        </div>
-        <song-table :songs="songMenuDetail.tracks"></song-table>
-        <!--        评论-->
-        <div>全部评论</div>
-        <div>
-          <template v-for="item in comments">
-            <div :key="item.commentId">
-              <div class="simLine"></div>
-              <comments-table :comment="item"></comments-table>
+        <div v-else>
+          <div>我的歌手</div>
+          <div class="line"></div>
+          <div v-for="(item, index) in singers" :key="index" class="singer"  @click="gosinger(item.id)">
+            <img :src="item.img1v1Url" alt="">
+            <div class="word">
+              <span>{{item.name}}</span><br>
+              <span>{{item.mvSize}}个mv</span>
+              <span>{{item.albumSize}}个mv</span>
             </div>
-          </template>
+          </div>
         </div>
-        <el-pagination
-          v-if="total/5>1"
-          background
-          layout="prev, pager, next"
-          :page-size="5"
-          :total="total"
-          @prev-click="pre"
-          @next-click="next"
-          @current-change="current"
-          :current-page.sync="currentPage">
-        </el-pagination>
       </el-main>
     </el-container>
-    <el-container class="loginFalse" v-else>
-      您未登录
-      <el-button type="danger">立即登录</el-button>
+    <el-container v-else class="noLogin">
+      <div class="img">
+        <img src="../../assets/cry.png" alt="">
+        <div class="word">您还没有登录哟!</div>
+      </div>
     </el-container>
   </div>
 </template>
@@ -80,8 +97,6 @@ export default {
     // 判断是否有用户id
     if (this.accountId !== null) {
       this.getInf()
-    } else {
-      this.$message.error('请登录')
     }
   },
   data () {
@@ -100,7 +115,9 @@ export default {
       // 总的评论数量
       total: 0,
       // 是否一收藏
-      collected: false
+      collected: false,
+      singerIf: false,
+      singers: []
     }
   },
   methods: {
@@ -111,8 +128,16 @@ export default {
         this.goDetail(data.playlist[1].id)
       })
     },
+    getSinger () {
+      this.singerIf = true
+      this.$http.get(`/artist/sublist?uid=${this.accountId}`).then(data => {
+        console.log(data.data)
+        this.singers = data.data
+      })
+    },
     // 根据id获取歌单的详细信息
     getDetail (id) {
+      this.singerIf = false
       this.$http.get(`/playlist/detail?id=${id}`).then(data => {
         this.currentId = id
         this.songMenuDetail = data.playlist
@@ -183,6 +208,9 @@ export default {
           }
         }
       })
+    },
+    gosinger (id) {
+      this.$router.push({ name: 'singerInformation', params: { sid: id } })
     }
   },
   computed: {
@@ -202,11 +230,13 @@ export default {
 
 <style lang="stylus" scoped>
   .el-container
-    width 70%
+    width 74%
     margin auto
     .header
       margin 20px 0
       height 220px
+      div
+        width 470px
       img
         width 200px
         height 200px
@@ -268,9 +298,10 @@ export default {
   .aside
     margin 10px 10px 0 10px
     height 80px
+    font-size 14px
     img
-      width 60px
-      height 60px
+      width 55px
+      height 55px
     div
       position relative
       left 70px
@@ -325,7 +356,44 @@ export default {
     span
       font-size 10px
       margin-left 2px
-  .loginFalse
-    background-color #d3cebc
-    margin-top 20px
+  .singer
+    cursor pointer
+    margin 10px 10px 0 10px
+    height 80px
+    img
+      width 70px
+      height 70px
+    div
+      position relative
+      left 90px
+      top -70px
+      span
+        display inline-block
+        margin-left 10px
+        ~span
+          font-size 12px
+          color #888888
+  .mySinger
+    box-sizing border-box
+    padding 5px 20px 5px 20px
+    background-color #1c1c1c
+    cursor pointer
+  .mySinger:hover
+      font-size 20px
+  .noLogin
+    width 70%
+    margin-top 50px
+    .img
+      position relative
+      img
+        position absolute
+        width 400px
+        height auto
+        top 100px
+        left 180px
+      div
+        top 100px
+        left 700px
+        position absolute
+        font-size 30px
 </style>

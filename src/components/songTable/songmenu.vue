@@ -1,9 +1,9 @@
 <template>
   <div class="flex">
     <table>
-      <tr v-for="(item, index) in songs" :key="index">
+      <tr v-for="(item, index) in songs" :key="index" @click="goSongMenu(item.id)">
 <!--        <td>{{index+1}}</td>-->
-        <td @click="goSongMenu(item.id)" class="go"><i class="el-icon-video-play"></i></td>
+        <td class="go"><i class="el-icon-video-play"></i></td>
 <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.track,item.name,item.album.name)"></i>-->
         <td><img :src="item.coverImgUrl" alt=""></td>
         <td><div>{{item.name}}</div></td>
@@ -56,8 +56,9 @@ export default {
   i
     font-size 1.5em
   tr
+    cursor pointer
     div
-      width 300px
+      width 240px
       overflow hidden
       text-overflow ellipsis
       white-space nowrap
