@@ -15,18 +15,21 @@
         <!--        <i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, item.al.picUrl,item.name,item.al.name)"></i>-->
         <td><i class="el-icon-video-play"  :class="{'el-icon-video-pause':active == item.id}"  @click="play(item.id, index)"></i></td>
         <td  class="td"><div class="songName">{{item.name}}</div></td>
+        <!--        时长-->
         <td class="td">
           <span>{{duration(item.duration)}}</span>
         </td>
+        <!--        歌手-->
         <td  class="td">
           <div class="singer">
             <template v-for="(items, index) in item.artists">
-              <span :key="items.id" v-if="index===0">{{items.name}}</span>
-              <span :key="items.id" v-else>/{{items.name}}</span>
+              <span :key="items.id" v-if="index===0" @click="goSinger(items.id)">{{items.name}}</span>
+              <span :key="items.id" v-else @click="goSinger(items.id)">/{{items.name}}</span>
             </template>
           </div>
         </td>
-        <td  class="td"><div class="singer">{{item.album.name}}</div></td>
+        <!--        专辑-->
+        <td  class="td"><div class="album" @click="goAlbum(item.album.id)">{{item.album.name}}</div></td>
         <td class="collect">
           <i v-if="collected[item.id]!==undefined" class="el-icon-star-on" @click="collect('del', item.id)"><span>已收藏</span></i>
           <i v-else class="el-icon-star-off no" @click="collect('add', item.id)"><span>收藏</span></i>
@@ -117,6 +120,17 @@ export default {
     },
     duration (time) {
       return `${this.double(Math.floor(time / 60000))}:${this.double(Math.floor(time / 1000 % 60))}`
+    },
+    goAlbum (id) {
+      this.$router.push({
+        path: '/album',
+        query: {
+          id
+        }
+      })
+    },
+    goSinger (id) {
+      this.$router.push({ name: 'singerInformation', params: { sid: id } })
     }
   },
   computed: {
@@ -154,7 +168,7 @@ export default {
       overflow hidden
       text-overflow ellipsis
       white-space nowrap
-    .singer
+    .singer,.album
       margin-left 10px
       font-size 12px
       width 100px
@@ -183,4 +197,10 @@ export default {
     background-color #b93e37
     td
       margin-left 20px
+  .album:hover
+    text-decoration underline
+    cursor pointer
+  .singer span:hover
+    text-decoration underline
+    cursor pointer
 </style>

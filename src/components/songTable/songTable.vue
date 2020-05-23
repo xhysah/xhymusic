@@ -18,19 +18,22 @@
         <td class="td">
           <div class="songName">{{item.name}}</div>
         </td>
+        <!--        时长-->
         <td class="td">
           <span>{{duration(item.dt)}}</span>
         </td>
+        <!--        歌手-->
         <td class="td">
           <div class="singer">
             <template v-for="(items, index) in item.ar">
-              <span :key="items.id" v-if="index===0">{{items.name}}</span>
-              <span :key="items.id" v-else>/{{items.name}}</span>
+              <span :key="items.id" v-if="index===0" @click="goSinger(items.id)">{{items.name}}</span>
+              <span :key="items.id" v-else @click="goSinger(items.id)">/{{items.name}}</span>
             </template>
           </div>
         </td>
+        <!--        专辑-->
         <td class="td">
-          <div class="singer">{{item.al.name}}</div>
+          <div class="album" @click="goAlbum(item.al.id)">{{item.al.name}}</div>
         </td>
         <td class="collect">
           <i v-if="collected[item.id]!==undefined" class="el-icon-star-on"
@@ -123,6 +126,17 @@ export default {
     },
     duration (time) {
       return `${this.double(Math.floor(time / 60000))}:${this.double(Math.floor(time / 1000 % 60))}`
+    },
+    goAlbum (id) {
+      this.$router.push({
+        path: '/album',
+        query: {
+          id
+        }
+      })
+    },
+    goSinger (id) {
+      this.$router.push({ name: 'singerInformation', params: { sid: id } })
     }
   },
   computed: {
@@ -130,7 +144,6 @@ export default {
       return this.$store.state.active
     },
     songMenuId () {
-      console.log(this.songs)
       return this.$store.state.songMenuId
     },
     accountId () {
@@ -164,7 +177,7 @@ export default {
       overflow hidden
       text-overflow ellipsis
       white-space nowrap
-    .singer
+    .singer,.album
       margin-left 10px
       font-size 12px
       width 100px
@@ -193,4 +206,10 @@ export default {
     background-color #b93e37
     td
       margin-left 20px
+  .album:hover
+    text-decoration underline
+    cursor pointer
+  .singer span:hover
+    text-decoration underline
+    cursor pointer
 </style>

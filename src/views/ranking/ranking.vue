@@ -142,16 +142,16 @@ export default {
       })
     },
     // 上一页评论
-    pre (a) {
-      this.getnextComments(a)
+    pre (value) {
+      this.getnextComments(value)
     },
     // 下一页评论
-    next (a) {
-      this.getnextComments(a)
+    next (value) {
+      this.getnextComments(value)
     },
     // 当前评论
-    current (a) {
-      this.getnextComments(a)
+    current (value) {
+      this.getnextComments(value)
     },
     // 收藏该歌单
     collect (value) {

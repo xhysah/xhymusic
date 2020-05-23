@@ -12,6 +12,8 @@ const singerInformation = () => import('../views/singer/singerInformation/singer
 const search = () => import('../views/search/search')
 const myMusic = () => import('../views/myMusic/myMusic')
 const album = () => import('../views/album/album')
+const mv = () => import('../views/mv/mv')
+const video = () => import('../views/mv/video')
 
 Vue.use(VueRouter)
 
@@ -43,14 +45,6 @@ const routes = [
         path: '/songMenu',
         name: 'songMenu',
         component: songMenu
-        // beforeEnter: (to, from, next) => {
-        //   if (from.path === '/recommend') {
-        //
-        //   }
-        //   console.log(to)
-        //   console.log(from)
-        //   console.log(next)
-        // }
       },
       {
         path: '/singer',
@@ -76,6 +70,16 @@ const routes = [
         path: '/album',
         name: 'album',
         component: album
+      },
+      {
+        path: '/mv',
+        name: 'mv',
+        component: mv
+      },
+      {
+        path: '/video',
+        name: 'video',
+        component: video
       }
     ]
   },

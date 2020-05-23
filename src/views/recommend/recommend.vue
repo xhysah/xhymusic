@@ -2,7 +2,6 @@
   <div>
     <!--    banner-->
     <el-carousel :interval="5000" indicator-position="outside">
-      <audio :src="playurl" autoplay="autoplay"></audio>
       <el-carousel-item v-for="(item, index) in banners" :key="index">
         <img class="banner" :src="item.imageUrl" :alt="item.typeTitle">
       </el-carousel-item>
@@ -48,8 +47,7 @@ export default {
       // 热门推荐
       playlist: {},
       // 网友精选碟
-      toplist: [],
-      playurl: ''
+      toplist: []
     }
   },
   created () {
@@ -112,6 +110,7 @@ export default {
     font-size 22px
     margin 0 20px
     color white
+    cursor pointer
   .flex
     margin 0 160px
   .banner

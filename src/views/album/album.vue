@@ -1,84 +1,178 @@
 <template>
   <div>
     <el-container>
-      <!--    侧边栏部分-->
-<!--      <el-aside width="260px">-->
-<!--        <template v-for="(item, index) in rankingList">-->
-<!--          <div :key="item.coverImgId" @click="getMyselfRanking(idx[index])" :class="{check:active===idx[index]}" class="categories">-->
-<!--            <el-image :src="item.coverImgUrl" :class="{imgChange:active===idx[index]}"></el-image>-->
-<!--            <span class="first">{{item.name}}</span>-->
-<!--            <div style="position: relative"><span class="small">{{item.updateFrequency}}</span></div>-->
-<!--          </div>-->
-<!--        </template>-->
-<!--      </el-aside>-->
       <!--      主体部分-->
       <el-main>
         <!--      主体上面部分-->
         <div>
           <img :src="album.blurPicUrl" alt="">
-          <span class="actives">{{album.name}}
-          <span>最近更新：{{updateTime}}</span>
-        </span>
-<!--          <div class="btn-group">-->
-<!--            <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play()">播放</el-button>-->
-<!--            <i v-if="collected===false" class="el-icon-star-off" @click="collect(1)"><span>收藏</span></i>-->
-<!--            <i v-else class="el-icon-star-on" @click="collect(2)"><span>已收藏</span></i>-->
-<!--          </div>-->
+          <span class="head"><span>歌单</span><div></div>{{album.name}}</span>
+          <span>歌手：{{album.artist.name}}</span>
+          <span>发布时间：{{changeTime(album.publishTime)}}</span>
+          <div class="btn-group">
+            <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play()">播放</el-button>
+            <i v-if="collected===false" class="el-icon-star-off" @click="collect(1)"><span>收藏</span></i>
+            <i v-else class="el-icon-star-on" @click="collect(2)"><span>已收藏</span></i>
+          </div>
         </div>
         <!--      主体下面部分-->
-<!--        <div class="main">-->
-<!--          <div class="main-title">-->
-<!--            <span>歌曲列表</span>-->
-<!--            <span class="songNum">{{activeRanking.trackCount}}首歌</span>-->
-<!--            <span>播放：<span>{{activeRanking.playCount}}</span><span>次</span></span>-->
-<!--          </div>-->
-<!--          <song-table :songs="ranking"></song-table>-->
-<!--        </div>-->
-<!--        <div class="comments">-->
-<!--          <div class="all">全部评论</div>-->
-<!--          <div>-->
-<!--            <template v-for="item in comments">-->
-<!--              <div :key="item.commentId">-->
-<!--                <div class="simLine"></div>-->
-<!--                <comments-table :comment="item" width="400px"></comments-table>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </div>-->
-<!--          <el-pagination-->
-<!--            v-if="total/5>1"-->
-<!--            background-->
-<!--            layout="prev, pager, next"-->
-<!--            :page-size="5"-->
-<!--            :total="total"-->
-<!--            @prev-click="pre"-->
-<!--            @next-click="next"-->
-<!--            @current-change="current"-->
-<!--            :current-page.sync="currentPage">-->
-<!--          </el-pagination>-->
-<!--        </div>-->
+        <div class="main">
+          <div class="main-title">
+            <span>专辑介绍</span>
+            <span class="songNum">{{album.briefDesc}}</span>
+          </div>
+          <song-table :songs="songs"></song-table>
+        </div>
+        <div class="comments">
+          <div class="all">全部评论</div>
+          <div>
+            <template v-for="item in comments">
+              <div :key="item.commentId">
+                <div class="simLine"></div>
+                <comments-table :comment="item" width="400px"></comments-table>
+              </div>
+            </template>
+          </div>
+          <el-pagination
+            v-if="total/5>1"
+            background
+            layout="prev, pager, next"
+            :page-size="5"
+            :total="total"
+            @prev-click="pre"
+            @next-click="next"
+            @current-change="current"
+            :current-page.sync="currentPage">
+          </el-pagination>
+        </div>
       </el-main>
+      <!--    侧边栏部分-->
+      <el-aside width="260px">
+        <div class="otherHeader">
+          <span>歌手其他专辑</span>
+          <span class="more">更多</span>
+        </div>
+        <div class="line"></div>
+        <div v-for="(item, index) in otherAlbums" :key="index" class="other"  @click="goAlbum(item.id)">
+          <img :src="item.blurPicUrl" alt="">
+          <div class="word">
+            <span>{{item.name}}</span><br>
+            <span>{{changeTime(item.publishTime)}}</span>
+          </div>
+        </div>
+      </el-aside>
     </el-container>
   </div>
 </template>
 
 <script>
+import commentsTable from '../../components/commentsTable/commentsTable'
+import songTable from '../../components/songTable/songTable'
 export default {
   name: 'album',
+  components: {
+    songTable,
+    commentsTable
+  },
   data () {
     return {
-      album: {}
+      album: {},
+      songs: [],
+      // 评论数据
+      comments: {},
+      // 第一页分页
+      currentPage: 1,
+      // 当前排行榜id
+      currentId: 0,
+      // 总的评论数量
+      total: 0,
+      // 是否被收藏
+      collected: false,
+      otherAlbums: []
     }
   },
   created () {
     this.getAlbumDetail(this.id)
+    this.getComments(this.id)
   },
   methods: {
     getAlbumDetail (id) {
-      console.log('sasa')
+      this.id = id
       this.$http.get(`/album?id=${id}`).then(data => {
+        console.log(data)
         this.album = data.album
+        this.songs = data.songs
+        this.getSingerOtherAlbum(data.album.artist.id)
+      })
+    },
+    collect (value) {
+      if (this.accountId !== null) {
+        this.$http.get(`/album/sub?t=${value}&id=${this.currentId}`).then(data => {
+          if (data.code === 200) {
+            if (value === 1) {
+              this.$message({
+                message: '成功收藏专辑',
+                type: 'success'
+              })
+              this.collected = true
+            } else {
+              this.$message({
+                message: '取消收藏该专辑',
+                type: 'warning'
+              })
+              this.collected = false
+            }
+          }
+        })
+      } else {
+        this.$message.error('请登录')
+      }
+    },
+    // 全部播放时的操作
+    play () {
+      this.$store.commit('getTotal', this.album.size)
+      this.$store.commit('getSongs', this.songs)
+      this.$store.dispatch('play', { num: 0, name: 'songTable' })
+    },
+    getComments (id) {
+      return this.$http.get(`/comment/album?id=${id}&limit=5`).then(data => {
+        this.total = data.total
+        this.currentPage = 1
+        this.comments = data.comments
+      })
+    },
+    getNextComments (value) {
+      this.$http.get(`/comment/playlist?id=${this.id}&limit=5&offset=${(value - 1) * 5}`).then(data => {
+        this.comments = data.comments
+      })
+    },
+    // 上一页评论
+    pre (value) {
+      this.getNextComments(value)
+    },
+    // 下一页评论
+    next (value) {
+      this.getNextComments(value)
+    },
+    // 当前评论
+    current (value) {
+      this.getNextComments(value)
+    },
+    // 获取歌手其他专辑
+    getSingerOtherAlbum (id) {
+      this.$http.get(`/artist/album?id=${id}&limit=5`).then(data => {
+        this.otherAlbums = data.hotAlbums
         console.log(data)
       })
+    },
+    changeTime (time) {
+      const date = new Date()
+      date.setTime(time)
+      return date.toLocaleDateString()
+    },
+    goAlbum (id) {
+      this.getAlbumDetail(id)
+      this.getComments(id)
     }
   },
   computed: {
@@ -90,15 +184,67 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .el-container
+    width 74%
+    margin auto
   img
     width 150px
     height 150px
     border 2px solid color
     margin 3px
     box-shadow 0 0 10 color
-  .actives
+  .other
+    margin 10px 10px 0 10px
+    height 65px
+    font-size 14px
+    img
+      width 55px
+      height 55px
+    div
+      position relative
+      left 70px
+      top -60px
+      span
+        display inline-block
+        width 170px
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+        ~span
+          font-size 12px
+          color #888888
+  .other:hover
+    img
+      width 65px
+      height 65px
+    div
+      left 80px
+  .otherHeader
+    margin-top 80px
+    margin-bottom 10px
+    .more
+      font-size 6px
+      position relative
+      left 10px
+  .head
     position relative
-    top -120px
-    font-size 25px
-    margin 20px
+    left 20px
+    top -170px
+    font-size 20px
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+    span
+      background-color red
+      font-size 16px
+      padding-left 5px
+      padding-right 5px
+      +div
+        position relative
+        top 5px
+        width 0
+        height 0
+        display inline-block
+        border 11px solid
+        border-color transparent transparent transparent red
 </style>

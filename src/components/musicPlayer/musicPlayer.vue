@@ -60,7 +60,13 @@ export default {
   computed: {
     // 从vuex里面获取到数据
     playSong () {
-      return this.$store.state.playSong
+      if (this.$store.state.playSong.img !== null) {
+        return this.$store.state.playSong
+      } else {
+        return {
+          name: '暂无播放音乐'
+        }
+      }
     },
     playIf () {
       return this.$store.state.playIf

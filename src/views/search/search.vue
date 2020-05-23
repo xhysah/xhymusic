@@ -33,7 +33,7 @@
               <template v-for="(item, index) in searchResult[2].albums">
                 <album-outline :key="index" length="150px" height="150px">
                   <template v-slot:img>
-                    <img :src="item.blurPicUrl" alt="" @click="songlist(item.id)">
+                    <img :src="item.blurPicUrl" alt="" @click="goAlbum(item.id)">
                   </template>
                   <template v-slot:sentence>
                     <div>{{item.name}}</div>
@@ -47,7 +47,7 @@
               <template v-for="(item, index) in searchResult[3].videos">
                 <album-outline :key="index" length="150px" height="90px">
                   <template v-slot:img>
-                    <img :src="item.coverUrl" alt="" @click="songlist(item.id)">
+                    <img :src="item.coverUrl" alt="" @click="goMv(item.vid)">
                   </template>
                   <template v-slot:sentence>
                     <div>{{item.title}}</div>
@@ -112,11 +112,8 @@ export default {
       this.$http.get(`/search?keywords=${this.keywords}&type=${type}`).then(data => {
         this.$set(this.searchResult, i, data.result)
         // this.searchResult.splice(i, 0, data.result)
+        console.log(this.searchResult[3])
       })
-    },
-    // 去往歌单详细信息
-    songlist (id) {
-      this.$router.push({ name: 'songMenuDetail', query: { path: '/top/playlist/id=', id: id } })
     },
     // 去往歌手详细信息
     goSinger (id) {
@@ -126,7 +123,25 @@ export default {
       console.log(val)
     },
     getActiveNames () {
-      console.log(this.searchResult[4])
+      console.log(this.searchResult[3])
+    },
+    // 去往专辑页面
+    goAlbum (id) {
+      this.$router.push({
+        path: '/album',
+        query: {
+          id
+        }
+      })
+    },
+    // 去往mv页面
+    goMv (id) {
+      this.$router.push({
+        path: '/video',
+        query: {
+          id
+        }
+      })
     }
   },
   computed: {
