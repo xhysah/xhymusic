@@ -6,24 +6,26 @@
         <!--      主体上面部分-->
         <div>
           <img :src="album.blurPicUrl" alt="">
-          <span class="head"><span>歌单</span><div></div>{{album.name}}</span>
-          <span>歌手：{{album.artist.name}}</span>
-          <span>发布时间：{{changeTime(album.publishTime)}}</span>
-          <div class="btn-group">
-            <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play()">播放</el-button>
-            <i v-if="collected===false" class="el-icon-star-off" @click="collect(1)"><span>收藏</span></i>
-            <i v-else class="el-icon-star-on" @click="collect(2)"><span>已收藏</span></i>
+          <div class="aside">
+            <span class="head"><span>专辑</span><div></div>{{album.name}}</span>
+            <span class="singer">歌手：<span>{{album.artist.name}}</span></span>
+            <span class="time">发布时间：{{changeTime(album.publishTime)}}</span>
+            <div class="btn-group">
+              <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play()">播放</el-button>
+              <i v-if="collected===false" class="el-icon-star-off" @click="collect(1)"><span>收藏</span></i>
+              <i v-else class="el-icon-star-on" @click="collect(2)"><span>已收藏</span></i>
+            </div>
           </div>
         </div>
         <!--      主体下面部分-->
         <div class="main">
           <div class="main-title">
-            <span>专辑介绍</span>
-            <span class="songNum">{{album.briefDesc}}</span>
+            <span>专辑介绍:</span>
+            <span class="songNum">{{album.description}}</span>
           </div>
           <song-table :songs="songs"></song-table>
         </div>
-        <div class="comments">
+        <div class="comments" v-if="Object.keys(comments).length !== 0">
           <div class="all">全部评论</div>
           <div>
             <template v-for="item in comments">
@@ -45,6 +47,7 @@
             :current-page.sync="currentPage">
           </el-pagination>
         </div>
+        <div v-else class="center">暂无评论</div>
       </el-main>
       <!--    侧边栏部分-->
       <el-aside width="260px">
@@ -82,8 +85,6 @@ export default {
       comments: {},
       // 第一页分页
       currentPage: 1,
-      // 当前排行榜id
-      currentId: 0,
       // 总的评论数量
       total: 0,
       // 是否被收藏
@@ -101,13 +102,14 @@ export default {
       this.$http.get(`/album?id=${id}`).then(data => {
         console.log(data)
         this.album = data.album
+        console.log(data.album)
         this.songs = data.songs
         this.getSingerOtherAlbum(data.album.artist.id)
       })
     },
     collect (value) {
       if (this.accountId !== null) {
-        this.$http.get(`/album/sub?t=${value}&id=${this.currentId}`).then(data => {
+        this.$http.get(`/album/sub?t=${value}&id=${this.id}`).then(data => {
           if (data.code === 200) {
             if (value === 1) {
               this.$message({
@@ -176,8 +178,16 @@ export default {
     }
   },
   computed: {
-    id () {
-      return this.$route.query.id
+    id: {
+      get () {
+        return this.$route.query.id
+      },
+      set (newValue) {
+        return newValue
+      }
+    },
+    accountId () {
+      return this.$store.state.accountId
     }
   }
 }
@@ -226,25 +236,70 @@ export default {
       font-size 6px
       position relative
       left 10px
-  .head
-    position relative
-    left 20px
-    top -170px
-    font-size 20px
-    overflow hidden
-    text-overflow ellipsis
-    white-space nowrap
-    span
-      background-color red
-      font-size 16px
-      padding-left 5px
-      padding-right 5px
-      +div
-        position relative
-        top 5px
-        width 0
-        height 0
-        display inline-block
-        border 11px solid
-        border-color transparent transparent transparent red
+   .aside
+     position relative
+     left 170px
+     top -155px
+    .head
+      position absolute
+      font-size 20px
+      overflow hidden
+      text-overflow ellipsis
+      white-space nowrap
+      span
+        background-color red
+        font-size 16px
+        padding-left 5px
+        padding-right 5px
+        +div
+          position relative
+          top 5px
+          width 0
+          height 0
+          display inline-block
+          border 11px solid
+          border-color transparent transparent transparent red
+    .singer
+      position absolute
+      top 55px
+      color #888888
+      font-size 12px
+      span
+        color aquamarine
+        font-size 10px
+    .time
+      font-size 12px
+      color #888888
+      position absolute
+      top 80px
+    .btn-group
+      display inline
+      position absolute
+      top 110px
+      .el-button
+        margin-right 10px
+  .el-pagination
+    display flex
+    justify-content center
+  .el-pagination.is-background .el-pager li:not(.disabled)
+  >>>.active
+    background-color red !important
+  .comments
+    margin-top 30px
+    .all
+      margin-bottom 10px
+  .main
+    margin-top 10px
+    .main-title
+      margin-bottom 10px
+      .songNum
+        font-size 12px
+        color #888888
+        display -webkit-box
+        -webkit-box-orient vertical
+        -webkit-line-clamp 2
+        overflow hidden
+        text-indent 2em
+  .el-main
+    margin-top 40px
 </style>
