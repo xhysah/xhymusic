@@ -15,7 +15,7 @@
         </div>
         <div class="video">
           <i class="el-icon-video-play" v-if="playIf===false"></i>
-          <video :src="videoUrl" controls @play="play" @pause="pause" @canplay="pause"></video>
+          <video ref="video" :src="videoUrl" controls @play="play" @pause="pause" @ended="pause"></video>
         </div>
         <div class="comments">
           <div class="all">全部评论 <span>评论数量<span>{{videoInf.commentCount}}</span></span></div>
@@ -45,9 +45,9 @@
         <div class="line"></div>
         <div class="word">发布时间：{{publishTime}}</div>
         <div class="word">播放次数：{{videoInf.playTime}}次</div>
-        <div class="simiHeader">相似MV</div>
+        <div class="simiHeader">相似视频</div>
         <div class="line"></div>
-        <div v-for="(item, index) in relateVideos" :key="index" class="sim"  @click="goVideoDetail(item.vid)">
+        <div v-for="(item, index) in relateVideos" :key="index" class="sim"  @click="goVideoDetail(item.vid, item.type)">
           <img :src="item.coverUrl" alt="">
           <div>
             <span>{{item.title}}</span><br>
@@ -70,7 +70,7 @@ export default {
     if (this.$store.state.playIf === true) {
       this.pauseMusic()
     }
-    this.goVideoDetail(this.id)
+    this.goVideoDetail(this.id, this.type)
   },
   data () {
     return {
@@ -88,13 +88,23 @@ export default {
   },
   methods: {
     // 获取视频信息
-    goVideoDetail (id) {
-      this.getVideoInf(id)
-      this.getVideoAdd(id)
-      this.getVideoComments(id)
-      this.getRelatedMv(id)
-      if (this.accountId !== null) {
-        this.getCollectedValue(id)
+    goVideoDetail (id, type) {
+      if (type === 1) {
+        this.getVideoInf(id)
+        this.getVideoAdd(id)
+        this.getVideoComments(id)
+        this.getRelatedMv(id)
+        if (this.accountId !== null) {
+          this.getCollectedValue(id)
+        }
+      } else {
+        this.$router.push({
+          path: '/mv',
+          query: {
+            id,
+            type
+          }
+        })
       }
     },
     getVideoInf (id) {
@@ -105,11 +115,8 @@ export default {
     // 获取视频地址
     getVideoAdd (id) {
       this.$http.get(`/video/url?id=${id}`).then(data => {
-        if (data.urls[0].url !== undefined) {
-          this.videoUrl = data.urls[0].url
-        } else {
-          this.$message.error('该视频地址不对')
-        }
+        this.videoUrl = data.urls[0].url
+      }).catch(() => {
       })
     },
     // 获取视频评论信息
@@ -187,6 +194,9 @@ export default {
   computed: {
     id () {
       return this.$route.query.id
+    },
+    type () {
+      return this.$route.query.type
     },
     publishTime () {
       const time = new Date()

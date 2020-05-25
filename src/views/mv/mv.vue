@@ -20,7 +20,7 @@
         <div class="video">
 <!--          <i class="el-icon-video-pause" v-if="playIf===true"></i>-->
           <i class="el-icon-video-play" v-if="playIf===false"></i>
-          <video ref="video" :src="mvUrl" controls @play="play" @pause="pause" @canplay="pause"></video>
+          <video ref="video" :src="mvUrl" controls @play="play" @pause="pause" @ended="pause"></video>
         </div>
         <div class="comments">
           <div class="all">全部评论 <span>评论数量<span>{{mvInf.commentCount}}</span></span></div>
@@ -52,7 +52,7 @@
         <div class="word">播放次数：{{mvInf.playCount}}次</div>
         <div class="simiHeader">相似MV</div>
         <div class="line"></div>
-        <div v-for="(item, index) in simiMvs" :key="index" class="sim"  @click="goMvDetail(item.id)">
+        <div v-for="(item, index) in simiMvs" :key="index" class="sim"  @click="goMvDetail(item.id, item.type)">
           <img :src="item.cover" alt="">
           <div>
             <span>{{item.name}}</span><br>
@@ -72,7 +72,7 @@ export default {
     commentsTable
   },
   created () {
-    this.goMvDetail(this.id)
+    this.goMvDetail(this.id, this.type)
     if (this.$store.state.playIf === true) {
       this.pauseMusic()
     }
@@ -94,7 +94,6 @@ export default {
     getMvInf (id) {
       this.$http.get(`/mv/detail?mvid=${id}`).then(data => {
         this.mvInf = data.data
-        console.log(data)
       })
     },
     // 获取mv地址
@@ -106,10 +105,8 @@ export default {
     // 获取mv评论信息
     getMvComments (id) {
       this.$http.get(`/comment/mv?id=${id}&limit=5`).then(data => {
-        console.log(data)
         this.mvComments = data.comments
         this.total = data.total
-        console.log(data)
       })
     },
     getnextComments (value) {
@@ -152,14 +149,24 @@ export default {
         this.$message.error('请登录')
       }
     },
-    goMvDetail (id) {
-      this.id = id
-      this.getMvInf(id)
-      this.getMvAdd(id)
-      this.getSimiMv(id)
-      this.getMvComments(id)
-      if (this.accountId !== null) {
-        this.getCollectedValue(id)
+    goMvDetail (id, type) {
+      if (type === 1) {
+        this.$router.push({
+          path: '/videos',
+          query: {
+            id,
+            type
+          }
+        })
+      } else {
+        this.id = id
+        this.getMvInf(id)
+        this.getMvAdd(id)
+        this.getSimiMv(id)
+        this.getMvComments(id)
+        if (this.accountId !== null) {
+          this.getCollectedValue(id)
+        }
       }
     },
     // 获取相似mv
@@ -202,6 +209,9 @@ export default {
       set (newValue) {
         return newValue
       }
+    },
+    type () {
+      return this.$route.query.type
     },
     accountId () {
       return this.$store.state.accountId
@@ -246,11 +256,11 @@ export default {
     height 65px
     font-size 14px
     img
-      width 55px
-      height 55px
+      width 90px
+      height auto
     div
       position relative
-      left 70px
+      left 100px
       top -60px
       width 150px
       cursor pointer
@@ -265,10 +275,10 @@ export default {
           color #888888
   .sim:hover
     img
-      width 65px
-      height 65px
+      width 100px
+      height auto
     div
-      left 80px
+      left 110px
   .header
     margin-left 22px
     .mv

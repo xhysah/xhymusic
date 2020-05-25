@@ -47,7 +47,7 @@
               <template v-for="(item, index) in searchResult[3].videos">
                 <album-outline :key="index" length="150px" height="90px">
                   <template v-slot:img>
-                    <img :src="item.coverUrl" alt="" @click="goMv(item.vid)">
+                    <img :src="item.coverUrl" alt="" @click="goMv(item.vid, item.type)">
                   </template>
                   <template v-slot:sentence>
                     <div>{{item.title}}</div>
@@ -134,13 +134,24 @@ export default {
       })
     },
     // 去往mv页面
-    goMv (id) {
-      this.$router.push({
-        path: '/videos',
-        query: {
-          id
-        }
-      })
+    goMv (id, type) {
+      if (type === 1) {
+        this.$router.push({
+          path: '/videos',
+          query: {
+            id,
+            type
+          }
+        })
+      } else {
+        this.$router.push({
+          path: '/mv',
+          query: {
+            id,
+            type
+          }
+        })
+      }
     }
   },
   computed: {

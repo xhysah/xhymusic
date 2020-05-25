@@ -36,7 +36,9 @@ export default new Vuex.Store({
     // 用户id，看是否存在用户id，判断用户是否登录
     accountId: window.localStorage.getItem('accountId'),
     // 用户的歌单id，用于添加/取消收藏歌曲
-    songMenuId: window.localStorage.getItem('songMenuId')
+    songMenuId: window.localStorage.getItem('songMenuId'),
+    checkFalse: true,
+    memberSong: false
   },
   getters: {
     // 播放进度
@@ -103,7 +105,6 @@ export default new Vuex.Store({
     },
     // 得到元总时长
     getDuration (state, audio) {
-      console.log(audio.duration)
       state.metaDuration = audio.duration
       state.metaCurrentTime = audio.currentTime
       state.audio = audio
@@ -156,10 +157,8 @@ export default new Vuex.Store({
       console.log(state.playSong.num)
       if (state.playSong.num === 0) {
         state.playSong.num = state.total - 1
-        console.log('wwewe')
       } else {
         state.playSong.num--
-        console.log('2222222')
       }
     },
     // 下一首播放
@@ -190,22 +189,52 @@ export default new Vuex.Store({
     getSongMenuId (state, value) {
       state.songMenuId = value
       window.localStorage.setItem('songMenuId', value)
+    },
+    editCheckFalse (state, value) {
+      state.checkFalse = value
+    },
+    editMemberSong (state, value) {
+      state.memberSong = value
     }
   },
   actions: {
     play (context, payload) {
-      axios.all([axios.get(`/song/url?id=${context.state.songs[payload.num].id}`), axios.get(`/lyric?id=${context.state.songs[payload.num].id}`)])
-        .then(axios.spread((songUrl, lyric) => {
-          window.sessionStorage.setItem('active', context.state.songs[payload.num].id)
-          context.commit('editActive', context.state.songs[payload.num].id)
-          context.commit('editName', payload.name)
-          window.sessionStorage.setItem('tableName', payload.name)
-          if (payload.name === 'songs') {
-            context.commit('playUrl', { url: songUrl.data[0].url, img: context.state.songs[payload.num].artists[0].img1v1Url, name: context.state.songs[payload.num].name, singer: context.state.songs[payload.num].artists[0].name, lyric: lyric, num: payload.num })
-          } else {
-            context.commit('playUrl', { url: songUrl.data[0].url, img: context.state.songs[payload.num].al.picUrl, name: context.state.songs[payload.num].name, singer: context.state.songs[payload.num].al.name, lyric: lyric, num: payload.num })
-          }
-        }))
+      context.commit('editCheckFalse', true)
+      context.commit('editMemberSong', false)
+      axios.get(`/check/music?id=${context.state.songs[payload.num].id}`).then(() => {
+        axios.all([axios.get(`/song/url?id=${context.state.songs[payload.num].id}`), axios.get(`/lyric?id=${context.state.songs[payload.num].id}`)])
+          .then(axios.spread((songUrl, lyric) => {
+            if (songUrl.data[0].url !== null) {
+              window.sessionStorage.setItem('active', context.state.songs[payload.num].id)
+              context.commit('editActive', context.state.songs[payload.num].id)
+              context.commit('editName', payload.name)
+              window.sessionStorage.setItem('tableName', payload.name)
+              if (payload.name === 'songs') {
+                context.commit('playUrl', {
+                  url: songUrl.data[0].url,
+                  img: context.state.songs[payload.num].artists[0].img1v1Url,
+                  name: context.state.songs[payload.num].name,
+                  singer: context.state.songs[payload.num].artists[0].name,
+                  lyric: lyric,
+                  num: payload.num
+                })
+              } else {
+                context.commit('playUrl', {
+                  url: songUrl.data[0].url,
+                  img: context.state.songs[payload.num].al.picUrl,
+                  name: context.state.songs[payload.num].name,
+                  singer: context.state.songs[payload.num].al.name,
+                  lyric: lyric,
+                  num: payload.num
+                })
+              }
+            } else {
+              context.commit('editMemberSong', true)
+            }
+          }))
+      }).catch(() => {
+        context.commit('editCheckFalse', false)
+      })
     }
   },
   modules: {

@@ -35,7 +35,7 @@
               <template v-for="(item, index) in mv">
                 <album-outline :key="index" length="260px" height="150px">
                   <template v-slot:img>
-                    <img :src="item.imgurl16v9" alt="" @click="goMv(item.id)">
+                    <img :src="item.imgurl16v9" alt="" @click="goMv(item.id, item.type)">
                   </template>
                   <template v-slot:sentence>
                     <div>{{item.name}}</div>
@@ -202,13 +202,24 @@ export default {
       })
     },
     // 去往mv页面
-    goMv (id) {
-      this.$router.push({
-        path: '/mv',
-        query: {
-          id
-        }
-      })
+    goMv (id, type) {
+      if (type === 1) {
+        this.$router.push({
+          path: '/videos',
+          query: {
+            id,
+            type
+          }
+        })
+      } else {
+        this.$router.push({
+          path: '/mv',
+          query: {
+            id,
+            type
+          }
+        })
+      }
     }
   },
   computed: {

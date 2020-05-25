@@ -86,11 +86,27 @@ export default {
     },
     name () {
       return this.$store.state.tableName
+    },
+    checkFalse () {
+      return this.$store.state.checkFalse
+    },
+    memberSong () {
+      return this.$store.state.memberSong
     }
   },
   watch: {
     num (newValue) {
       this.$store.dispatch('play', { num: newValue, name: this.name })
+    },
+    checkFalse (newValue) {
+      if (newValue === false) {
+        this.$message.error('亲爱的,此歌暂无版权')
+      }
+    },
+    memberSong (newValue) {
+      if (newValue === true) {
+        this.$message.warning('亲爱的，此歌是会员歌曲哦')
+      }
     }
   }
 }

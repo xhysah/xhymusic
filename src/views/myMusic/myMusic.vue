@@ -3,6 +3,7 @@
     <el-container v-if="accountId!==null">
       <el-aside>
         <div @click="getSinger" class="mySinger">我的歌手</div>
+        <div @click="getVideo" class="mySinger">我的视频</div>
         <div v-for="(item, index) in playlists" :key="index" class="aside" @click="goDetail(item.id)">
           <img :src="item.coverImgUrl" alt="">
           <div>
@@ -12,7 +13,33 @@
         </div>
       </el-aside>
       <el-main>
-        <div v-if="singerIf===false">
+        <div v-if="singerIf===true">
+          <div>我的歌手</div>
+          <div class="line"></div>
+          <div v-for="(item, index) in singers" :key="index" class="singer"  @click="gosinger(item.id)">
+            <img :src="item.img1v1Url" alt="">
+            <div class="word">
+              <span>{{item.name}}</span><br>
+              <span>{{item.mvSize}}个mv</span>
+              <span>{{item.albumSize}}个mv</span>
+            </div>
+          </div>
+        </div>
+        <div v-else-if="videoIf===true">
+          <div>我的视频</div>
+          <div class="line"></div>
+          <div class="flex">
+            <div v-for="(item, index) in videos" :key="index" class="video" @click="goVideo(item.vid, item.type)">
+              <img :src="item.coverUrl" alt="">
+              <!--            <div class="word">-->
+              <!--              <span>{{item.name}}</span><br>-->
+              <!--              <span>{{item.mvSize}}个mv</span>-->
+              <!--              <span>{{item.albumSize}}个mv</span>-->
+              <!--            </div>-->
+            </div>
+          </div>
+        </div>
+        <div v-else>
           <div class="header">
             <img :src="songMenuDetail.coverImgUrl" alt="">
             <span class="head"><span>歌单</span><div></div>{{songMenuDetail.name}}</span>
@@ -60,18 +87,6 @@
             :current-page.sync="currentPage">
           </el-pagination>
         </div>
-        <div v-else>
-          <div>我的歌手</div>
-          <div class="line"></div>
-          <div v-for="(item, index) in singers" :key="index" class="singer"  @click="gosinger(item.id)">
-            <img :src="item.img1v1Url" alt="">
-            <div class="word">
-              <span>{{item.name}}</span><br>
-              <span>{{item.mvSize}}个mv</span>
-              <span>{{item.albumSize}}个mv</span>
-            </div>
-          </div>
-        </div>
       </el-main>
     </el-container>
     <el-container v-else class="noLogin">
@@ -117,7 +132,9 @@ export default {
       // 是否一收藏
       collected: false,
       singerIf: false,
-      singers: []
+      singers: [],
+      videoIf: false,
+      videos: []
     }
   },
   methods: {
@@ -129,15 +146,16 @@ export default {
       })
     },
     getSinger () {
+      this.videoIf = false
       this.singerIf = true
       this.$http.get(`/artist/sublist?uid=${this.accountId}`).then(data => {
-        console.log(data.data)
         this.singers = data.data
       })
     },
     // 根据id获取歌单的详细信息
     getDetail (id) {
       this.singerIf = false
+      this.videoIf = false
       this.$http.get(`/playlist/detail?id=${id}`).then(data => {
         this.currentId = id
         this.songMenuDetail = data.playlist
@@ -211,6 +229,33 @@ export default {
     },
     gosinger (id) {
       this.$router.push({ name: 'singerInformation', params: { sid: id } })
+    },
+    getVideo () {
+      this.singerIf = false
+      this.videoIf = true
+      this.$http.get(`mv/sublist??uid=${this.accountId}`).then(data => {
+        this.videos = data.data
+        console.log(data.data)
+      })
+    },
+    goVideo (id, type) {
+      if (type === 1) {
+        this.$router.push({
+          path: '/videos',
+          query: {
+            id,
+            type
+          }
+        })
+      } else {
+        this.$router.push({
+          path: '/mv',
+          query: {
+            id,
+            type
+          }
+        })
+      }
     }
   },
   computed: {
@@ -396,4 +441,8 @@ export default {
         left 700px
         position absolute
         font-size 30px
+  .video
+    img
+      width 200px
+      height auto
 </style>
