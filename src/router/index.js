@@ -13,7 +13,7 @@ const search = () => import('../views/search/search')
 const myMusic = () => import('../views/myMusic/myMusic')
 const album = () => import('../views/album/album')
 const mv = () => import('../views/mv/mv')
-const video = () => import('../views/mv/video')
+const videos = () => import('../views/mv/videos')
 
 Vue.use(VueRouter)
 
@@ -77,9 +77,9 @@ const routes = [
         component: mv
       },
       {
-        path: '/video',
-        name: 'video',
-        component: video
+        path: '/videos',
+        name: 'videos',
+        component: videos
       }
     ]
   },

@@ -17,17 +17,19 @@
     <!--    网友精选-->
     <div class="flex">
       <template v-for="(item, index) in toplist">
-        <song-outline :key="index" length="150px" height="150px" active="active">
-          <template v-slot:img>
-            <img :src="item.coverImgUrl" alt="" @click="songlist(item.id)">
-          </template>
-          <template v-slot:creator>
-            <span>by {{item.creator.nickname}}</span>
-          </template>
-          <template v-slot:sentence>
-            <div>{{item.name}}</div>
-          </template>
-        </song-outline>
+        <div @click="songlist(item.id)" :key="index">
+          <song-outline length="150px" height="150px" active="active">
+            <template v-slot:img>
+              <img :src="item.coverImgUrl" alt="">
+            </template>
+            <template v-slot:creator>
+              <span>by {{item.creator.nickname}}</span>
+            </template>
+            <template v-slot:sentence>
+              <div>{{item.name}}</div>
+            </template>
+          </song-outline>
+        </div>
       </template>
     </div>
   </div>

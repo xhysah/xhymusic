@@ -112,7 +112,6 @@ export default {
       this.$http.get(`/search?keywords=${this.keywords}&type=${type}`).then(data => {
         this.$set(this.searchResult, i, data.result)
         // this.searchResult.splice(i, 0, data.result)
-        console.log(this.searchResult[3])
       })
     },
     // 去往歌手详细信息
@@ -137,7 +136,7 @@ export default {
     // 去往mv页面
     goMv (id) {
       this.$router.push({
-        path: '/video',
+        path: '/videos',
         query: {
           id
         }
@@ -175,4 +174,6 @@ export default {
     color red
   .tabs>>>.el-tabs__item:hover
     color red !important
+  .el-collapse
+    padding 10px
 </style>

@@ -79,7 +79,10 @@ export default {
   },
   data () {
     return {
-      album: {},
+      album: {
+        name: '',
+        artist: {}
+      },
       songs: [],
       // 评论数据
       comments: {},
@@ -93,8 +96,7 @@ export default {
     }
   },
   created () {
-    this.getAlbumDetail(this.id)
-    this.getComments(this.id)
+    this.goAlbum(this.id)
   },
   methods: {
     getAlbumDetail (id) {
@@ -175,6 +177,21 @@ export default {
     goAlbum (id) {
       this.getAlbumDetail(id)
       this.getComments(id)
+      if (this.accountId !== null) {
+        this.getCollectedValue(id)
+      }
+    },
+    // 判断该歌单是否被收藏
+    getCollectedValue (id) {
+      this.collected = false
+      this.$http.get(`/album/sublist?uid=${this.accountId}`).then(data => {
+        for (const key of data.data) {
+          if (Number(id) === key.id) {
+            this.collected = true
+          }
+        }
+        console.log(data)
+      })
     }
   },
   computed: {

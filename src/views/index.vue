@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <!--    导航菜单-->
     <el-menu
       :default-active="activeIndex"
@@ -15,7 +15,7 @@
       <el-menu-item index="singer" @click="go('/singer')">歌手</el-menu-item>
       <el-input class="input" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户"
                 prefix-icon="el-icon-search" @keyup.enter.native="searchInf(input)"
-                @input="changeValue" ref="input"
+                @input="changeValue" ref="input" @blur="blur"
       ></el-input>
       <span @click="loginVisible=true" v-if="loginIf === 0" ref="login">登录</span>
       <!--        登录后显示-->
@@ -196,10 +196,10 @@ export default {
       this.search(value)
     },
     // 失去焦点时
-    // blur () {
-    //   this.result = {}
-    //   this.input = ''
-    // },
+    blur () {
+      this.result = {}
+      this.input = ''
+    },
     changeInputValue (value) {
       this.result = {}
       this.$refs.input.focus()
@@ -234,6 +234,8 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+  .container
+    margin-bottom 50px
   .music
     position fixed
     bottom 0

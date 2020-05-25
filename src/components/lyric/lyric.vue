@@ -70,5 +70,9 @@ export default {
     white-space nowrap
   .el-collapse-item
     background-color  #1c1c1c
-    padding 5px
+    padding 15px
+    >>>.el-collapse-item__header
+      background-color  black
+      padding-left 10px
+      color white
 </style>
