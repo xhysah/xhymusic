@@ -26,8 +26,8 @@
         <td class="td">
           <div class="singer">
             <template v-for="(items, index) in item.ar">
-              <span :key="items.id" v-if="index===0" @click="goSinger(items.id)">{{items.name}}</span>
-              <span :key="items.id" v-else @click="goSinger(items.id)">/{{items.name}}</span>
+              <span :key="index" v-if="index===0" @click="goSinger(items.id)">{{items.name}}</span>
+              <span :key="index" v-else @click="goSinger(items.id)">/{{items.name}}</span>
             </template>
           </div>
         </td>

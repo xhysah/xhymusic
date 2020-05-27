@@ -28,7 +28,7 @@ export default new Vuex.Store({
     // 菜单应该选到哪里
     activeName: '',
     // 歌曲列表
-    songs: window.sessionStorage.getItem('songs'),
+    songs: JSON.parse(window.sessionStorage.getItem('songs')),
     // 总歌曲数
     total: window.sessionStorage.getItem('total'),
     // songstable还是songs
@@ -128,6 +128,7 @@ export default new Vuex.Store({
     // 放音乐。musicPlayer
     playSongs (state) {
       if (state.playUrl !== '') {
+        console.log(state.active)
         state.audio.play()
         state.playIf = true
         state.active = state.active - 1
@@ -137,6 +138,7 @@ export default new Vuex.Store({
     pauseSongs (state) {
       state.playIf = false
       state.audio.pause()
+      console.log(state.active)
       state.active = state.active + 1
     },
     // 通过控制active，来记录audio状态
@@ -154,7 +156,6 @@ export default new Vuex.Store({
     },
     // 上一首播放
     editPreNum (state) {
-      console.log(state.playSong.num)
       if (state.playSong.num === 0) {
         state.playSong.num = state.total - 1
       } else {
@@ -163,7 +164,6 @@ export default new Vuex.Store({
     },
     // 下一首播放
     editNextNum (state) {
-      console.log(state.playSong.num)
       if (state.playSong.num === state.total - 1) {
         state.playSong.num = 0
       } else {
@@ -172,7 +172,7 @@ export default new Vuex.Store({
     },
     // 得到歌单的总歌曲信息并存在session里
     getSongs (state, songs) {
-      window.sessionStorage.setItem('songs', songs)
+      window.sessionStorage.setItem('songs', JSON.stringify(songs))
       state.songs = songs
       // this.play(0)
     },

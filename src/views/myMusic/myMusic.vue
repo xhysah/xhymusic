@@ -280,6 +280,7 @@ export default {
     .header
       margin 20px 0
       height 220px
+      position relative
       div
         width 470px
       img
@@ -288,13 +289,13 @@ export default {
         border-radius 20px
         border 1px solid red
       .button-group
-        position relative
+        position absolute
         left 230px
-        top -140px
+        top 90px
       .tags
-        position relative
+        position absolute
         left 230px
-        top -130px
+        top 130px
         font-size 12px
         span
           font-size 10px
@@ -304,9 +305,9 @@ export default {
           padding 1px 10px 1px 10px
           margin-left 10px
       .creator
-        position relative
+        position absolute
         left 230px
-        top -150px
+        top 40px
         img
           border none
           border-radius 2px
@@ -323,10 +324,13 @@ export default {
             color #888888
             font-size 12px
       .head
-        position relative
-        left 20px
-        top -170px
+        position absolute
+        left 230px
         font-size 20px
+        width 470px
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
         span
           background-color red
           font-size 16px
@@ -340,6 +344,19 @@ export default {
             display inline-block
             border 11px solid
             border-color transparent transparent transparent red
+      .introduce
+        font-size 12px
+        width 470px
+        position absolute
+        left 230px
+        top 170px
+        // 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示
+        display -webkit-box
+        // 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式
+        -webkit-box-orient vertical
+        // 一个块元素显示的文本的行数
+        -webkit-line-clamp 2
+        overflow hidden
   .aside
     margin 10px 10px 0 10px
     height 80px
@@ -377,19 +394,6 @@ export default {
         :first-child
           color red
           margin-right 5px
-  .introduce
-    font-size 12px
-    width 460px
-    position relative
-    left 230px
-    top -110px
-    // 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示
-    display -webkit-box
-    // 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式
-    -webkit-box-orient vertical
-    // 一个块元素显示的文本的行数
-    -webkit-line-clamp 2
-    overflow hidden
   .el-pagination
     display flex
     justify-content center

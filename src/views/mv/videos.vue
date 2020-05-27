@@ -23,7 +23,7 @@
             <template v-for="item in videoComments">
               <div :key="item.commentId">
                 <div class="simLine"></div>
-                <comments-table :comment="item" width="400px"></comments-table>
+                <comments-table :comment="item" width="530px"></comments-table>
               </div>
             </template>
           </div>

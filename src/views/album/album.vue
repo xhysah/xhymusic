@@ -31,7 +31,7 @@
             <template v-for="item in comments">
               <div :key="item.commentId">
                 <div class="simLine"></div>
-                <comments-table :comment="item" width="400px"></comments-table>
+                <comments-table :comment="item" width="580px"></comments-table>
               </div>
             </template>
           </div>
@@ -102,9 +102,7 @@ export default {
     getAlbumDetail (id) {
       this.id = id
       this.$http.get(`/album?id=${id}`).then(data => {
-        console.log(data)
         this.album = data.album
-        console.log(data.album)
         this.songs = data.songs
         this.getSingerOtherAlbum(data.album.artist.id)
       })
@@ -166,7 +164,6 @@ export default {
     getSingerOtherAlbum (id) {
       this.$http.get(`/artist/album?id=${id}&limit=5`).then(data => {
         this.otherAlbums = data.hotAlbums
-        console.log(data)
       })
     },
     changeTime (time) {
@@ -190,7 +187,6 @@ export default {
             this.collected = true
           }
         }
-        console.log(data)
       })
     }
   },
@@ -231,9 +227,11 @@ export default {
       position relative
       left 70px
       top -60px
+      width 170px
+      cursor pointer
       span
         display inline-block
-        width 170px
+        width 160px
         overflow hidden
         text-overflow ellipsis
         white-space nowrap
@@ -319,4 +317,5 @@ export default {
         text-indent 2em
   .el-main
     margin-top 40px
+    overflow hidden
 </style>

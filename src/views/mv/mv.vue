@@ -28,7 +28,7 @@
             <template v-for="item in mvComments">
               <div :key="item.commentId">
                 <div class="simLine"></div>
-                <comments-table :comment="item" width="400px"></comments-table>
+                <comments-table :comment="item" width="530px"></comments-table>
               </div>
             </template>
           </div>
@@ -262,11 +262,11 @@ export default {
       position relative
       left 100px
       top -60px
-      width 150px
+      width 120px
       cursor pointer
       span
         display inline-block
-        width 150px
+        width 120px
         overflow hidden
         text-overflow ellipsis
         white-space nowrap

@@ -208,8 +208,9 @@ export default {
     width 70%
     margin 20px auto
     .header
-      margin 20px 0
+      margin 15px 0
       height 220px
+      position relative
       div
         width 450px
       img
@@ -218,14 +219,14 @@ export default {
         border-radius 20px
         border 1px solid red
       .button-group
-        position relative
+        position absolute
         left 230px
-        top -140px
+        top 90px
       .tags
-        position relative
+        position absolute
         left 230px
-        top -130px
         font-size 12px
+        top 130px
         span
           font-size 10px
           color #434343
@@ -233,10 +234,23 @@ export default {
           border-radius 5px
           padding 1px 10px 1px 10px
           margin-left 10px
-      .creator
-        position relative
+      .introduce
+        position absolute
         left 230px
-        top -150px
+        top 170px
+        font-size 12px
+        width 440px
+         // 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示
+        display -webkit-box
+        // 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式
+        -webkit-box-orient vertical
+        // 一个块元素显示的文本的行数
+        -webkit-line-clamp 2
+        overflow hidden
+      .creator
+        position absolute
+        left 230px
+        top 40px
         img
           border none
           border-radius 2px
@@ -253,10 +267,10 @@ export default {
             color #888888
             font-size 12px
       .head
-        position relative
-        left 20px
-        top -170px
+        position absolute
+        left 230px
         font-size 20px
+        width 440px
         overflow hidden
         text-overflow ellipsis
         white-space nowrap
@@ -284,19 +298,6 @@ export default {
         :first-child
           color red
           margin-right 5px
-  .introduce
-    font-size 12px
-    width 460px
-    position relative
-    left 230px
-    top -110px
-    // 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示
-    display -webkit-box
-    // 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式
-    -webkit-box-orient vertical
-    // 一个块元素显示的文本的行数
-    -webkit-line-clamp 2
-    overflow hidden
   .simiHeader
     margin-top 80px
     margin-bottom 10px

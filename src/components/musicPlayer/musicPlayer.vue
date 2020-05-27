@@ -14,7 +14,7 @@
           <el-progress :percentage="percentage" color="red" :show-text="false"></el-progress>
         </div>
         <span>{{currentTime}}/{{duration}}</span>
-        <audio :src="playSong.url" autoplay="autoplay" ref="audio" @ended="ended" @canplay="getDuration"
+        <audio :src="playSong.url" ref="audio" autoplay @ended="ended" @canplay="getDuration"
                @timeupdate="getCurrentTime"></audio>
       </div>
 <!--      <div class="lyric" v-if="playSong.lyric.hasOwnProperty('lrc')">{{playSong.lyric.lrc.lyric}}</div>-->
