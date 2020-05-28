@@ -9,10 +9,10 @@
         <div class="center">
           <el-button type="danger" class="loginButton" @click="confirmPhone">确定</el-button>
         </div>
-        <div @click="phoneLogin(1)"><i class="el-icon-back"></i>手机号登录</div>
+        <div class="login" @click="phoneLogin(1)"><i class="el-icon-back"></i>手机号登录</div>
       </el-form>
       <!--    注册-->
-      <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="80px" v-else>
+      <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="80px" v-else-if="name==='register'">
         <el-form-item prop="captcha" label="验证码">
           <el-input v-model="registerForm.captcha" placeholder="请输入验证码"></el-input>
         </el-form-item>
@@ -26,6 +26,18 @@
           <el-button type="danger" class="loginButton" @click="registerByPhone">确定</el-button>
         </div>
       </el-form>
+      <!--      修改密码-->
+      <el-form ref="forgetForm" :model="forgetForm" :rules="forgetRules" label-width="80px" v-else>
+        <el-form-item prop="captcha" label="验证码">
+          <el-input v-model="forgetForm.captcha" placeholder="请输入验证码"></el-input>
+        </el-form-item>
+        <el-form-item prop="password" label="密码">
+          <el-input v-model="forgetForm.password" placeholder="请输入密码"></el-input>
+        </el-form-item>
+        <div class="center">
+          <el-button type="danger" class="loginButton" @click="forgetByPhone">确定</el-button>
+        </div>
+      </el-form>
     </el-card>
   </div>
 </template>
@@ -33,6 +45,11 @@
 <script>
 export default {
   name: 'register',
+  props: {
+    name: {
+      type: String
+    }
+  },
   data () {
     return {
       // 设置哪一个表单显示
@@ -64,6 +81,19 @@ export default {
         nickname: [
           { required: true, message: '请输入昵称', trigger: 'blur' }
         ]
+      },
+      forgetForm: {
+        phone: 15522102778,
+        password: '',
+        captcha: ''
+      },
+      forgetRules: {
+        captcha: [
+          { required: true, message: '请输入验证码', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -73,9 +103,16 @@ export default {
         if (!valid) {
           return this.$message.error('请填写完整信息')
         }
-        this.$http.get('/captcha/sent', { params: this.phoneForm }).then(data => {
-          this.show = false
-          this.registerForm.phone = this.phoneForm.phone
+        this.$http.get(`/cellphone/existence/check?phone=${this.phoneForm.phone}`).then(data => {
+          this.$http.get('/captcha/sent', { params: this.phoneForm }).then(() => {
+            this.show = false
+          })
+          if (data.exist !== 1) {
+            this.forgetForm.nickname = data.nickname
+            this.forgetForm.phone = this.phoneForm.phone
+          } else {
+            this.registerForm.phone = this.phoneForm.phone
+          }
         })
       })
     },
@@ -84,8 +121,30 @@ export default {
         if (!valid) {
           return this.$message.error('请填写完整信息')
         }
-        this.$http.get('/register/cellphone', { params: this.registerForm }).then(response => {
-          console.log(response)
+        this.$http.get('/register/cellphone', { params: this.registerForm }).then(() => {
+          this.$message.success('注册成功')
+          let t = 3
+          setInterval(function () {
+            if (t === 0) {
+              this.phoneLogin(1)
+            } else {
+              this.$message.success(`${t}秒钟跳转到登录页面`)
+              t--
+            }
+          }, 1000)
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+    },
+    forgetByPhone () {
+      this.$refs.forgetForm.validate((valid) => {
+        if (!valid) {
+          return this.$message.error('请填写完整信息')
+        }
+        this.$http.get('/register/cellphone', { params: this.forgetForm }).then(() => {
+          this.$message.success('修改密码成功')
+          this.phoneLogin(1)
         }).catch(err => {
           console.log(err)
         })
@@ -110,4 +169,7 @@ export default {
     background-color black
   .loginButton
     width 120px
+  .login
+    cursor pointer
+    color #888888
 </style>

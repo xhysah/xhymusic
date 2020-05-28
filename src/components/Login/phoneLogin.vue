@@ -11,7 +11,8 @@
         <div class="center">
           <el-button type="danger" class="loginButton" @click="login">登录</el-button>
         </div>
-        <div @click="register(2)"><i class="el-icon-back"></i>注册</div>
+        <div class="register div" @click="register(2)"><i class="el-icon-back"></i>注册</div>
+        <div class="forget div" @click="forget(2)">忘记密码<i class="el-icon-right"></i></div>
       </el-form>
     </el-card>
   </div>
@@ -57,12 +58,17 @@ export default {
           window.localStorage.setItem('password', this.loginForm.password)
           window.localStorage.setItem('imgUrl', data.profile.avatarUrl)
           this.$emit('success', data.profile.avatarUrl)
+        }).catch(() => {
+          this.$message.error('密码错误')
         })
       })
     },
     // 跳转注册页面
     register (value) {
       this.$emit('register', { value: value, title: '注册' })
+    },
+    forget (value) {
+      this.$emit('register', { value: value, title: '修改密码' })
     }
   },
   computed: {}
@@ -80,4 +86,14 @@ export default {
     background-color black
   .loginButton
     width 120px
+  .forget
+    right 0
+    bottom 25px
+    margin-right 20px
+    position absolute
+  .register
+    position relative
+  .div
+    cursor pointer
+    color #888888
 </style>

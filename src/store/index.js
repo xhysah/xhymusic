@@ -12,7 +12,7 @@ export default new Vuex.Store({
       img: window.sessionStorage.getItem('img'),
       name: window.sessionStorage.getItem('name'),
       singer: window.sessionStorage.getItem('singer'),
-      lyric: window.sessionStorage.getItem('lyric'),
+      lyric: JSON.parse(window.sessionStorage.getItem('lyric')),
       num: window.sessionStorage.getItem('num')
     },
     // 音乐是否处于播放状态，决定小图标该显示哪一个
@@ -89,7 +89,7 @@ export default new Vuex.Store({
       window.sessionStorage.setItem('img', payload.img)
       window.sessionStorage.setItem('name', payload.name)
       window.sessionStorage.setItem('singer', payload.singer)
-      window.sessionStorage.setItem('lyric', payload.lyric)
+      window.sessionStorage.setItem('lyric', JSON.stringify(payload.lyric))
       window.sessionStorage.setItem('num', payload.num)
     },
     // 一首音乐结束操作

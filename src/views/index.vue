@@ -84,7 +84,7 @@
           <el-button round size="medium" @click="change(2, '注册')">注册</el-button>
         </div>
         <phone-login v-else-if="active == 1" @register="editActive" @success="login"></phone-login>
-        <register v-else @login="editActive"></register>
+        <register v-else @login="editActive" :name="this.title"></register>
       </el-dialog>
     </div>
     <!--    音乐栏显示-->
@@ -96,8 +96,8 @@
 
 <script>
 import musicPlayer from '../components/musicPlayer/musicPlayer'
-import phoneLogin from './Login/phoneLogin'
-import register from './register/register'
+import phoneLogin from '../components/Login/phoneLogin'
+import register from '../components/register/register'
 export default {
   name: 'index',
   data () {
@@ -127,11 +127,11 @@ export default {
   mounted () {
     // 判断音乐栏是否显示
     function show () {
-      if ((window.innerHeight - event.clientY) < 200) {
-        this.show = true
-      } else {
-        this.show = false
-      }
+      // if ((window.innerHeight - event.clientY) < 200) {
+      this.show = true
+      // } else {
+      //   this.show = false
+      // }
     }
     window.addEventListener('mousemove', show.bind(this))
   },
@@ -225,6 +225,8 @@ export default {
           return window.localStorage.getItem('imgUrl')
         }
         return ''
+      },
+      set () {
       }
     },
     activeIndex () {
@@ -244,6 +246,7 @@ export default {
     display flex
     justify-content center
     span
+      cursor pointer
       position relative
       margin auto 0
       font-size 10px
@@ -280,13 +283,11 @@ export default {
     /*color white*/
     >>>.el-dialog__header
       background-color black
-      border 1px solid red
       border-bottom none
     >>>.el-dialog__body
       background-color black
-      border 1px solid red
       border-top none
-      padding 5px 0
+      padding 10px
     >>>.el-dialog__title
       color white
   img

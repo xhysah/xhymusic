@@ -14,12 +14,12 @@
       <!--      主体部分-->
       <el-main>
         <!--      主体上面部分-->
-        <div>
+        <div class="aside">
           <img :src="activeRanking.coverImgUrl" alt="">
           <span class="actives">{{activeRanking.name}}
           <span>最近更新：{{updateTime}}</span>
         </span>
-          <div class="btn-group">
+          <div>
             <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play()">播放</el-button>
             <i v-if="collected===false" class="el-icon-star-off" @click="collect(1)"><span>收藏</span></i>
             <i v-else class="el-icon-star-on" @click="collect(2)"><span>已收藏</span></i>
@@ -233,34 +233,35 @@ color=#353535
     font-size 13px
     position relative
     top -50px
-  img
-    width 150px
-    height 150px
-    border 2px solid color
-    margin 3px
-    box-shadow 0 0 10 color
   .main
     display flex
     justify-content center
     flex-wrap wrap
     flex-direction column
-    margin -20px 20px
-  .actives
+    margin 10px 20px
+  .aside
     position relative
-    top -120px
-    font-size 25px
-    margin 20px
-    +div
-      position relative
-      left -190px
-      top -50px
-      margin 20px
-    span
-      color #909399
-      font-size 12px
+    .actives
       position absolute
-      left 10px
-      top 40px
+      font-size 25px
+      margin 20px
+      +div
+        position absolute
+        left 160px
+        top 70px
+        margin 20px
+      span
+        color #909399
+        font-size 12px
+        position absolute
+        left 10px
+        top 40px
+    img
+      width 150px
+      height 150px
+      border 2px solid color
+      margin 3px
+      box-shadow 0 0 10 color
   .el-main
     margin 0 20px
     border 2px solid color
@@ -313,8 +314,6 @@ color=#353535
       color #888888
   .check
     background-color #1c1c1c
-  .btn-group
-    display inline-block
   .imgChange
     width 70px
     height 70px

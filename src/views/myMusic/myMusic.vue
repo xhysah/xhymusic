@@ -66,26 +66,28 @@
           </div>
           <song-table :songs="songMenuDetail.tracks"></song-table>
           <!--        评论-->
-          <div>全部评论</div>
-          <div>
-            <template v-for="item in comments">
-              <div :key="item.commentId">
-                <div class="simLine"></div>
-                <comments-table :comment="item"></comments-table>
-              </div>
-            </template>
+          <div v-if="Object.keys(comments).length !== 0">
+            <div>全部评论</div>
+            <div>
+              <template v-for="item in comments">
+                <div :key="item.commentId">
+                  <div class="simLine"></div>
+                  <comments-table :comment="item"></comments-table>
+                </div>
+              </template>
+            </div>
+            <el-pagination
+              v-if="total/5>1"
+              background
+              layout="prev, pager, next"
+              :page-size="5"
+              :total="total"
+              @prev-click="pre"
+              @next-click="next"
+              @current-change="current"
+              :current-page.sync="currentPage">
+            </el-pagination>
           </div>
-          <el-pagination
-            v-if="total/5>1"
-            background
-            layout="prev, pager, next"
-            :page-size="5"
-            :total="total"
-            @prev-click="pre"
-            @next-click="next"
-            @current-change="current"
-            :current-page.sync="currentPage">
-          </el-pagination>
         </div>
       </el-main>
     </el-container>

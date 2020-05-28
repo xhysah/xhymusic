@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-const phoneLogin = () => import('../views/Login/phoneLogin')
-const register = () => import('../views/register/register')
 const index = () => import('../views/index')
 const recommend = () => import('../views/recommend/recommend')
 const ranking = () => import('../views/ranking/ranking')
@@ -82,16 +80,6 @@ const routes = [
         component: videos
       }
     ]
-  },
-  {
-    path: '/register',
-    name: 'register',
-    component: register
-  },
-  {
-    path: '/login',
-    name: 'phoneLogin',
-    component: phoneLogin
   }
 ]
 

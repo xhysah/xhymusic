@@ -1,6 +1,14 @@
 <template>
   <div>
     <div class="audio1">
+      <el-container v-show="show">
+        <el-main>
+          <playlist :songs="songs" :activeSongId="playSong.num"></playlist>
+        </el-main>
+        <el-aside>
+          <lyrics :lyric="lyrics"></lyrics>
+        </el-aside>
+      </el-container>
       <div class="audio">
         <div class="i-group">
           <i class="el-icon-caret-left" @click="preSong"></i>
@@ -13,7 +21,10 @@
           <span>{{playSong.name}}</span><span>{{playSong.singer}}</span>
           <el-progress :percentage="percentage" color="red" :show-text="false"></el-progress>
         </div>
-        <span>{{currentTime}}/{{duration}}</span>
+        <div class="time">
+          <span>{{currentTime}}/{{duration}}</span>
+        </div>
+        <i class="el-icon-caret-top" @click="show=!show"></i>
         <audio :src="playSong.url" ref="audio" autoplay @ended="ended" @canplay="getDuration"
                @timeupdate="getCurrentTime"></audio>
       </div>
@@ -23,10 +34,23 @@
 </template>
 
 <script>
+import lyrics from '../lyric/playlist/lyrics'
+import playlist from '../lyric/playlist/playlist'
 export default {
   name: 'musicPlayer',
+  components: {
+    playlist,
+    lyrics
+  },
   data () {
     return {
+      show: false
+    }
+  },
+  mounted () {
+    // 页面刷新时，停止音乐播放
+    window.onload = e => {
+      this.$refs.audio.pause()
     }
   },
   methods: {
@@ -92,6 +116,12 @@ export default {
     },
     memberSong () {
       return this.$store.state.memberSong
+    },
+    songs () {
+      return this.$store.state.songs
+    },
+    lyrics () {
+      return this.$store.state.playSong.lyric
     }
   },
   watch: {
@@ -114,21 +144,21 @@ export default {
 
 <style lang="stylus" scoped>
   .audio1
-    margin auto
-  .audio
-    padding 6px 15%
+    padding 10px 15%
     border-radius 10px 10px 0 0
-    margin auto
     background-color #1c1c1c
+  .audio
+    width 100%
     .i-group
       display inline-block
-      margin auto
+      width 102px
+      i
+        display inline-block
+        font-size 30px
     .i
-      width 70%
       display inline-block
-      margin auto
+      width 60%
       span
-        margin 0
         color white
         font-size 13px
         +span
@@ -138,17 +168,19 @@ export default {
     img
       width 35px
       height 35px
-      display inline-block
       margin 0 15px
       position relative
       top 5px
-    i
-      display inline-block
-      font-size 30px
-      margin auto 2px
-    span
+    .time
+      width 76px
       display inline-block
       margin 0 0 0 20px
       font-size 13px
       color #888888
+  .el-icon-caret-top
+    font-size 20px
+    margin-left 10px
+  .el-container
+    height 260px
+    overflow hidden
 </style>
