@@ -127,11 +127,11 @@ export default {
   mounted () {
     // 判断音乐栏是否显示
     function show () {
-      // if ((window.innerHeight - event.clientY) < 200) {
-      this.show = true
-      // } else {
-      //   this.show = false
-      // }
+      if ((window.innerHeight - event.clientY) < 200) {
+        this.show = true
+      } else {
+        this.show = false
+      }
     }
     window.addEventListener('mousemove', show.bind(this))
   },
@@ -154,13 +154,6 @@ export default {
       this.$http.get(`/search/suggest?keywords=${value}`).then(data => {
         this.result = data.result
       })
-      // this.$http.get(`/search/suggest?keywords=${value}`).then(response => {
-      //   if (response.code !== 200) {
-      //     return this.$message.error('搜索失败')
-      //   }
-      //   this.result = response.data.result
-      //   console.log(response.data.result)
-      // })
     },
     // 在登录框中，为显示哪个做改变
     change (value, title) {
@@ -206,6 +199,7 @@ export default {
       this.input = value
       this.searchInf(value)
     },
+    //  退出登录
     loginOut () {
       this.loginIf = 0
       window.localStorage.removeItem('token')

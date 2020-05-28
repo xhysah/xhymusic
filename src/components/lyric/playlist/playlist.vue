@@ -1,7 +1,7 @@
 <template>
   <div class="flex">
     <table>
-      <tr v-for="(item, index) in songs" :key="item.id" @click="play(item.id, index)" :class="{active:index===Number(activeSongId)}">
+      <tr v-for="(item, index) in songs" :key="item.id" @click="play(item.id, index)" :class="{active:index===activeSongId}">
         <td><div class="name">{{item.name}}</div></td>
 <!--        <td class="creator">{{item.creator.nickname}}</td>-->
         <td>
@@ -30,7 +30,7 @@ export default {
       type: Array
     },
     activeSongId: {
-      type: String
+      type: Number
     }
   },
   data () {

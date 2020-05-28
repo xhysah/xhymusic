@@ -3,9 +3,9 @@
     <div class="audio1">
       <el-container v-show="show">
         <el-main>
-          <playlist :songs="songs" :activeSongId="playSong.num"></playlist>
+          <playlist :songs="songs" :activeSongId="Number(playSong.num)"></playlist>
         </el-main>
-        <el-aside>
+        <el-aside v-if="lyrics.lrc !== undefined">
           <lyrics :lyric="lyrics"></lyrics>
         </el-aside>
       </el-container>
@@ -121,6 +121,7 @@ export default {
       return this.$store.state.songs
     },
     lyrics () {
+      console.log(this.$store.state.playSong.lyric)
       return this.$store.state.playSong.lyric
     }
   },
@@ -182,5 +183,4 @@ export default {
     margin-left 10px
   .el-container
     height 260px
-    overflow hidden
 </style>
