@@ -29,9 +29,11 @@ import {
   Progress,
   Collapse,
   CollapseItem,
-  MessageBox
+  MessageBox,
+  Loading
 } from 'element-ui'
 
+Vue.use(Loading.directive)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Input)
@@ -61,3 +63,4 @@ Vue.use(Collapse)
 Vue.use(CollapseItem)
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message
+Vue.prototype.$loading = Loading.service

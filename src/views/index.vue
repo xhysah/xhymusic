@@ -85,7 +85,7 @@
         </div>
         <phone-login v-else-if="active == 1" @register="editActive" @success="login"></phone-login>
         <register v-else @login="editActive" :name="this.title"></register>
-      </el-dialog>x
+      </el-dialog>
     </div>
     <!--    音乐栏显示-->
     <transition name="music">
