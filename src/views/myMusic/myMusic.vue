@@ -399,9 +399,6 @@ export default {
   .el-pagination
     display flex
     justify-content center
-  .el-pagination.is-background .el-pager li:not(.disabled)
-  >>>.active
-    background-color red !important
   i
     margin-left 10px
     span

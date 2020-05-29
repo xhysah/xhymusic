@@ -181,10 +181,6 @@ export default {
       font-size 14px
       margin-bottom 6px
       padding-left 10px
-  .tabs>>>.el-tabs__item.is-active
-    color red
-  .tabs>>>.el-tabs__item:hover
-    color red !important
   .el-collapse
     padding 10px
 </style>

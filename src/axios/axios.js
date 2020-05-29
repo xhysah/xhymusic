@@ -10,8 +10,6 @@ axios.interceptors.response.use(config => {
   if (config.status === 200) {
     return config.data
   } else {
+    return Promise.reject(config)
   }
-}, error => {
-  return Promise.reject(error)
-}
-)
+})

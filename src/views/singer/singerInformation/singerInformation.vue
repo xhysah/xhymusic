@@ -237,7 +237,6 @@ export default {
 <style lang="stylus" scoped>
   color=#353535
   .el-divider
-    background-color red
     width 2px
   .el-container
     width 74%
@@ -270,10 +269,6 @@ export default {
   .simiHeader
     margin-top 80px
     margin-bottom 10px
-  .tabs>>>.el-tabs__item.is-active
-    color red
-  .tabs>>>.el-tabs__item:hover
-    color red !important
   .center
     margin 10px
     color #888888

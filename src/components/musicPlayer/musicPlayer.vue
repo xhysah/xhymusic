@@ -5,7 +5,7 @@
         <el-main>
           <playlist :songs="songs" :activeSongId="Number(playSong.num)"></playlist>
         </el-main>
-        <el-aside v-if="lyrics.lrc !== undefined">
+        <el-aside v-if="lyrics !== null && lyrics.lrc !== undefined ">
           <lyrics :lyric="lyrics"></lyrics>
         </el-aside>
       </el-container>

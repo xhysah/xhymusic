@@ -229,7 +229,4 @@ export default {
     justify-content center
     position relative
     top -20px
-  .el-pagination.is-background .el-pager li:not(.disabled)
-  >>>.active
-    background-color red !important
 </style>

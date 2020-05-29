@@ -85,7 +85,7 @@
         </div>
         <phone-login v-else-if="active == 1" @register="editActive" @success="login"></phone-login>
         <register v-else @login="editActive" :name="this.title"></register>
-      </el-dialog>
+      </el-dialog>x
     </div>
     <!--    音乐栏显示-->
     <transition name="music">
@@ -201,14 +201,25 @@ export default {
     },
     //  退出登录
     loginOut () {
-      this.loginIf = 0
-      window.localStorage.removeItem('token')
-      window.localStorage.removeItem('phone')
-      window.localStorage.removeItem('password')
-      window.localStorage.removeItem('imgUrl')
-      window.localStorage.removeItem('accountId')
-      window.localStorage.removeItem('getAccountId')
-      window.location.reload()
+      this.$confirm('此操作将退出登录, 是否继续??', '提示', {
+        confirmButtonText: '退出',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.loginIf = 0
+        window.localStorage.removeItem('token')
+        window.localStorage.removeItem('phone')
+        window.localStorage.removeItem('password')
+        window.localStorage.removeItem('imgUrl')
+        window.localStorage.removeItem('accountId')
+        window.localStorage.removeItem('getAccountId')
+        window.location.reload()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消退出'
+        })
+      })
     }
   },
   computed: {

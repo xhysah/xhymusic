@@ -11,7 +11,7 @@
             <span>{{createTime}}创建</span>
           </div>
           <div class="button-group">
-            <el-button size="mini" type="primary" icon="el-icon-video-play" plain @click="play()">播放全部</el-button>
+            <el-button size="mini" type="danger" icon="el-icon-video-play" plain @click="play()">播放全部</el-button>
             <i v-if="collected===false" class="el-icon-star-off" @click="collect(1)"><span>收藏</span></i>
             <i v-else class="el-icon-star-on" @click="collect(2)"><span>已收藏</span></i>
           </div>
@@ -332,9 +332,6 @@ export default {
   .el-pagination
     display flex
     justify-content center
-  .el-pagination.is-background .el-pager li:not(.disabled)
-  >>>.active
-    background-color red !important
   i
     margin-left 10px
     span

@@ -53,6 +53,7 @@ export default {
           this.$http.get(`/user/playlist?uid=${data.account.id}`).then(data => {
             this.$store.commit('getSongMenuId', data.playlist[0].id)
           })
+          this.$message.success('登录成功')
           this.$store.commit('getAccountId', data.account.id)
           window.localStorage.setItem('phone', this.loginForm.phone)
           window.localStorage.setItem('password', this.loginForm.password)

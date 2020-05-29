@@ -1,3 +1,4 @@
+import '../css/theme/index.css'
 import Vue from 'vue'
 import {
   Form,
@@ -27,7 +28,8 @@ import {
   Popover,
   Progress,
   Collapse,
-  CollapseItem
+  CollapseItem,
+  MessageBox
 } from 'element-ui'
 
 Vue.use(Form)
@@ -57,4 +59,5 @@ Vue.use(Popover)
 Vue.use(Progress)
 Vue.use(Collapse)
 Vue.use(CollapseItem)
+Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message

@@ -227,9 +227,6 @@ export default {
   .el-pagination
     display flex
     justify-content center
-  .el-pagination.is-background .el-pager li:not(.disabled)
-  >>>.active
-    background-color red !important
   .comments
     margin-top 30px
     .all

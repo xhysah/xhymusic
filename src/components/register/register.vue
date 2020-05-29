@@ -12,7 +12,7 @@
         <div class="login" @click="phoneLogin(1)"><i class="el-icon-back"></i>手机号登录</div>
       </el-form>
       <!--    注册-->
-      <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="80px" v-else-if="name==='register'">
+      <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="80px" v-else-if="name==='注册'">
         <el-form-item prop="captcha" label="验证码">
           <el-input v-model="registerForm.captcha" placeholder="请输入验证码"></el-input>
         </el-form-item>
@@ -25,19 +25,29 @@
         <div class="center">
           <el-button type="danger" class="loginButton" @click="registerByPhone">确定</el-button>
         </div>
+        <div class="login" @click="show=true"><i class="el-icon-back"></i>上一步</div>
       </el-form>
       <!--      修改密码-->
       <el-form ref="forgetForm" :model="forgetForm" :rules="forgetRules" label-width="80px" v-else>
         <el-form-item prop="captcha" label="验证码">
           <el-input v-model="forgetForm.captcha" placeholder="请输入验证码"></el-input>
         </el-form-item>
-        <el-form-item prop="password" label="密码">
+        <el-form-item prop="password" label="新密码">
           <el-input v-model="forgetForm.password" placeholder="请输入密码"></el-input>
         </el-form-item>
         <div class="center">
           <el-button type="danger" class="loginButton" @click="forgetByPhone">确定</el-button>
         </div>
+        <div class="login" @click="show=true"><i class="el-icon-back"></i>上一步</div>
       </el-form>
+      <el-dialog
+        width="30%"
+        :title="name+'成功'"
+        :visible.sync="innerVisible"
+        append-to-body
+        center>
+        <span>{{time}}秒钟跳转到登录页面</span>
+      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -83,7 +93,7 @@ export default {
         ]
       },
       forgetForm: {
-        phone: 15522102778,
+        phone: 0,
         password: '',
         captcha: ''
       },
@@ -94,7 +104,9 @@ export default {
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' }
         ]
-      }
+      },
+      time: 3,
+      innerVisible: false
     }
   },
   methods: {
@@ -104,14 +116,19 @@ export default {
           return this.$message.error('请填写完整信息')
         }
         this.$http.get(`/cellphone/existence/check?phone=${this.phoneForm.phone}`).then(data => {
-          this.$http.get('/captcha/sent', { params: this.phoneForm }).then(() => {
-            this.show = false
-          })
-          if (data.exist !== 1) {
-            this.forgetForm.nickname = data.nickname
-            this.forgetForm.phone = this.phoneForm.phone
+          if (data.exist === 1 && this.name === '注册') {
+            return this.$message.warning('你已经注册过，请登录')
+          } else if (data.exist !== 1 && this.name === '修改密码') {
+            return this.$message.warning('你还没有注册过，请先注册')
           } else {
-            this.registerForm.phone = this.phoneForm.phone
+            this.$http.get('/captcha/sent', { params: this.phoneForm }).then(() => {
+              this.show = false
+            })
+            if (this.name === '注册') {
+              this.registerForm.phone = this.phoneForm.phone
+            } else {
+              this.forgetForm.phone = this.phoneForm.phone
+            }
           }
         })
       })
@@ -122,18 +139,20 @@ export default {
           return this.$message.error('请填写完整信息')
         }
         this.$http.get('/register/cellphone', { params: this.registerForm }).then(() => {
-          this.$message.success('注册成功')
           let t = 3
-          setInterval(function () {
+          this.innerVisible = true
+          setInterval(() => {
             if (t === 0) {
               this.phoneLogin(1)
             } else {
-              this.$message.success(`${t}秒钟跳转到登录页面`)
+              this.time = t
               t--
             }
           }, 1000)
         }).catch(err => {
-          console.log(err)
+          if (err.code === 503) {
+            this.$message.error('验证码错误')
+          }
         })
       })
     },
@@ -143,10 +162,18 @@ export default {
           return this.$message.error('请填写完整信息')
         }
         this.$http.get('/register/cellphone', { params: this.forgetForm }).then(() => {
-          this.$message.success('修改密码成功')
-          this.phoneLogin(1)
-        }).catch(err => {
-          console.log(err)
+          let t = 2
+          this.innerVisible = true
+          setInterval(() => {
+            if (t === 0) {
+              this.phoneLogin(1)
+            } else {
+              this.time = t
+              t--
+            }
+          }, 1000)
+        }).catch(() => {
+          this.$message.error('验证码错误')
         })
       })
     },
