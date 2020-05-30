@@ -127,7 +127,7 @@ export default {
   mounted () {
     // 判断音乐栏是否显示
     function show () {
-      if ((window.innerHeight - event.clientY) < 200) {
+      if ((window.innerHeight - event.clientY) < 1000) {
         this.show = true
       } else {
         this.show = false

@@ -59,9 +59,9 @@ export default {
 <style lang="stylus" scoped>
   .lyric
     text-align center
-    font-size 14px
+    font-size 12px
     color rgba(136, 136, 136, 0.96)
   .active
-    font-size 16px
+    font-size 14px
     color red
 </style>

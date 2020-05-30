@@ -3,9 +3,11 @@
     <div class="audio1">
       <el-container v-show="show">
         <el-main>
+          <div>播放列表({{songs.length}})</div>
           <playlist :songs="songs" :activeSongId="Number(playSong.num)"></playlist>
         </el-main>
         <el-aside v-if="lyrics !== null && lyrics.lrc !== undefined ">
+          <div>{{playSong.name}}</div>
           <lyrics :lyric="lyrics" :time="currentTimeTwo"></lyrics>
         </el-aside>
       </el-container>
@@ -125,7 +127,6 @@ export default {
       return this.$store.state.playSong.lyric
     },
     currentTimeTwo () {
-      console.log(this.$store.getters.currentTimeTwo)
       return this.$store.getters.currentTimeTwo
     }
   },
@@ -151,7 +152,8 @@ export default {
   .audio1
     padding 10px 15%
     border-radius 10px 10px 0 0
-    background-color #1c1c1c
+    background-color black
+    opacity 0.8
   .audio
     width 100%
     .i-group
@@ -187,4 +189,7 @@ export default {
     margin-left 10px
   .el-container
     height 260px
+  .el-aside
+    text-align center
+    padding 20px 0
 </style>
