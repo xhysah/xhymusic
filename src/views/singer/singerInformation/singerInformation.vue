@@ -275,7 +275,6 @@ export default {
   .el-button
     width 80px
     position absolute
-    z-index 100
     top 260px
     left 580px
 </style>

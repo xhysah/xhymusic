@@ -73,18 +73,6 @@ export default new Vuex.Store({
         return num
       }
       return `${double(Math.floor(state.metaCurrentTime / 60))}:${double(Math.floor(state.metaCurrentTime % 60))}`
-    },
-    currentTimeTwo (state) {
-      const double = function (num) {
-        if (num.toString().length !== 2) {
-          if (num === 0) {
-            return '00'
-          }
-          return '0' + num
-        }
-        return num
-      }
-      return `${double(Math.floor(state.metaCurrentTime / 60))}:${double(Math.floor(state.metaCurrentTime % 60))}.${(state.metaCurrentTime % 60).toFixed(2).toString().split('.')[1]}0`
     }
   },
   mutations: {

@@ -2,13 +2,20 @@
   <div>
     <div class="audio1">
       <el-container v-show="show">
-        <el-main>
+        <el-main v-if="songs !== null">
           <div>播放列表({{songs.length}})</div>
-          <playlist :songs="songs" :activeSongId="Number(playSong.num)"></playlist>
+          <div class="scroll">
+            <playlist :songs="songs" :activeSongId="Number(playSong.num)"></playlist>
+          </div>
         </el-main>
         <el-aside v-if="lyrics !== null && lyrics.lrc !== undefined ">
           <div>{{playSong.name}}</div>
-          <lyrics :lyric="lyrics" :time="currentTimeTwo"></lyrics>
+          <div ref="scroll" class="scroll">
+            <lyrics :lyric="lyrics" :time="currentTime" @changeScroll="scrollEvent"></lyrics>
+          </div>
+        </el-aside>
+        <el-aside v-else>
+          <div>暂无歌词噢</div>
         </el-aside>
       </el-container>
       <div class="audio">
@@ -26,7 +33,7 @@
         <div class="time">
           <span>{{currentTime}}/{{duration}}</span>
         </div>
-        <i class="el-icon-caret-top" @click="show=!show"></i>
+        <i class="el-icon-caret-top" @click="showLyr"></i>
         <audio :src="playSong.url" ref="audio" autoplay @ended="ended" @canplay="getDuration"
                @timeupdate="getCurrentTime"></audio>
       </div>
@@ -74,13 +81,36 @@ export default {
     },
     // 当点击了播放按钮
     playMusic () {
-      this.$store.commit('playSongs')
+      if (this.songs !== null) {
+        this.$store.commit('playSongs')
+      } else {
+        this.$message.warning('暂无播放歌曲')
+      }
     },
     preSong () {
-      this.$store.commit('editPreNum')
+      if (this.songs !== null) {
+        this.$store.commit('editPreNum')
+      } else {
+        this.$message.warning('暂无播放歌曲')
+      }
     },
     nextSong () {
-      this.$store.commit('editNextNum')
+      if (this.songs !== null) {
+        this.$store.commit('editNextNum')
+      } else {
+        this.$message.warning('暂无播放歌曲')
+      }
+    },
+    showLyr () {
+      if (this.songs !== null) {
+        this.show = !this.show
+      } else {
+        this.$message.warning('暂无播放歌词')
+      }
+    },
+    scrollEvent (value) {
+      console.log(value)
+      this.$refs.scroll.scrollBy(0, value)
     }
   },
   computed: {
@@ -125,13 +155,11 @@ export default {
     lyrics () {
       console.log(this.$store.state.playSong.lyric)
       return this.$store.state.playSong.lyric
-    },
-    currentTimeTwo () {
-      return this.$store.getters.currentTimeTwo
     }
   },
   watch: {
     num (newValue) {
+      this.$refs.scroll.scrollTo(0, 0)
       this.$store.dispatch('play', { num: newValue, name: this.name })
     },
     checkFalse (newValue) {
@@ -150,10 +178,12 @@ export default {
 
 <style lang="stylus" scoped>
   .audio1
+    border-right 2px solid red
+    border-left 2px solid red
+    border-top 2px solid red
     padding 10px 15%
     border-radius 10px 10px 0 0
-    background-color black
-    opacity 0.8
+    background-color #000000
   .audio
     width 100%
     .i-group
@@ -187,9 +217,11 @@ export default {
   .el-icon-caret-top
     font-size 20px
     margin-left 10px
-  .el-container
-    height 260px
   .el-aside
     text-align center
     padding 20px 0
+  .scroll
+    margin-top 10px
+    height 200px
+    overflow scroll
 </style>

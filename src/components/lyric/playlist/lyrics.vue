@@ -2,7 +2,7 @@
   <div>
 <!--    <div class="lyric" v-for="(item,index) in txt" :key="index">{{item}}</div>-->
 <!--    <div>{{txts}}</div>-->
-    <div class="lyric" :class="{active:key===time}" v-for="(item,key) in timeLyric" :key="key">{{item}}</div>
+    <div class="lyric" :class="{active:key===newTime}" v-for="(item,key) in timeLyric" :key="key">{{item}}</div>
   </div>
 </template>
 
@@ -19,7 +19,10 @@ export default {
   },
   data () {
     return {
-      timeLyric: {}
+      timeLyric: {},
+      active: false,
+      keyValue: '',
+      newTime: this.time
     }
   },
   created () {
@@ -38,17 +41,32 @@ export default {
         let b = String(value.match('(\\[[0-9][0-9]:[0-6][0-9].[0-9][0-9]+])+'))
         b = b.split('[')
         b.forEach(v => {
-          v = v.match('[0-9][0-9]:[0-6][0-9].[0-9][0-9]+') + ''
+          v = v.match('[0-9][0-9]:[0-6][0-9]') + ''
           if (v !== 'null') {
-            this.timeLyric[v] = a
+            if (a !== 'null') {
+              this.timeLyric[v] = a
+            }
           }
         })
       })
+      console.log(this.timeLyric)
     }
   },
   watch: {
     lyric () {
       this.getLyric()
+    },
+    time (newValue) {
+      for (const key in this.timeLyric) {
+        if (key === newValue) {
+          this.keyValue = newValue
+          this.newTime = newValue
+          this.$emit('changeScroll', 10)
+        } else {
+          this.newTime = this.keyValue
+          // this.$emit('changeScroll', 1)
+        }
+      }
     }
   },
   computed: {
@@ -58,6 +76,7 @@ export default {
 
 <style lang="stylus" scoped>
   .lyric
+    padding 14px
     text-align center
     font-size 12px
     color rgba(136, 136, 136, 0.96)

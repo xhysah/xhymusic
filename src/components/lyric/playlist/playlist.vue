@@ -76,6 +76,7 @@ export default {
   table
     color rgba(255, 255, 255, 0.82)
     font-size 12px
+    border-collapse collapse
     td
       padding 5px 15px
     .singer
@@ -91,8 +92,10 @@ export default {
       overflow hidden
       text-overflow ellipsis
       white-space nowrap
+  tr
+    cursor pointer
   tr:hover
-    background-color black
+    background-color red
   .active
     background-color red
 </style>
