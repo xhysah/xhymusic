@@ -6,7 +6,7 @@
           <playlist :songs="songs" :activeSongId="Number(playSong.num)"></playlist>
         </el-main>
         <el-aside v-if="lyrics !== null && lyrics.lrc !== undefined ">
-          <lyrics :lyric="lyrics"></lyrics>
+          <lyrics :lyric="lyrics" :time="currentTimeTwo"></lyrics>
         </el-aside>
       </el-container>
       <div class="audio">
@@ -123,6 +123,10 @@ export default {
     lyrics () {
       console.log(this.$store.state.playSong.lyric)
       return this.$store.state.playSong.lyric
+    },
+    currentTimeTwo () {
+      console.log(this.$store.getters.currentTimeTwo)
+      return this.$store.getters.currentTimeTwo
     }
   },
   watch: {
