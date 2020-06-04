@@ -64,9 +64,11 @@ export default {
       font-size 10px
       cursor pointer
       div
-        overflow hidden
-        text-overflow ellipsis
-        white-space nowrap
+        text-align justify
+        overflow: hidden
+        display: -webkit-box
+        -webkit-box-orient: vertical
+        -webkit-line-clamp 2
   .icon-enter-active, .icon-leave-active
     transition opacity 0.5s
   .icon-enter, .icon-leave-to

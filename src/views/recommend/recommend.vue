@@ -34,10 +34,10 @@
         </template>
       </div>
       <div class="hot">独家放送<i class="el-icon-arrow-right"></i></div>
-      <div class="flex">
+      <div class="flex-1">
         <template v-for="item in exclusive">
           <div :key="item.id" @click="goMv(item.id, item.type)">
-            <song-outline>
+            <song-outline length="180px">
               <template v-slot:img>
                 <img :src="item.sPicUrl" alt="">
               </template>
@@ -51,17 +51,17 @@
           </div>
         </template>
       </div>
-      <div class="hot">最新音乐<i class="el-icon-arrow-right"></i></div>
-      <div class="flex">
+      <div class="hot" @click="goLatest">最新音乐<i class="el-icon-arrow-right"></i></div>
+      <div class="flex-1 latest">
         <template v-for="item in latestMusic">
           <music-outline :key="item.id" :music="item"></music-outline>
         </template>
       </div>
       <div class="hot">推荐MV<i class="el-icon-arrow-right"></i></div>
-      <div class="flex">
+      <div class="flex-1">
         <template v-for="item in mvs">
           <div :key="item.id" @click="goMv(item.id, item.type)">
-            <song-outline>
+            <song-outline length="180px">
               <template v-slot:img>
                 <img :src="item.picUrl" alt="">
               </template>
@@ -153,6 +153,11 @@ export default {
       this.$store.commit('editActiveName', 'songMenu')
       this.$router.push({ path: '/songMenuDetail', query: { id } })
     },
+    goLatest () {
+      this.$router.push({
+        path: '/latest'
+      })
+    },
     // 根据热门分类，去往对应歌单分类
     goSongMenu (name) {
       this.$router.push({
@@ -212,4 +217,6 @@ export default {
     max-width 900px
   .el-row
     padding-bottom 4px
+  .latest
+    margin 20px
 </style>

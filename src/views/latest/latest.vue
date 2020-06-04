@@ -1,24 +1,28 @@
 <template>
   <div>
-    <el-row type="flex" class="row-bg" justify="center">
-      <el-link type="info" :underline="false">全部</el-link>
-      <el-link type="info" :underline="false">华语</el-link>
-      <el-link type="info" :underline="false">欧美</el-link>
-      <el-link type="info" :underline="false">韩国</el-link>
-      <el-link type="info" :underline="false">日本</el-link>
-    </el-row>
-    <template  v-for="item in musics" class="box">
-      <div :key="item.id">
-        <img :src="item.album.picUrl">
-        <div class="name">{{item.name}}</div>
-        <div class="singer">
-          <template v-for="(items, index) in item.artists">
-            <span :key="index" v-if="index===0" @click="goSinger(items.id)">{{items.name}}</span>
-            <span :key="index" v-else @click="goSinger(items.id)">/{{items.name}}</span>
-          </template>
+    <el-main>
+      <el-row type="flex-1">
+        <template v-for="item in cate">
+          <span :class="{active:activeName===item.name}" :key="item.id" :underline="false" @click="getSongs(item.id, item.name)">{{item.name}}</span>
+        </template>
+        <el-button size="mini" type="danger" icon="el-icon-video-play" plain>播放全部</el-button>
+      </el-row>
+      <template v-for="(item, index) in musics" class="box">
+        <div :key="item.id" class="music">
+          <div class="num">{{double(index+1)}}</div>
+          <img :src="item.album.picUrl">
+          <div class="name">{{item.name}}</div>
+          <div class="singer">
+            <template v-for="(items, index) in item.artists">
+              <span :key="index" v-if="index===0" @click="goSinger(items.id)">{{items.name}}</span>
+              <span :key="index" v-else @click="goSinger(items.id)">/{{items.name}}</span>
+            </template>
+          </div>
+          <div class="albumName" @click="goSongMenu(item.album.id)">{{item.album.name}}</div>
+          <div class="time">{{duration(item.duration)}}</div>
         </div>
-      </div>
-    </template>
+      </template>
+    </el-main>
   </div>
 </template>
 
@@ -26,23 +30,68 @@
 export default {
   name: 'latest',
   created () {
-    this.getSongs()
+    this.getSongs(0, '全部')
     this.$store.commit('editActiveName', 'latest')
   },
   data () {
     return {
-      musics: []
+      musics: [],
+      cate: [
+        {
+          name: '全部',
+          id: 0
+        },
+        {
+          name: '华语',
+          id: 7
+        },
+        {
+          name: '欧美',
+          id: 96
+        },
+        {
+          name: '韩国',
+          id: 8
+        },
+        {
+          name: '日本',
+          id: 16
+        }
+      ],
+      activeName: ''
     }
   },
   methods: {
-    getSongs () {
-      this.$http.get('/top/song').then(data => {
+    getSongs (type, name) {
+      console.log(name)
+      this.activeName = name
+      this.$http.get(`/top/song?type=${type}`).then(data => {
         this.musics = data.data
-        console.log(data.data)
       })
     },
     goSinger (id) {
       this.$router.push({ name: 'singerInformation', params: { sid: id } })
+    },
+    goSongMenu (id) {
+      this.$router.push({
+        path: '/album',
+        query: {
+          id
+        }
+      })
+    },
+    double (num) {
+      if (num.toString().length >= 2) {
+        return num
+      } else {
+        if (num === 0) {
+          return '00'
+        }
+        return '0' + num
+      }
+    },
+    duration (time) {
+      return `${this.double(Math.floor(time / 60000))}:${this.double(Math.floor(time / 1000 % 60))}`
     }
   },
   computed: {}
@@ -50,7 +99,50 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  img
-    width 80px
-    height 80px
+  .el-main
+    width 70%
+    margin auto
+    .el-row
+      span
+        cursor pointer
+        color #888888
+        margin 10px 30px
+        font-size 16px
+    .el-button
+      float right
+      margin-right 100px
+  .music
+    position relative
+    margin 10px
+    .num
+      left -30px
+    img
+      width 80px
+      height 80px
+    div
+      font-size 14px
+      color #888888
+      position absolute
+      top 30px
+      overflow hidden
+      text-overflow ellipsis
+      white-space nowrap
+    .name
+      color white
+      font-size 16px
+      left 100px
+      width 260px
+    .singer
+      left 400px
+      width 160px
+      span
+        cursor pointer
+    .albumName
+      cursor pointer
+      left 600px
+      width 160px
+    .time
+      left 800px
+  .active
+    color white !important
 </style>
