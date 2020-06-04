@@ -12,6 +12,7 @@ const myMusic = () => import('../views/myMusic/myMusic')
 const album = () => import('../views/album/album')
 const mv = () => import('../views/mv/mv')
 const videos = () => import('../views/mv/videos')
+const latest = () => import('../views/latest/latest')
 
 Vue.use(VueRouter)
 
@@ -78,6 +79,11 @@ const routes = [
         path: '/videos',
         name: 'videos',
         component: videos
+      },
+      {
+        path: '/latest',
+        name: 'latest',
+        component: latest
       }
     ]
   }

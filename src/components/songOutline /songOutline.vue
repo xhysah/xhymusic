@@ -74,12 +74,11 @@ export default {
   .hover
     div
       width 100%
-      padding 6px 0 6px 0
+      padding 4px
       position absolute
       left 0
       top 0
       font-size 10px
-      text-indent 2em
       background: rgba(0,0,0,0.6)
   i
     position absolute

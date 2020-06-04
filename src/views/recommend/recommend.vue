@@ -8,39 +8,85 @@
     </el-carousel>
     <!--    热门-->
     <el-row type="flex" class="row-bg" justify="center">
-      <span class="hot" @click="handleCurrentChange">热门推荐</span>
       <template v-for="(item, index) in playlist">
         <el-link type="info"  :key="index" style="margin: 0 20px" @click="goSongMenu(item.name)"><span>{{item.name}}</span></el-link>
       </template>
     </el-row>
     <div class="line"></div>
     <!--    网友精选-->
-    <div class="flex">
-      <template v-for="(item, index) in toplist">
-        <div @click="songlist(item.id)" :key="index">
-          <song-outline length="150px" height="150px" active="active">
-            <template v-slot:img>
-              <img :src="item.coverImgUrl" alt="">
-            </template>
-            <template v-slot:creator>
-              <span>by {{item.creator.nickname}}</span>
-            </template>
-            <template v-slot:sentence>
-              <div>{{item.name}}</div>
-            </template>
-          </song-outline>
-        </div>
-      </template>
+    <div class="el-main">
+      <div class="hot" @click="goSongMenu('全部')">推荐歌单<i class="el-icon-arrow-right"></i></div>
+      <div class="flex">
+        <template v-for="(item, index) in toplist">
+          <div @click="songlist(item.id)" :key="index">
+            <song-outline length="150px" height="150px" active="active">
+              <template v-slot:img>
+                <img :src="item.picUrl" alt="">
+              </template>
+              <template v-slot:creator>
+                <span><i class="el-icon-caret-right"></i>{{count(item.playCount)}}</span>
+              </template>
+              <template v-slot:sentence>
+                <div>{{item.name}}</div>
+              </template>
+            </song-outline>
+          </div>
+        </template>
+      </div>
+      <div class="hot">独家放送<i class="el-icon-arrow-right"></i></div>
+      <div class="flex">
+        <template v-for="item in exclusive">
+          <div :key="item.id" @click="goMv(item.id, item.type)">
+            <song-outline>
+              <template v-slot:img>
+                <img :src="item.sPicUrl" alt="">
+              </template>
+              <template v-slot:creator>
+                <span>{{item.copywriter}}</span>
+              </template>
+              <template v-slot:sentence>
+                <div>{{item.copywriter}}</div>
+              </template>
+            </song-outline>
+          </div>
+        </template>
+      </div>
+      <div class="hot">最新音乐<i class="el-icon-arrow-right"></i></div>
+      <div class="flex">
+        <template v-for="item in latestMusic">
+          <music-outline :key="item.id" :music="item"></music-outline>
+        </template>
+      </div>
+      <div class="hot">推荐MV<i class="el-icon-arrow-right"></i></div>
+      <div class="flex">
+        <template v-for="item in mvs">
+          <div :key="item.id" @click="goMv(item.id, item.type)">
+            <song-outline>
+              <template v-slot:img>
+                <img :src="item.picUrl" alt="">
+              </template>
+              <template v-slot:creator>
+                <span>{{item.copywriter}}</span>
+              </template>
+              <template v-slot:sentence>
+                <div>{{item.name}}</div>
+              </template>
+            </song-outline>
+          </div>
+        </template>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import musicOutline from '../../components/songOutline /musicOutline'
 import songOutline from '../../components/songOutline /songOutline'
 export default {
   name: 'recommend',
   components: {
-    songOutline
+    songOutline,
+    musicOutline
   },
   data () {
     return {
@@ -49,7 +95,10 @@ export default {
       // 热门推荐
       playlist: {},
       // 网友精选碟
-      toplist: []
+      toplist: [],
+      latestMusic: [],
+      mvs: [],
+      exclusive: []
     }
   },
   created () {
@@ -57,6 +106,9 @@ export default {
     this.getBanner()
     this.getHot()
     this.getTop()
+    this.getLatestMusic()
+    this.getMv()
+    this.getExclusive()
     this.$store.commit('editActiveName', 'recommend')
   },
   methods: {
@@ -74,8 +126,26 @@ export default {
     },
     // 获取热门歌单
     getTop () {
-      this.$http.get('/top/playlist/highquality?limit=15').then(data => {
-        this.toplist = data.playlists
+      this.$http.get('/personalized?limit=10').then(data => {
+        this.toplist = data.result
+      })
+    },
+    // 获取最新音乐
+    getLatestMusic () {
+      this.$http.get('/top/song?limit=10').then(data => {
+        this.latestMusic = data.data.splice(0, 10)
+      })
+    },
+    // 获取推荐mv
+    getMv () {
+      this.$http.get('/personalized/mv').then(data => {
+        this.mvs = data.result
+      })
+    },
+    // 获取独家放送
+    getExclusive () {
+      this.$http.get('/personalized/privatecontent').then(data => {
+        this.exclusive = data.result
       })
     },
     // 去往歌单详情页
@@ -92,15 +162,35 @@ export default {
         }
       })
     },
-    // 获取精选分类数据
-    handleCurrentChange () {
-      this.$http.get(`/top/playlist/highquality?before=${this.toplist[this.toplist.length - 1].updateTime}&limit=15`).then(data => {
-        this.toplist = data.playlists
-        console.log(data.playlists)
-      })
+    count (number) {
+      if (number / 10000 > 1) {
+        return `${(Math.floor(number / 10000))}万`
+      } else {
+        return number
+      }
+    },
+    goMv (id, type) {
+      if (type === 1) {
+        this.$router.push({
+          path: '/videos',
+          query: {
+            id,
+            type
+          }
+        })
+      } else {
+        this.$router.push({
+          path: '/mv',
+          query: {
+            id,
+            type
+          }
+        })
+      }
     }
   },
-  computed: {}
+  computed: {
+  }
 }
 </script>
 
@@ -109,13 +199,17 @@ export default {
     display flex
     justify-content center
   .hot
-    font-size 22px
+    font-size 20px
     margin 0 20px
     color white
     cursor pointer
-  .flex
+  .el-main
     margin 0 160px
+    .flex
+      margin-bottom 50px
   .banner
     height auto
     max-width 900px
+  .el-row
+    padding-bottom 4px
 </style>

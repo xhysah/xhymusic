@@ -13,6 +13,7 @@
       <el-menu-item index="ranking" @click="go('/ranking')">排行榜</el-menu-item>
       <el-menu-item index="songMenu" @click="go('/songMenu')">歌单</el-menu-item>
       <el-menu-item index="singer" @click="go('/singer')">歌手</el-menu-item>
+      <el-menu-item index="latest" @click="go('/latest')">最新音乐</el-menu-item>
       <el-input class="input" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户"
                 prefix-icon="el-icon-search" @keyup.enter.native="searchInf(input)"
                 @input="changeValue" ref="input" @blur="blur"
