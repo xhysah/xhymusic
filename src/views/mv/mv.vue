@@ -221,9 +221,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .el-container
-    width 74%
-    margin auto
   .el-pagination
     display flex
     justify-content center
@@ -300,7 +297,7 @@ export default {
         text-decoration underline
         cursor pointer
   .el-main
-    margin 30px
+    padding 0
   .video
     margin 10px
     width 100%
@@ -308,7 +305,6 @@ export default {
     justify-content center
     align-items center
     video
-      border 1px solid red
       width 700px
     i
       font-size 80px

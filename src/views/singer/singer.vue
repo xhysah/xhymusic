@@ -3,26 +3,40 @@
     <el-container>
       <!--      页面主体-->
       <el-main>
-        <div>
-          <span>语种</span>
-          <template v-for="(item, index) in singerArea">
-            <span :key="index" @click="show">{{item.name}}</span>
-          </template>
-        </div>
-        <div>
-          <span>分类</span>
-          <template v-for="(item, index) in singerType">
-            <span :key="index" @click="show">{{item.name}}</span>
-          </template>
-        </div>
-        <div>
-          <span>筛选</span>
+        <div  class="main">
+          <div class="language">
+            <span>语种:</span>
+            <div>
+              <span :class="{actives: currentId === -1}" @click="show('area',-1)">全部</span>
+              <template v-for="(item, index) in singerArea">
+                <el-divider :key="item.areaId" direction="vertical"></el-divider>
+                <span :key="index" :class="{actives: currentId === item.areaId}" @click="show('area', item.areaId)">{{item.name}}</span>
+              </template>
+            </div>
+          </div>
+          <div class="cate">
+            <span>分类:</span>
+            <div>
+              <span :class="{actives: currentId2 === -1}" @click="show('cate',-1)">全部</span>
+              <template v-for="(item, index) in singerType">
+                <el-divider :key="item.typeId" direction="vertical"></el-divider>
+                <span :key="index" :class="{actives: currentId2 === item.typeId}" @click="show('cate', item.typeId)">{{item.name}}</span>
+              </template>
+            </div>
+          </div>
           <!--        循环字母-->
-          <div class="spell">
-            <span class="red" :class="{actives: currentId2 === 0}" @click="show(activeId.typeId, activeId.areaId)">热门</span>
-            <template v-for="n in 26">
-              <span :key="n" :class="{actives: currentId2 === String.fromCharCode(n+96)}" class="spell-item" @click="searchSinger(String.fromCharCode(n+96))">{{String.fromCharCode(n+64)}}</span>
-            </template>
+          <div class="spells">
+            <span>筛选:</span>
+            <div class="spell">
+              <span :class="{actives: currentId3 === -1}" @click="searchSinger(-1)">热门</span>
+              <template v-for="n in 26">
+                <el-divider :key="n" direction="vertical"></el-divider>
+                <span :key="n" :class="{actives: currentId3=== String.fromCharCode(n+96)}" class="spell-item"
+                      @click="searchSinger(String.fromCharCode(n+96))">{{String.fromCharCode(n+64)}}</span>
+              </template>
+              <el-divider direction="vertical"></el-divider>
+              <span class="last" :class="{actives: currentId3 === 0}" @click="searchSinger(0)">#</span>
+            </div>
           </div>
         </div>
       <!--        歌手信息-->
@@ -94,32 +108,39 @@ export default {
           areaId: 0
         }
       ],
-      // 显示图片的歌手
       singers: {},
       // 记录此时的typeId,areaId
       activeId: {
         typeId: 0,
-        areaId: 0
+        areaId: 0,
+        initial: -1
       },
-      currentId: 0,
-      currentId2: 0
+      currentId: -1,
+      currentId2: -1,
+      currentId3: -1
     }
   },
   methods: {
     // 获取歌手的种类
-    show (typeId, areaId) {
-      this.currentId2 = 0
-      this.activeId.typeId = typeId
-      this.activeId.areaId = areaId
-      this.currentId = '' + typeId + areaId
-      this.$http.get(`/artist/list?type=${typeId}&area=${areaId}`).then(data => {
-        this.singers = data.artists
-        console.log(data.artists)
-      })
+    show (type, name) {
+      if (type === 'cate') {
+        this.currentId2 = name
+        this.activeId.typeId = name
+        this.$http.get(`/artist/list?type=${name}&area=${this.activeId.areaId}&initial=${this.activeId.initial}`).then(data => {
+          this.singers = data.artists
+        })
+      } else {
+        this.currentId = name
+        this.activeId.areaId = name
+        this.$http.get(`/artist/list?type=${this.activeId.typeId}&area=${name}&initial=${this.activeId.initial}`).then(data => {
+          this.singers = data.artists
+        })
+      }
     },
     // 根据字母获取歌手信息
     searchSinger (value) {
-      this.currentId2 = value
+      this.currentId3 = value
+      this.activeId.initial = value
       this.$http.get(`/artist/list?type=${this.activeId.typeId}&area=${this.activeId.areaId}&initial=${value}`).then(data => {
         console.log(data)
         this.singers = data.artists
@@ -127,9 +148,9 @@ export default {
     },
     // 显示热门歌手
     firstShow () {
-      this.activeId.typeId = 0
-      this.currentId = 0
-      this.$http.get('/top/artists').then(data => {
+      this.activeId.typeId = -1
+      this.activeId.areaId = -1
+      this.$http.get('/artist/list?type=-1&area=-1').then(data => {
         this.singers = data.artists
       })
     },
@@ -143,62 +164,31 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .el-container
-    .el-aside
-      padding 20px
-      border 2px solid #353535
-      .header
-        font-size 20px
-      .main
-        font-size 12px
-        padding 7px 0
-        cursor pointer
-  .spell-item:hover
-    border-radius 2px
-    background-color black
-    box-shadow 0 0 3px red
-  .main:hover
-    border-radius 20px
-    background-color black
-    box-shadow 0 0 8px red
-  .point
-    display inline-block
-    width 5px
-    height 5px
-    border-radius 50%
-    background-color white
-    margin 0 10px
-    margin-top -4px
-  .rest
-    display grid
-    grid-template-columns: repeat(5, 20%);
-    margin-left 20px
-  .rest-item
-    font-size 10px
-    display inline-block
-    margin 10px
-    cursor pointer
-  .rest-item:hover
-    text-decoration underline
-    color red
-  .spell
-    margin 2px auto
-  .spell-item
-    display inline-block
-    padding  0 7px
-    cursor pointer
-  .red
-    padding 3px 6px
-    display inline-block
-    margin 5px 5px 5px 15px
-    cursor pointer
-  .active
-    border-radius 20px
-    background-color black
-    box-shadow 0 0 8px red
   .actives
+    background-color #262626
     border-radius 5px
-    background-color red
-    box-shadow 0 0 8px red
-    border 1px solid red
+    color red
+  .el-main
+    padding 0
+    .main
+      margin  0 20px
+      color #5f5d5d
+      div
+        margin 4px 10px
+        font-size 14px
+        div
+          cursor pointer
+          display inline-block
+          span
+            padding 2px 10px
+          span:hover
+            color red
+        span:first-child
+          margin-right 5px
+      .spells
+        .spell
+          display inline
+        .spell-item,.last
+          margin 0 10px
+          padding 2px 20px
 </style>

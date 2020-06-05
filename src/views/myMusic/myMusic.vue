@@ -1,17 +1,6 @@
 <template>
   <div>
     <el-container v-if="accountId!==null">
-      <el-aside>
-        <div @click="getSinger" class="mySinger">我的歌手</div>
-        <div @click="getVideo" class="mySinger">我的视频</div>
-        <div v-for="(item, index) in playlists" :key="index" class="aside" @click="goDetail(item.id)">
-          <img :src="item.coverImgUrl" alt="">
-          <div>
-            <span>{{item.name}}</span><br>
-            <span>{{item.trackCount}}首 by{{item.creator.nickname}}</span>
-          </div>
-        </div>
-      </el-aside>
       <el-main>
         <div v-if="singerIf===true">
           <div>我的歌手</div>
@@ -96,8 +85,8 @@
 </template>
 
 <script>
-import commentsTable from '../commentsTable/commentsTable'
-import songTable from '../songTable/songTable'
+import commentsTable from '../../components/commentsTable/commentsTable'
+import songTable from '../../components/songTable/songTable'
 export default {
   name: 'myMusic',
   components: {
@@ -105,11 +94,16 @@ export default {
     commentsTable
   },
   created () {
-    this.$store.commit('editActiveName', 'myMusic')
-    // 判断是否有用户id
-    if (this.accountId !== null) {
-      this.getInf()
+    if (this.name === 'singer') {
+      this.getSinger()
+    } else if (this.name === 'video') {
+      this.getVideo()
+    } else {
+      if (this.accountId !== null) {
+        this.goDetail(this.name)
+      }
     }
+    // 判断是否有用户id
   },
   data () {
     return {
@@ -135,13 +129,6 @@ export default {
     }
   },
   methods: {
-    // 获取用户收藏的歌单
-    getInf () {
-      this.$http.get(`/user/playlist?uid=${this.accountId}`).then(data => {
-        this.playlists = data.playlist
-        this.goDetail(data.playlist[1].id)
-      })
-    },
     getSinger () {
       this.videoIf = false
       this.singerIf = true
@@ -265,6 +252,9 @@ export default {
       const time = new Date()
       time.setTime(this.songMenuDetail.createTime)
       return time.toLocaleDateString()
+    },
+    name () {
+      return this.$route.query.name
     }
   }
 }
@@ -272,8 +262,6 @@ export default {
 
 <style lang="stylus" scoped>
   .el-container
-    width 74%
-    margin auto
     .header
       margin 20px 0
       height 220px
@@ -354,32 +342,6 @@ export default {
         // 一个块元素显示的文本的行数
         -webkit-line-clamp 2
         overflow hidden
-  .aside
-    margin 10px 10px 0 10px
-    height 80px
-    font-size 14px
-    img
-      width 55px
-      height 55px
-    div
-      position relative
-      left 70px
-      top -60px
-      span
-        display inline-block
-        width 190px
-        overflow hidden
-        text-overflow ellipsis
-        white-space nowrap
-        ~span
-          font-size 12px
-          color #888888
-  .aside:hover
-    img
-      width 70px
-      height 70px
-    div
-      left 80px
   .songHead
     margin-bottom 10px
     font-size 20px
@@ -416,13 +378,6 @@ export default {
         ~span
           font-size 12px
           color #888888
-  .mySinger
-    box-sizing border-box
-    padding 5px 20px 5px 20px
-    background-color #1c1c1c
-    cursor pointer
-  .mySinger:hover
-      font-size 20px
   .noLogin
     width 70%
     margin-top 50px

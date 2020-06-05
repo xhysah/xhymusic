@@ -178,10 +178,7 @@ export default {
 
 <style lang="stylus" scoped>
   .audio1
-    border-right 2px solid red
-    border-left 2px solid red
-    border-top 2px solid red
-    padding 10px 15%
+    padding 10px
     border-radius 10px 10px 0 0
     background-color #000000
   .audio

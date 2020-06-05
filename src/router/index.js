@@ -12,8 +12,8 @@ const album = () => import('../views/album/album')
 const mv = () => import('../views/mv/mv')
 const videos = () => import('../views/mv/videos')
 const latest = () => import('../views/latest/latest')
-const rankingDetail = () => import('../views/ranking/rankingDetail/rankingDetail')
 const highQuality = () => import('../views/songMenu/highquality/highquality')
+const myMusic = () => import('../views/myMusic/myMusic')
 
 Vue.use(VueRouter)
 
@@ -67,31 +67,31 @@ const routes = [
         component: album
       },
       {
-        path: '/mv',
-        name: 'mv',
-        component: mv
-      },
-      {
-        path: '/videos',
-        name: 'videos',
-        component: videos
-      },
-      {
         path: '/latest',
         name: 'latest',
         component: latest
       },
       {
-        path: '/rankingDetail',
-        name: 'rankingDetail',
-        component: rankingDetail
-      },
-      {
         path: '/highQuality',
         name: 'highQuality',
         component: highQuality
+      },
+      {
+        path: '/myMusic',
+        name: 'myMusic',
+        component: myMusic
       }
     ]
+  },
+  {
+    path: '/mv',
+    name: 'mv',
+    component: mv
+  },
+  {
+    path: '/videos',
+    name: 'videos',
+    component: videos
   }
 ]
 

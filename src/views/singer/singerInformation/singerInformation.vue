@@ -17,7 +17,7 @@
             <song-table :songs="hotSongs"></song-table>
           </el-tab-pane>
           <el-tab-pane label="所有专辑">
-            <div class="flex">
+            <div class="grid-4">
               <template v-for="(item, index) in album">
                 <album-outline :key="index" length="150px" height="150px">
                   <template v-slot:img>
@@ -31,7 +31,7 @@
             </div>
           </el-tab-pane>
           <el-tab-pane label="相关mv">
-            <div class="flex">
+            <div class="grid-2">
               <template v-for="(item, index) in mv">
                 <album-outline :key="index" length="260px" height="150px">
                   <template v-slot:img>
@@ -60,25 +60,23 @@
               </div>
             </template>
           </el-tab-pane>
+          <el-tab-pane label="相似歌手">
+            <div class="flex" v-if="Object.keys(simArtists).length !== 0">
+              <template v-for="(item, index) in simArtists">
+                <singer-outline :key="index" length="50px" height="50px">
+                  <template v-slot:img>
+                    <img :src="item.img1v1Url" alt="" @click="goSinger(item.id)">
+                  </template>
+                  <template v-slot:sentence>
+                    <div>{{item.name}}</div>
+                  </template>
+                </singer-outline>
+              </template>
+            </div>
+            <div v-else class="center">暂无相似歌手</div>
+          </el-tab-pane>
         </el-tabs>
       </el-main>
-      <el-aside width="280px">
-        <div class="simiHeader">相似歌手</div>
-        <div class="line"></div>
-        <div class="flex" v-if="Object.keys(simArtists).length !== 0">
-          <template v-for="(item, index) in simArtists">
-            <singer-outline :key="index" length="50px" height="50px">
-              <template v-slot:img>
-                <img :src="item.img1v1Url" alt="" @click="goSinger(item.id)">
-              </template>
-              <template v-slot:sentence>
-                <div>{{item.name}}</div>
-              </template>
-            </singer-outline>
-          </template>
-        </div>
-        <div v-else class="center">暂无相似歌手</div>
-      </el-aside>
     </el-container>
   </div>
 </template>
@@ -241,8 +239,6 @@ export default {
   .el-tabs
     margin 0 20px
   .el-main
-    margin  20px auto
-    border-left 1px solid color
     .img
       position relative
       margin 0 20px
@@ -253,9 +249,6 @@ export default {
         display block
         position relative
         height auto
-  .el-aside
-    border-left  1px solid color
-    border-right 1px solid color
   .header
     font-size 20px
     +div

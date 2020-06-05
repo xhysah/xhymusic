@@ -33,6 +33,7 @@ export default {
   .box:hover
     background-color #0e0e0e
   .box
+    cursor pointer
     position relative
     width 100%
     padding 4px 0

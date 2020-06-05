@@ -78,14 +78,15 @@ export default {
     margin 20px 0
     .el-main
       padding 5px 10px
+      color #888888
       .all
         cursor pointer
         margin-top 10px
         margin-left 5px
         font-size 12px
-        color: #888888
       .odd
         background-color #131313
+        color white
       .row:hover
         background-color #131313
       .row

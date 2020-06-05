@@ -29,7 +29,7 @@
             </div>
           </el-tab-pane>
           <el-tab-pane label="专辑">
-            <div class="flex">
+            <div class="grid-4">
               <template v-for="(item, index) in searchResult[2].albums">
                 <album-outline :key="index" length="150px" height="150px">
                   <template v-slot:img>
@@ -43,7 +43,7 @@
             </div>
           </el-tab-pane>
           <el-tab-pane label="视频">
-            <div class="flex">
+            <div class="grid-4">
               <template v-for="(item, index) in searchResult[3].videos">
                 <album-outline :key="index" length="150px" height="90px">
                   <template v-slot:img>
@@ -166,16 +166,13 @@ export default {
 
 <style lang="stylus" scoped>
   .el-main
-    margin 0 auto
+    padding 0
     .search
       width 400px
       margin 10px auto
   .el-input
     :focus
       border-color: red
-  .tabs
-    width 70%
-    margin 0 auto
     .title
       color #909399
       font-size 14px

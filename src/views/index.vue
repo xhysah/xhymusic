@@ -22,15 +22,6 @@
     </el-header>
     <el-container>
       <el-aside width="220px">
-        <div class="mySinger">我的歌手</div>
-        <div>我的视频</div>
-        <div v-for="(item, index) in playlists" :key="index" class="aside">
-          <img :src="item.coverImgUrl" alt="">
-          <div>
-            <span>{{item.name}}</span><br>
-            <span>{{item.trackCount}}首 by{{item.creator.nickname}}</span>
-          </div>
-        </div>
         <!--    显示登录对话框-->
         <div class="dialog">
           <el-dialog
@@ -46,7 +37,10 @@
             <register v-else @login="editActive" :name="this.title"></register>
           </el-dialog>
         </div>
-        <span @click="loginVisible=true" v-if="loginIf === 0" ref="login">登录</span>
+        <div @click="loginVisible=true" v-if="loginIf === 0" ref="login">
+          <img src="../assets/logo.png" alt="hhh" slot="reference" class="avatar">
+          <span>未登录</span>
+        </div>
         <!--        登录后显示-->
         <el-popover
           v-else
@@ -58,8 +52,18 @@
             <li><i class="el-icon-setting"></i>个人设置</li>
             <li @click="loginOut"><i class="el-icon-circle-close"></i>退出</li>
           </ul>
-          <img :src="headImgUrl" alt="hhh" slot="reference">
+          <img :src="headImgUrl" alt="hhh" slot="reference" class="avatar">
+          <div>name</div>
         </el-popover>
+        <div class="mySinger" @click="goMyMusic('singer')"><i class="el-icon-coordinate"></i>我的歌手</div>
+        <div class="mySinger" @click="goMyMusic('video')"><i class="el-icon-coordinate"></i>我的视频</div>
+        <div v-for="(item, index) in playlists" :key="index" class="aside" @click="goMyMusic(item.id)">
+          <img :src="item.coverImgUrl" alt="">
+          <div>
+            <span>{{item.name}}</span><br>
+            <span>{{item.trackCount}}首 by{{item.creator.nickname}}</span>
+          </div>
+        </div>
       </el-aside>
       <!--    显示的页面-->
       <el-main>
@@ -146,7 +150,7 @@ export default {
   mounted () {
     // 判断音乐栏是否显示
     function show () {
-      if ((window.innerHeight - event.clientY) < 1000) {
+      if ((window.innerHeight - event.clientY) < 300) {
         this.show = true
       } else {
         this.show = false
@@ -244,6 +248,14 @@ export default {
       this.$http.get(`/user/playlist?uid=${this.accountId}`).then(data => {
         this.playlists = data.playlist
       })
+    },
+    goMyMusic (name) {
+      this.$router.push({
+        path: '/myMusic',
+        query: {
+          name: name
+        }
+      })
     }
   },
   computed: {
@@ -260,6 +272,10 @@ export default {
     },
     activeIndex () {
       return this.$store.state.activeName
+    },
+    // 从vuex中得到用户id
+    accountId () {
+      return this.$store.state.accountId
     }
   }
 }
@@ -319,11 +335,6 @@ export default {
       padding 10px
     >>>.el-dialog__title
       color white
-  img
-    width 30px
-    height 30px
-    border-radius 50%
-    margin auto
   .music-enter-active, .music-leave-active
     transition opacity 1s
   .music-enter, .music-leave-to
@@ -361,4 +372,48 @@ export default {
       background-color #eeeeee
   .el-aside
     background-color #171717
+  .aside
+    cursor pointer
+    margin 10px 10px 0 10px
+    height 50px
+    font-size 12px
+    img
+      width 40px
+      height 40px
+    div
+      position relative
+      left 50px
+      top -40px
+      width 150px
+      span
+        display inline-block
+        width 150px
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+        ~span
+          font-size 12px
+          color #888888
+  .aside:hover
+    img
+      width 45px
+      height 45px
+    div
+      left 55px
+  .avatar
+    width 55px
+    height 55px
+    border-radius 50%
+    margin 10px 20px
+    +span
+      position relative
+      left 20px
+      top -20px
+  .mySinger
+    box-sizing border-box
+    padding 5px 20px 5px 20px
+    background-color #1c1c1c
+    cursor pointer
+  .mySinger:hover
+    font-size 20px
 </style>
