@@ -30,9 +30,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .box:hover
+    background-color #0e0e0e
   .box
-    width 400px
     position relative
+    width 100%
+    padding 4px 0
     .singer
       position absolute
       left 90px
@@ -40,14 +43,14 @@ export default {
       font-size 12px
       color #888888
       span:hover
-        color black
+        color #5f5e5e
         cursor pointer
     .name
       position absolute
       top 10px
       left 90px
   img
-    width 80px
-    height 80px
+    width 60px
+    height 60px
     margin auto
 </style>

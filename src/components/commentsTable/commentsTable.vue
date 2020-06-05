@@ -48,7 +48,7 @@ export default {
       height 50px
   .nickname
     font-size 12px
-    color #8cd9ee
+    color #639da5
     position absolute
     left 70px
     top -1px

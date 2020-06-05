@@ -3,12 +3,12 @@
     <el-main>
       <el-row type="flex-1">
         <template v-for="item in cate">
-          <span :class="{active:activeName===item.name}" :key="item.id" :underline="false" @click="getSongs(item.id, item.name)">{{item.name}}</span>
+          <span :class="{active:activeName===item.name}" :key="item.id" @click="getSongs(item.id, item.name)">{{item.name}}</span>
         </template>
         <el-button size="mini" type="danger" icon="el-icon-video-play" plain>播放全部</el-button>
       </el-row>
       <template v-for="(item, index) in musics" class="box">
-        <div :key="item.id" class="music">
+        <div :key="item.id" class="music" :class="{odd:index%2 ===0}">
           <div class="num">{{double(index+1)}}</div>
           <img :src="item.album.picUrl">
           <div class="name">{{item.name}}</div>
@@ -100,8 +100,6 @@ export default {
 
 <style lang="stylus" scoped>
   .el-main
-    width 70%
-    margin auto
     .el-row
       span
         cursor pointer
@@ -119,6 +117,7 @@ export default {
     img
       width 80px
       height 80px
+      margin-top 2px
     div
       font-size 14px
       color #888888
@@ -145,4 +144,6 @@ export default {
       left 800px
   .active
     color white !important
+  .odd
+    background-color #0a0a0a
 </style>

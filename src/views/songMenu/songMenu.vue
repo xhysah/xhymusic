@@ -1,34 +1,44 @@
 <template>
   <div>
-    <el-main>
-      <!--      选择栏-->
+    <!--      选择栏-->
+    <div class="header" v-if="showhigh" @click="goHighQuality">
       <el-row>
-        <span class="all">{{cateName}}</span>
-        <el-button type="danger" plain size="mini" @click="categoriesVisible=true">选择分类</el-button>
-        <span class="hot" @click="cate(cateName)">热门</span>
+        <img :src="highqualityList[0].coverImgUrl" alt="">
+        <div>
+          <button>精品歌单</button>
+          <span class="name">{{highqualityList[0].name}}</span>
+          <span class="writer">{{highqualityList[0].copywriter}}</span>
+        </div>
       </el-row>
-      <!--      分割线-->
-      <div class="line"></div>
-      <!--      歌单列表-->
-      <div class="flex">
-        <template v-for="(item, index) in songMenu">
-          <song-outline :key="index" length="150px" height="150px">
-            <template v-slot:img>
-              <img :src="item.coverImgUrl" alt=""  @click="songsDetail(item.id)">
-            </template>
-            <template v-slot:creator>
-              <span>by {{item.creator.nickname}}</span>
-            </template>
-            <template v-slot:sentence>
-              <div>{{item.name}}</div>
-            </template>
-          </song-outline>
+    </div>
+    <el-row>
+      <el-button type="danger" plain size="mini" @click="categoriesVisible=true">{{cateName}}<i class="el-icon-arrow-right"></i></el-button>
+      <div class="link">
+        <template v-for="(item, index) in playlist">
+          <el-link type="info" :key="index" style="margin: 0 10px" @click="cate(item.name)">
+            <span>{{item.name}}</span></el-link>
         </template>
       </div>
-    </el-main>
+    </el-row>
+    <!--      歌单列表-->
+    <div class="grid-4">
+      <template v-for="(item, index) in songMenu">
+        <song-outline :key="index">
+          <template v-slot:img>
+            <img :src="item.coverImgUrl" alt="" @click="songsDetail(item.id)">
+          </template>
+          <template v-slot:creator>
+            <span>by {{item.creator.nickname}}</span>
+          </template>
+          <template v-slot:sentence>
+            <div>{{item.name}}</div>
+          </template>
+        </song-outline>
+      </template>
+    </div>
     <!--    分类对话框-->
     <el-dialog center :visible.sync="categoriesVisible" width="50%" :modal="false" class="dialog">
-      <el-button type="danger" plain size="mini" @click="highQuality">全部</el-button>
+      <el-button type="danger" plain size="mini" @click="highCate">全部</el-button>
       <div v-for="(item, index) in categories" :key="index">
         <div  class="category">
           <i :class="icon[index]"></i>
@@ -67,10 +77,12 @@ export default {
     this.getSongMenu()
     // 判断是当前路由有没有定义name值，如果没有，则显示全部精品歌单数据，如果有，则根据name值来显示
     if (this.$route.query.name === undefined) {
-      this.highQuality()
+      this.highCate()
     } else {
       this.cate(this.$route.query.name)
     }
+    this.getHot()
+    this.getHighQuality()
     this.$store.commit('editActiveName', 'songMenu')
   },
   data () {
@@ -93,10 +105,19 @@ export default {
       // 当前的页码值
       currentPage: 1,
       // 总的页码值
-      total: 0
+      total: 0,
+      playlist: [],
+      highqualityList: [],
+      showhigh: true
     }
   },
   methods: {
+    // 获取热门分类数据
+    getHot () {
+      this.$http.get('/playlist/hot').then(data => {
+        this.playlist = data.tags
+      })
+    },
     // 分类数据
     getSongMenu () {
       this.$http.get('/playlist/catlist').then(data => {
@@ -104,14 +125,26 @@ export default {
         this.sub = data.sub
       })
     },
-    // 获取精品歌单
-    highQuality () {
+    // 获取分类歌单
+    highCate () {
       this.$http.get('/top/playlist?limit=20').then(data => {
         this.currentPage = 1
         this.total = data.total
         this.songMenu = data.playlists
         this.cateName = '全部'
         this.categoriesVisible = false
+        this.getHighQuality('全部')
+      })
+    },
+    getHighQuality (cat) {
+      this.$http.get(`/top/playlist/highquality?cat=${cat}&&limit=1`).then(data => {
+        console.log(data.playlists)
+        if (Object.keys(data.playlists).length !== 0) {
+          this.showhigh = true
+          this.highqualityList = data.playlists
+        } else {
+          this.showhigh = false
+        }
       })
     },
     // 根据cat值，来获取对应歌单
@@ -129,6 +162,7 @@ export default {
         this.categoriesVisible = false
         this.cateName = cat
       })
+      this.getHighQuality(cat)
     },
     // 根据歌单的id，去往歌单详细信息页面
     songsDetail (id) {
@@ -150,6 +184,14 @@ export default {
     // 当前分页
     current (value) {
       this.cate(this.cateName, value)
+    },
+    goHighQuality () {
+      this.$router.push({
+        path: '/highQuality',
+        query: {
+          name: this.cateName
+        }
+      })
     }
   },
   computed: {
@@ -168,26 +210,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .el-main
-    width 80%
-    margin 0 auto
-    .hot
-      position relative
-      left 70%
-      background-color red
-      font-size 13px
-      padding 3px 10px
-      border-radius 5px
-      cursor pointer
-    .all
-      font-size 25px
-      margin-left 50px
-      margin-right 20px
-    .el-button
-      position relative
-      top -2px
   .el-row
     margin 10px
+    .el-button
+      margin-left 10px
   .category
     font-size 18px
     i
@@ -204,9 +230,6 @@ export default {
     line-height 18px
     left 80px
     top -25px
-  .el-button
-    position relative
-    top -20px
   .category-item-item:hover
     font-size 15px
     text-decoration underline
@@ -228,5 +251,37 @@ export default {
     display flex
     justify-content center
     position relative
-    top -20px
+  .link
+    display inline-block
+    float right
+  .header
+    cursor pointer
+    background-color #131313
+    margin 15px
+    position relative
+    img
+      width 150px
+      height 150px
+      border-radius 20px
+    .name
+      position absolute
+      top 70px
+      left 170px
+    .writer
+      position absolute
+      left 170px
+      top 100px
+      font-size 14px
+      color #888888
+    button
+      cursor pointer
+      width 110px
+      position absolute
+      left 170px
+      top 30px
+      border 1px solid #ffaa00
+      color #ffaa00
+      background-color transparent
+      border-radius 14px
+      padding 5px
 </style>

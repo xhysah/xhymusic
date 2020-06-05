@@ -30,7 +30,8 @@ import {
   Collapse,
   CollapseItem,
   MessageBox,
-  Loading
+  Loading,
+  Header
 } from 'element-ui'
 
 Vue.use(Loading.directive)
@@ -61,6 +62,7 @@ Vue.use(Popover)
 Vue.use(Progress)
 Vue.use(Collapse)
 Vue.use(CollapseItem)
+Vue.use(Header)
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message
 Vue.prototype.$loading = Loading.service

@@ -31,11 +31,6 @@
           <div class="flex">
             <div v-for="(item, index) in videos" :key="index" class="video" @click="goVideo(item.vid, item.type)">
               <img :src="item.coverUrl" alt="">
-              <!--            <div class="word">-->
-              <!--              <span>{{item.name}}</span><br>-->
-              <!--              <span>{{item.mvSize}}个mv</span>-->
-              <!--              <span>{{item.albumSize}}个mv</span>-->
-              <!--            </div>-->
             </div>
           </div>
         </div>
@@ -101,8 +96,8 @@
 </template>
 
 <script>
-import commentsTable from '../../components/commentsTable/commentsTable'
-import songTable from '../../components/songTable/songTable'
+import commentsTable from '../commentsTable/commentsTable'
+import songTable from '../songTable/songTable'
 export default {
   name: 'myMusic',
   components: {

@@ -1,39 +1,34 @@
 <template>
   <div>
     <el-container>
-      <!--      侧边栏-->
-      <el-aside width="240px">
-        <div class="header">推荐</div>
-        <div class="main" :class="{active: currentId === 0}" @click="firstShow()"><div class="point"></div>热门歌手</div>
-        <!--        循环地区分类-->
-        <template v-for="(item1, index1) in singerArea">
-          <div :key="index1">
-            <el-divider></el-divider>
-            <div class="header">{{item1.name}}</div>
-            <!--            循环歌手分类-->
-            <template v-for="(item2, index2) in singerType">
-              <div :key="index2">
-                <div class="main" :class="{active: currentId === ''+item2.typeId+item1.areaId}" @click="show(item2.typeId,item1.areaId,item1.name+item2.name)"><div class="point"></div>{{item1.name+item2.name}}</div>
-              </div>
-            </template>
-          </div>
-          </template>
-      </el-aside>
       <!--      页面主体-->
       <el-main>
-        <div class="header">{{activeId.headerName}}</div>
-        <div class="line"></div>
-      <!--        循环字母-->
-        <div class="spell" v-if="activeId.typeId !== 0">
-          <span class="red" :class="{actives: currentId2 === 0}" @click="show(activeId.typeId, activeId.areaId, activeId.headerName)">热门</span>
-          <template v-for="n in 26">
-            <span :key="n" :class="{actives: currentId2 === String.fromCharCode(n+96)}" class="spell-item" @click="searchSinger(String.fromCharCode(n+96))">{{String.fromCharCode(n+64)}}</span>
-           </template>
+        <div>
+          <span>语种</span>
+          <template v-for="(item, index) in singerArea">
+            <span :key="index" @click="show">{{item.name}}</span>
+          </template>
+        </div>
+        <div>
+          <span>分类</span>
+          <template v-for="(item, index) in singerType">
+            <span :key="index" @click="show">{{item.name}}</span>
+          </template>
+        </div>
+        <div>
+          <span>筛选</span>
+          <!--        循环字母-->
+          <div class="spell">
+            <span class="red" :class="{actives: currentId2 === 0}" @click="show(activeId.typeId, activeId.areaId)">热门</span>
+            <template v-for="n in 26">
+              <span :key="n" :class="{actives: currentId2 === String.fromCharCode(n+96)}" class="spell-item" @click="searchSinger(String.fromCharCode(n+96))">{{String.fromCharCode(n+64)}}</span>
+            </template>
+          </div>
         </div>
       <!--        歌手信息-->
-        <div class="flex">
+        <div class="grid-5">
           <template v-for="item in singers">
-            <singer-outline :key="item.id" length="100px" height="100px">
+            <singer-outline :key="item.id">
               <template v-slot:img>
                 <img :src="item.img1v1Url" alt="" @click="showInformation(item.id)">
               </template>
@@ -41,14 +36,6 @@
                 <div @click="showInformation(item.id)">{{item.name}}</div>
               </template>
             </singer-outline>
-          </template>
-        </div>
-        <!--        分割线-->
-        <div class="line"></div>
-        <!--        不展示图片的歌手-->
-        <div  class="rest">
-          <template v-for="(item, index) in restSingers">
-            <span @click="showInformation(item.id)" :key="index" class="rest-item">{{item.name}}</span>
           </template>
         </div>
       </el-main>
@@ -80,7 +67,7 @@ export default {
           typeId: 2
         },
         {
-          name: '乐队',
+          name: '组合乐队',
           typeId: 3
         }
       ],
@@ -109,13 +96,10 @@ export default {
       ],
       // 显示图片的歌手
       singers: {},
-      // 不显示图片的其他歌手
-      restSingers: {},
       // 记录此时的typeId,areaId
       activeId: {
         typeId: 0,
-        areaId: 0,
-        headerName: '热门歌手'
+        areaId: 0
       },
       currentId: 0,
       currentId2: 0
@@ -123,34 +107,30 @@ export default {
   },
   methods: {
     // 获取歌手的种类
-    show (typeId, areaId, headerName) {
+    show (typeId, areaId) {
       this.currentId2 = 0
       this.activeId.typeId = typeId
       this.activeId.areaId = areaId
-      this.activeId.headerName = headerName
       this.currentId = '' + typeId + areaId
       this.$http.get(`/artist/list?type=${typeId}&area=${areaId}`).then(data => {
-        this.singers = data.artists.slice(0, 10)
-        this.restSingers = data.artists.slice(10)
-        // console.log(this.restSingers)
+        this.singers = data.artists
+        console.log(data.artists)
       })
     },
     // 根据字母获取歌手信息
     searchSinger (value) {
       this.currentId2 = value
       this.$http.get(`/artist/list?type=${this.activeId.typeId}&area=${this.activeId.areaId}&initial=${value}`).then(data => {
-        this.singers = data.artists.slice(0, 10)
-        this.restSingers = data.artists.slice(10)
+        console.log(data)
+        this.singers = data.artists
       })
     },
     // 显示热门歌手
     firstShow () {
-      this.activeId.headerName = '热门歌手'
       this.activeId.typeId = 0
       this.currentId = 0
       this.$http.get('/top/artists').then(data => {
-        this.singers = data.artists.slice(0, 10)
-        this.restSingers = data.artists.slice(10)
+        this.singers = data.artists
       })
     },
     // 根据id，去往歌手详细信息页面
@@ -164,8 +144,6 @@ export default {
 
 <style lang="stylus" scoped>
   .el-container
-    width 70%
-    margin 0 auto
     .el-aside
       padding 20px
       border 2px solid #353535
@@ -214,9 +192,6 @@ export default {
     display inline-block
     margin 5px 5px 5px 15px
     cursor pointer
-  .header
-    font-size 25px
-    margin 10px
   .active
     border-radius 20px
     background-color black

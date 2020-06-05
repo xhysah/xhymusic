@@ -15,7 +15,7 @@ export default {
   props: {
     length: {
       type: String,
-      default: '150px'
+      default: '100%'
     },
     height: {
       type: String,
@@ -38,7 +38,7 @@ export default {
 <style lang="stylus" scoped>
   .img-item
     display inline-block
-    margin 20px
+    padding 0 20px
     .img
       position relative
     .sentence
@@ -51,9 +51,8 @@ export default {
         white-space nowrap
   .img:hover
     img
-      width 120%
-      height 120%
-      border 1px solid red
+      width 105%
+      height 105%
       box-shadow 0 0 10px red
     +.sentence
       visibility hidden

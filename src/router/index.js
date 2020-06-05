@@ -8,11 +8,12 @@ const singer = () => import('../views/singer/singer')
 const detail = () => import('../views/songMenu/detail/detail')
 const singerInformation = () => import('../views/singer/singerInformation/singerInformation')
 const search = () => import('../views/search/search')
-const myMusic = () => import('../views/myMusic/myMusic')
 const album = () => import('../views/album/album')
 const mv = () => import('../views/mv/mv')
 const videos = () => import('../views/mv/videos')
 const latest = () => import('../views/latest/latest')
+const rankingDetail = () => import('../views/ranking/rankingDetail/rankingDetail')
+const highQuality = () => import('../views/songMenu/highquality/highquality')
 
 Vue.use(VueRouter)
 
@@ -29,11 +30,6 @@ const routes = [
         path: '/recommend',
         name: 'recommend',
         component: recommend
-      },
-      {
-        path: '/myMusic',
-        name: 'myMusic',
-        component: myMusic
       },
       {
         path: '/ranking',
@@ -84,6 +80,16 @@ const routes = [
         path: '/latest',
         name: 'latest',
         component: latest
+      },
+      {
+        path: '/rankingDetail',
+        name: 'rankingDetail',
+        component: rankingDetail
+      },
+      {
+        path: '/highQuality',
+        name: 'highQuality',
+        component: highQuality
       }
     ]
   }

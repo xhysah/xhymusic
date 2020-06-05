@@ -238,9 +238,6 @@ export default {
   color=#353535
   .el-divider
     width 2px
-  .el-container
-    width 74%
-    margin auto
   .el-tabs
     margin 0 20px
   .el-main

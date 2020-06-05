@@ -23,7 +23,7 @@ export default {
   props: {
     length: {
       type: String,
-      default: '150px'
+      default: '100%'
     },
     height: {
       type: String,
@@ -56,7 +56,7 @@ export default {
 <style lang="stylus" scoped>
   .img-item
     display inline-block
-    margin 20px
+    padding 0 20px
     .img
       position relative
     .sentence

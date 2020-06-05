@@ -1,25 +1,18 @@
 <template>
   <div>
     <!--    banner-->
-    <el-carousel :interval="5000" indicator-position="outside">
+    <el-carousel :interval="5000" type="card" height="180px">
       <el-carousel-item v-for="(item, index) in banners" :key="index">
         <img class="banner" :src="item.imageUrl" :alt="item.typeTitle">
       </el-carousel-item>
     </el-carousel>
-    <!--    热门-->
-    <el-row type="flex" class="row-bg" justify="center">
-      <template v-for="(item, index) in playlist">
-        <el-link type="info"  :key="index" style="margin: 0 20px" @click="goSongMenu(item.name)"><span>{{item.name}}</span></el-link>
-      </template>
-    </el-row>
-    <div class="line"></div>
     <!--    网友精选-->
-    <div class="el-main">
-      <div class="hot" @click="goSongMenu('全部')">推荐歌单<i class="el-icon-arrow-right"></i></div>
-      <div class="flex">
+    <div class="container">
+      <div class="hotFirst" @click="goSongMenu('全部')">推荐歌单<i class="el-icon-arrow-right"></i></div>
+      <div class="grid-5">
         <template v-for="(item, index) in toplist">
           <div @click="songlist(item.id)" :key="index">
-            <song-outline length="150px" height="150px" active="active">
+            <song-outline>
               <template v-slot:img>
                 <img :src="item.picUrl" alt="">
               </template>
@@ -34,10 +27,10 @@
         </template>
       </div>
       <div class="hot">独家放送<i class="el-icon-arrow-right"></i></div>
-      <div class="flex-1">
+      <div class="grid-4">
         <template v-for="item in exclusive">
           <div :key="item.id" @click="goMv(item.id, item.type)">
-            <song-outline length="180px">
+            <song-outline>
               <template v-slot:img>
                 <img :src="item.sPicUrl" alt="">
               </template>
@@ -52,16 +45,16 @@
         </template>
       </div>
       <div class="hot" @click="goLatest">最新音乐<i class="el-icon-arrow-right"></i></div>
-      <div class="flex-1 latest">
+      <div class="grid-2 latest">
         <template v-for="item in latestMusic">
           <music-outline :key="item.id" :music="item"></music-outline>
         </template>
       </div>
       <div class="hot">推荐MV<i class="el-icon-arrow-right"></i></div>
-      <div class="flex-1">
+      <div class="grid-4">
         <template v-for="item in mvs">
           <div :key="item.id" @click="goMv(item.id, item.type)">
-            <song-outline length="180px">
+            <song-outline>
               <template v-slot:img>
                 <img :src="item.picUrl" alt="">
               </template>
@@ -92,8 +85,6 @@ export default {
     return {
       // banner数据
       banners: {},
-      // 热门推荐
-      playlist: {},
       // 网友精选碟
       toplist: [],
       latestMusic: [],
@@ -104,7 +95,6 @@ export default {
   created () {
     // 处理请求
     this.getBanner()
-    this.getHot()
     this.getTop()
     this.getLatestMusic()
     this.getMv()
@@ -116,12 +106,6 @@ export default {
     getBanner () {
       this.$http.get('/banner').then(data => {
         this.banners = data.banners
-      })
-    },
-    // 获取热门分类数据
-    getHot () {
-      this.$http.get('/playlist/hot').then(data => {
-        this.playlist = data.tags
       })
     },
     // 获取热门歌单
@@ -200,23 +184,16 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .el-carousel__item
-    display flex
-    justify-content center
-  .hot
-    font-size 20px
-    margin 0 20px
-    color white
+  .container
+    margin 0 -20px
+  .hotFirst
+    margin 0 0 10px 20px
     cursor pointer
-  .el-main
-    margin 0 160px
-    .flex
-      margin-bottom 50px
-  .banner
-    height auto
-    max-width 900px
+  .hot
+    margin 50px 0 10px 20px
+    cursor pointer
   .el-row
     padding-bottom 4px
   .latest
-    margin 20px
+    margin 10px 20px
 </style>

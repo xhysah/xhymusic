@@ -51,7 +51,7 @@
           </el-pagination>
         </div>
       </el-main>
-      <el-aside width="260px">
+      <el-aside width="200px">
         <div class="simiHeader">相似歌单</div>
         <div class="line"></div>
         <div v-for="(item, index) in relateSongMenu" :key="index" class="sim"  @click="goDetail(item.id)">
@@ -205,8 +205,6 @@ export default {
 
 <style lang="stylus" scoped>
   .container
-    width 70%
-    margin 20px auto
     .header
       margin 15px 0
       height 220px
@@ -217,7 +215,6 @@ export default {
         width 200px
         height 200px
         border-radius 20px
-        border 1px solid red
       .button-group
         position absolute
         left 230px
@@ -302,7 +299,7 @@ export default {
     margin-top 80px
     margin-bottom 10px
   .word
-    width 170px
+    width 130px
   .sim
     margin 10px 10px 0 10px
     height 65px
@@ -341,4 +338,6 @@ export default {
     margin-top 20px
     .all
       margin-bottom 10px
+  .el-main
+    padding 0
 </style>

@@ -1,38 +1,71 @@
 <template>
   <div class="container">
-    <!--    导航菜单-->
-    <el-menu
-      :default-active="activeIndex"
-      class="el-menu-demo"
-      mode="horizontal"
-      background-color="black"
-      text-color="white"
-      active-text-color="red">
-      <el-menu-item index="recommend" @click="go('/recommend')">推荐</el-menu-item>
-      <el-menu-item index="myMusic" @click="go('/myMusic')">我的音乐</el-menu-item>
-      <el-menu-item index="ranking" @click="go('/ranking')">排行榜</el-menu-item>
-      <el-menu-item index="songMenu" @click="go('/songMenu')">歌单</el-menu-item>
-      <el-menu-item index="singer" @click="go('/singer')">歌手</el-menu-item>
-      <el-menu-item index="latest" @click="go('/latest')">最新音乐</el-menu-item>
-      <el-input class="input" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户"
-                prefix-icon="el-icon-search" @keyup.enter.native="searchInf(input)"
-                @input="changeValue" ref="input" @blur="blur"
-      ></el-input>
-      <span @click="loginVisible=true" v-if="loginIf === 0" ref="login">登录</span>
-      <!--        登录后显示-->
-      <el-popover
-        v-else
-        placement="bottom"
-        trigger="hover">
-        <ul>
-          <li><i class="el-icon-user"></i>我的主页</li>
-          <li><i class="el-icon-message"></i>我的消息</li>
-          <li><i class="el-icon-setting"></i>个人设置</li>
-          <li @click="loginOut"><i class="el-icon-circle-close"></i>退出</li>
-        </ul>
-        <img :src="headImgUrl" alt="hhh" slot="reference">
-      </el-popover>
-    </el-menu>
+    <el-header>
+      <!--    导航菜单-->
+      <el-menu
+        :default-active="activeIndex"
+        class="el-menu-demo"
+        mode="horizontal"
+        background-color="black"
+        text-color="white"
+        active-text-color="red">
+        <el-menu-item index="recommend" @click="go('/recommend')">推荐</el-menu-item>
+        <el-menu-item index="ranking" @click="go('/ranking')">排行榜</el-menu-item>
+        <el-menu-item index="songMenu" @click="go('/songMenu')">歌单</el-menu-item>
+        <el-menu-item index="singer" @click="go('/singer')">歌手</el-menu-item>
+        <el-menu-item index="latest" @click="go('/latest')">最新音乐</el-menu-item>
+        <el-input class="input" v-model="input" autofocus placeholder="专辑/歌手/歌单/用户"
+                  prefix-icon="el-icon-search" @keyup.enter.native="searchInf(input)"
+                  @input="changeValue" ref="input" @blur="blur"
+        ></el-input>
+      </el-menu>
+    </el-header>
+    <el-container>
+      <el-aside width="220px">
+        <div class="mySinger">我的歌手</div>
+        <div>我的视频</div>
+        <div v-for="(item, index) in playlists" :key="index" class="aside">
+          <img :src="item.coverImgUrl" alt="">
+          <div>
+            <span>{{item.name}}</span><br>
+            <span>{{item.trackCount}}首 by{{item.creator.nickname}}</span>
+          </div>
+        </div>
+        <!--    显示登录对话框-->
+        <div class="dialog">
+          <el-dialog
+            :visible.sync="loginVisible"
+            width="400px"
+            :title="title"
+            @close="change(0,'没有账号？请先注册')">
+            <div class="button-group" v-if="active == 0">
+              <el-button size="medium" round @click="change(1, '手机登录')">手机登录</el-button>
+              <el-button round size="medium" @click="change(2, '注册')">注册</el-button>
+            </div>
+            <phone-login v-else-if="active == 1" @register="editActive" @success="login"></phone-login>
+            <register v-else @login="editActive" :name="this.title"></register>
+          </el-dialog>
+        </div>
+        <span @click="loginVisible=true" v-if="loginIf === 0" ref="login">登录</span>
+        <!--        登录后显示-->
+        <el-popover
+          v-else
+          placement="bottom"
+          trigger="hover">
+          <ul>
+            <li><i class="el-icon-user"></i>我的主页</li>
+            <li><i class="el-icon-message"></i>我的消息</li>
+            <li><i class="el-icon-setting"></i>个人设置</li>
+            <li @click="loginOut"><i class="el-icon-circle-close"></i>退出</li>
+          </ul>
+          <img :src="headImgUrl" alt="hhh" slot="reference">
+        </el-popover>
+      </el-aside>
+      <!--    显示的页面-->
+      <el-main>
+        <router-view/>
+      </el-main>
+    </el-container>
     <!--    显示搜索框-->
     <div v-show="Object.keys(result).length !== 0" class="search">
       <!--          歌曲-->
@@ -43,13 +76,13 @@
             <template v-for="(item1, index) in item.artists"><span :key="index"></span>{{item1.name}}</template>
           </div>
         </div>
-        <div  v-if="result.artists||result.albums||result.mvs" class="line"></div>
+        <div v-if="result.artists||result.albums||result.mvs" class="line"></div>
       </div>
       <!--        歌手-->
       <div v-if="result.artists">
         <i class="el-icon-user"></i>歌手
         <div v-for="(item, index) in result.artists" :key="index">
-          <div class="item"  @click="changeInputValue(item.name)">{{item.name}}</div>
+          <div class="item" @click="changeInputValue(item.name)">{{item.name}}</div>
         </div>
         <div v-if="result.albums||result.mvs" class="line"></div>
       </div>
@@ -57,7 +90,7 @@
       <div v-if="result.albums">
         <i class="el-icon-star-off"></i>专辑
         <div v-for="(item, index) in result.albums" :key="index">
-          <div class="item"  @click="changeInputValue(item.name)">{{item.name}}-{{item.artist.name}}</div>
+          <div class="item" @click="changeInputValue(item.name)">{{item.name}}-{{item.artist.name}}</div>
         </div>
         <div v-if="result.mvs" class="line"></div>
       </div>
@@ -65,28 +98,11 @@
       <div v-if="result.mvs">
         <i class="el-icon-s-platform"></i>视频
         <template v-for="(item, index) in result.mvs">
-          <div class="item" :key="index"  @click="changeInputValue(item.name)">{{item.name}}-
+          <div class="item" :key="index" @click="changeInputValue(item.name)">{{item.name}}-
             <template v-for="(item1, index) in item.artists"><span :key="index"></span>{{item1.name}}</template>
           </div>
         </template>
       </div>
-    </div>
-    <!--    显示的页面-->
-    <router-view/>
-    <!--    显示登录对话框-->
-    <div class="dialog">
-      <el-dialog
-        :visible.sync="loginVisible"
-        width="400px"
-        :title="title"
-        @close="change(0,'没有账号？请先注册')">
-        <div class="button-group" v-if="active == 0">
-          <el-button size="medium" round @click="change(1, '手机登录')">手机登录</el-button>
-          <el-button round size="medium" @click="change(2, '注册')">注册</el-button>
-        </div>
-        <phone-login v-else-if="active == 1" @register="editActive" @success="login"></phone-login>
-        <register v-else @login="editActive" :name="this.title"></register>
-      </el-dialog>
     </div>
     <!--    音乐栏显示-->
     <transition name="music">
@@ -116,7 +132,8 @@ export default {
       // 头像显示，还是登录显示
       loginIf: 0,
       // 控制音乐栏显示
-      show: false
+      show: false,
+      playlists: []
     }
   },
   created () {
@@ -124,6 +141,7 @@ export default {
     if (window.localStorage.getItem('phone') && window.localStorage.getItem('password')) {
       this.loginIf = 1
     }
+    this.getInf()
   },
   mounted () {
     // 判断音乐栏是否显示
@@ -220,6 +238,11 @@ export default {
           type: 'info',
           message: '已取消退出'
         })
+      })
+    },
+    getInf () {
+      this.$http.get(`/user/playlist?uid=${this.accountId}`).then(data => {
+        this.playlists = data.playlist
       })
     }
   },
@@ -336,4 +359,6 @@ export default {
     margin 0
     li:hover
       background-color #eeeeee
+  .el-aside
+    background-color #171717
 </style>

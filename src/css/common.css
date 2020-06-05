@@ -2,7 +2,6 @@ body{
   margin: 0;
   padding: 0;
   width: 100%;
-  min-width: 1420px;
   height: 100%;
   background-color: black;
   color: white;
@@ -30,7 +29,18 @@ audio{
 .simLine{
   border: .5px solid #888888
 }
-.flex-1{
-  display: flex;
-  flex-wrap: wrap;
+.grid-5{
+  display: grid;
+  grid-template-columns: 20% 20% 20% 20% 20%;
+  justify-items: center;
+}
+.grid-4{
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  justify-items: center;
+}
+.grid-2{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  justify-items: center;
 }

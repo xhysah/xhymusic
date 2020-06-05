@@ -209,9 +209,6 @@ export default {
 <style lang="stylus" scoped>
 color=#353535
   .el-container
-    width 74%
-    margin 0 auto
-    margin-top 50px
     .el-aside
       border 2px solid color
       .categories:hover
