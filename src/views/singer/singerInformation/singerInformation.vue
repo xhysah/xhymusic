@@ -251,6 +251,7 @@ export default {
         height auto
   .header
     font-size 20px
+    margin-left 20px
     +div
       margin 10px 30px
       font-size 14px
@@ -266,5 +267,5 @@ export default {
     width 80px
     position absolute
     top 260px
-    left 580px
+    left 740px
 </style>

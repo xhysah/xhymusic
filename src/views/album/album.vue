@@ -207,9 +207,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .el-container
-    width 74%
-    margin auto
   img
     width 150px
     height 150px
@@ -312,7 +309,4 @@ export default {
         -webkit-line-clamp 2
         overflow hidden
         text-indent 2em
-  .el-main
-    margin-top 40px
-    overflow hidden
 </style>

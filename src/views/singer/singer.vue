@@ -172,7 +172,7 @@ export default {
     padding 0
     .main
       margin  0 20px
-      color #5f5d5d
+      color #828080
       div
         margin 4px 10px
         font-size 14px
@@ -191,4 +191,6 @@ export default {
         .spell-item,.last
           margin 0 10px
           padding 2px 20px
+  .el-divider
+    background-color #2a2929
 </style>

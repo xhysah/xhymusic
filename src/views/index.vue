@@ -299,7 +299,6 @@ export default {
   .el-menu.el-menu--horizontal
     border-bottom none
   .button-group
-    background-color black
     text-align center
     .el-button
       /*background-color #252525*/
@@ -372,6 +371,21 @@ export default {
       background-color #eeeeee
   .el-aside
     background-color #171717
+    position fixed
+    left 0
+    top 50px
+    height 100%
+    padding 20px 5px
+  .el-main
+    overscroll-behavior contain
+    margin-left 220px
+    margin-top 50px
+  .el-header
+    z-index 10
+    position fixed
+    width 100%
+    left 0
+    top 0
   .aside
     cursor pointer
     margin 10px 10px 0 10px
@@ -406,6 +420,7 @@ export default {
     border-radius 50%
     margin 10px 20px
     +span
+      cursor pointer
       position relative
       left 20px
       top -20px

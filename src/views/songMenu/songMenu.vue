@@ -1,18 +1,35 @@
 <template>
   <div>
     <!--      选择栏-->
-    <div class="header" v-if="showhigh" @click="goHighQuality">
+    <div class="header" v-if="Object.keys(highqualityList).length!==0">
       <el-row>
-        <img :src="highqualityList[0].coverImgUrl" alt="">
+        <img :src="highqualityList[0].coverImgUrl" alt="" @click="goHighQuality">
         <div>
-          <button>精品歌单</button>
+          <button @click="goHighQuality">精品歌单</button>
           <span class="name">{{highqualityList[0].name}}</span>
           <span class="writer">{{highqualityList[0].copywriter}}</span>
         </div>
       </el-row>
     </div>
     <el-row>
-      <el-button type="danger" plain size="mini" @click="categoriesVisible=true">{{cateName}}<i class="el-icon-arrow-right"></i></el-button>
+      <el-popover
+        placement="bottom-start"
+        width="800"
+        v-model="popovervisible">
+        <button class="cate" @click="highCate">全部歌单</button>
+        <div v-for="(item, index) in categories" :key="index">
+          <div  class="category">
+            <i :class="icon[index]"></i>
+            {{item}}
+          </div>
+          <div class="category-item">
+          <span class="category-item-item" v-for="(items, indexs) in reduction[index]" :key="indexs" @click="cate(items.name)">{{items.name}}
+            <el-divider v-if="indexs!==reduction[index].length-1" direction="vertical"></el-divider>
+          </span>
+          </div>
+        </div>
+        <el-button class="button" slot="reference">{{cateName}}<i class="el-icon-arrow-right"></i></el-button>
+      </el-popover>
       <div class="link">
         <template v-for="(item, index) in playlist">
           <el-link type="info" :key="index" style="margin: 0 10px" @click="cate(item.name)">
@@ -36,21 +53,6 @@
         </song-outline>
       </template>
     </div>
-    <!--    分类对话框-->
-    <el-dialog center :visible.sync="categoriesVisible" width="50%" :modal="false" class="dialog">
-      <el-button type="danger" plain size="mini" @click="highCate">全部</el-button>
-      <div v-for="(item, index) in categories" :key="index">
-        <div  class="category">
-          <i :class="icon[index]"></i>
-          {{item}}
-        </div>
-        <div class="category-item">
-          <span class="category-item-item" v-for="(items, index) in reduction[index]" :key="index" @click="cate(items.name)">{{items.name}}
-            <el-divider direction="vertical"></el-divider>
-          </span>
-        </div>
-      </div>
-    </el-dialog>
     <!--    分页-->
     <el-pagination
       background
@@ -92,7 +94,6 @@ export default {
       categories: {},
       sub: {},
       // 分类对话框是否显示
-      categoriesVisible: false,
       // 歌单
       songMenu: {},
       icon: [
@@ -108,7 +109,7 @@ export default {
       total: 0,
       playlist: [],
       highqualityList: [],
-      showhigh: true
+      popovervisible: false
     }
   },
   methods: {
@@ -131,19 +132,17 @@ export default {
         this.currentPage = 1
         this.total = data.total
         this.songMenu = data.playlists
-        this.cateName = '全部'
-        this.categoriesVisible = false
+        this.cateName = '全部歌单'
+        this.popovervisible = false
         this.getHighQuality('全部')
       })
     },
     getHighQuality (cat) {
       this.$http.get(`/top/playlist/highquality?cat=${cat}&&limit=1`).then(data => {
-        console.log(data.playlists)
         if (Object.keys(data.playlists).length !== 0) {
-          this.showhigh = true
           this.highqualityList = data.playlists
         } else {
-          this.showhigh = false
+          this.highqualityList = []
         }
       })
     },
@@ -159,7 +158,7 @@ export default {
       this.$http.get(info).then(data => {
         this.total = data.total
         this.songMenu = data.playlists
-        this.categoriesVisible = false
+        this.popovervisible = false
         this.cateName = cat
       })
       this.getHighQuality(cat)
@@ -212,8 +211,6 @@ export default {
 <style lang="stylus" scoped>
   .el-row
     margin 10px
-    .el-button
-      margin-left 10px
   .category
     font-size 18px
     i
@@ -226,31 +223,17 @@ export default {
     cursor pointer
     position relative
     margin 3px 0
-    font-size 12px
+    font-size 14px
     line-height 18px
     left 80px
     top -25px
   .category-item-item:hover
-    font-size 15px
-    text-decoration underline
-  .dialog
-    /*color white*/
-    margin-top 10px
-    >>>.el-dialog__header
-      background-color black
-      border 1px solid red
-      border-bottom none
-      padding 5px
-    >>>.el-dialog__body
-      background-color black
-      border 1px solid red
-      border-top none
-      color white
-      padding 25px 25px 0 25px
+    color red
   .el-pagination
     display flex
     justify-content center
     position relative
+    margin-top 10px
   .link
     display inline-block
     float right
@@ -284,4 +267,18 @@ export default {
       background-color transparent
       border-radius 14px
       padding 5px
+  .button
+    margin-left 10px
+    border-radius 10px
+    background-color black
+    color #cdc9c9
+    padding 5px 15px
+    border 1px solid #888888
+  .cate
+    margin 10px
+    border-radius 10px
+    background-color black
+    color #cdc9c9
+    padding 2px 15px
+    border 1px solid #888888
 </style>

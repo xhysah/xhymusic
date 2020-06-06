@@ -5,6 +5,8 @@ body{
   height: 100%;
   background-color: black;
   color: white;
+  min-height: 660px;
+  min-width: 1200px;
 }
 .line{
   border: 1px solid #ff0000

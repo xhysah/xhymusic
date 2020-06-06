@@ -5,7 +5,7 @@
         <template v-for="item in cate">
           <span :class="{active:activeName===item.name}" :key="item.id" @click="getSongs(item.id, item.name)">{{item.name}}</span>
         </template>
-        <el-button size="mini" type="danger" icon="el-icon-video-play" plain>播放全部</el-button>
+        <el-button class="cate" icon="el-icon-video-play" plain>播放全部</el-button>
       </el-row>
       <template v-for="(item, index) in musics" class="box">
         <div :key="item.id" class="music" :class="{odd:index%2 ===0}">
@@ -63,10 +63,10 @@ export default {
   },
   methods: {
     getSongs (type, name) {
-      console.log(name)
       this.activeName = name
       this.$http.get(`/top/song?type=${type}`).then(data => {
         this.musics = data.data
+        console.log(data.data)
       })
     },
     goSinger (id) {
@@ -146,4 +146,11 @@ export default {
     color white !important
   .odd
     background-color #0a0a0a
+  .cate
+    margin 10px
+    border-radius 10px
+    background-color #db5858
+    color white
+    padding 5px 15px
+    border none
 </style>

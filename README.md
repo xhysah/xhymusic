@@ -72,6 +72,31 @@
 - 其实sync是一个语法糖，是什么语法糖呢？
 - 在子组件中不能修改父组件中的值，要想修改父组件中的值，必须向父组件发射一个方法this.$emit('方法名',‘修改的的值);，然后父组件接收这个方法@方法名=‘处理数据操作’
 - 如果使用.sync,就不用上面操作了，在子组件中修改的值，父组件也会同步变化
+- ### sessionStorage
+存储的数据只有在同一个会话中的页面才能访问并且当会话结束后数据也随之销毁.只能存储字符串类型,如果存储的数据类型不是字符串类型，存储时，会自动调用toString方法,存入一个对象数据，会变成 [object Object]字符串
+数据存储不正确，获取的sessionStorage数据也就不对了
+- 1.存储时：JSON.stringify()方法转换成字符串，再存储到sessionStorage中
+- 2.使用时：通过JSON.parse()方法将字符串转换成JSON格式即可
+- ### 使单行文字超过一定长度显示...
+- 1.规定元素的宽度  
+       width: 200px;
+- 2.定义超过元素宽度的文字隐藏  
+       overflow: hidden
+- 3.规定当文本溢出时包含元素时发生的事情------ellipsis(显示省略符号来代表被修剪的文本)  
+       text-overflow: ellipsis
+- 4.规定元素不换行  
+       white-space: nowrap  
+- ### 多行文字显示...
+- 1.规定元素的宽度  
+        width: 200px;
+ - 2.定义超过元素宽度的文字隐藏  
+        overflow: hidden
+ - 3.设置盒子样式  
+      display: -webkit-box    
+ - 4.设置盒子参考方式  
+       -webkit-box-orient: vertical
+ - 5.设置超出多少行显示省略号    
+        -webkit-line-clamp 2
 ## 项目截图
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516191250866.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516191250802.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
