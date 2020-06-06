@@ -40,7 +40,7 @@
           </el-pagination>
         </div>
       </el-main>
-      <el-aside width="280px">
+      <el-aside width="300px">
         <div class="simiHeader">视频简介</div>
         <div class="line"></div>
         <div class="word">发布时间：{{publishTime}}</div>
@@ -215,7 +215,9 @@ export default {
     display flex
     justify-content center
   .comments
+    margin auto
     margin-top 30px
+    width 92%
     .all
       margin-bottom 10px
       margin-left 10px
@@ -226,8 +228,6 @@ export default {
         color #888888
         span
           color aquamarine
-  .el-main
-    margin 30px
   .video
     margin 10px
     width 100%
@@ -235,7 +235,7 @@ export default {
     justify-content center
     align-items center
     video
-      width 700px
+      width 92%
     i
       font-size 80px
       position absolute
@@ -253,6 +253,7 @@ export default {
           margin-left 5px
           color aquamarine
   .header
+    margin 20px
     .videoName
       font-size 23px
       margin-right 20px
@@ -289,11 +290,11 @@ export default {
       position relative
       left 100px
       top -60px
-      width 150px
+      width 180px
       cursor pointer
       span
         display inline-block
-        width 150px
+        width 180px
         overflow hidden
         text-overflow ellipsis
         white-space nowrap

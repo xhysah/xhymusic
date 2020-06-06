@@ -193,7 +193,6 @@ export default {
   .box-card
     width 450px
     border none
-    background-color black
   .loginButton
     width 120px
   .login

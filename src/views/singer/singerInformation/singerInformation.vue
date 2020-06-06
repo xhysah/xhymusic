@@ -31,9 +31,9 @@
             </div>
           </el-tab-pane>
           <el-tab-pane label="相关mv">
-            <div class="grid-2">
+            <div class="grid-3">
               <template v-for="(item, index) in mv">
-                <album-outline :key="index" length="260px" height="150px">
+                <album-outline :key="index" length="250px" height="140px">
                   <template v-slot:img>
                     <img :src="item.imgurl16v9" alt="" @click="goMv(item.id, item.type)">
                   </template>
@@ -61,19 +61,21 @@
             </template>
           </el-tab-pane>
           <el-tab-pane label="相似歌手">
-            <div class="flex" v-if="Object.keys(simArtists).length !== 0">
-              <template v-for="(item, index) in simArtists">
-                <singer-outline :key="index" length="50px" height="50px">
-                  <template v-slot:img>
-                    <img :src="item.img1v1Url" alt="" @click="goSinger(item.id)">
-                  </template>
-                  <template v-slot:sentence>
-                    <div>{{item.name}}</div>
-                  </template>
-                </singer-outline>
-              </template>
+            <div class="header">
+              <div class="grid-5" v-if="Object.keys(simArtists).length !== 0">
+                <template v-for="(item, index) in simArtists">
+                  <singer-outline :key="index" length="130px" height="130px">
+                    <template v-slot:img>
+                      <img :src="item.img1v1Url" alt="" @click="goSinger(item.id)">
+                    </template>
+                    <template v-slot:sentence>
+                      <div>{{item.name}}</div>
+                    </template>
+                  </singer-outline>
+                </template>
+              </div>
+              <div v-else class="center">暂无相似歌手</div>
             </div>
-            <div v-else class="center">暂无相似歌手</div>
           </el-tab-pane>
         </el-tabs>
       </el-main>
@@ -238,17 +240,16 @@ export default {
     width 2px
   .el-tabs
     margin 0 20px
-  .el-main
-    .img
+  .img
+    position relative
+    margin 0 20px
+    height 400px
+    overflow hidden
+    img
+      bottom 120px
+      display block
       position relative
-      margin 0 20px
-      height 300px
-      overflow hidden
-      img
-        bottom 120px
-        display block
-        position relative
-        height auto
+      height auto
   .header
     font-size 20px
     margin-left 20px
@@ -257,15 +258,15 @@ export default {
       font-size 14px
       color #909399
       text-indent 2em
-  .simiHeader
-    margin-top 80px
-    margin-bottom 10px
   .center
     margin 10px
     color #888888
   .el-button
     width 80px
     position absolute
-    top 260px
+    top 360px
     left 740px
+  .grid-5
+    img
+      position static
 </style>

@@ -28,11 +28,14 @@
             :visible.sync="loginVisible"
             width="400px"
             :title="title"
+            :append-to-body="true"
             @close="change(0,'没有账号？请先注册')">
-            <div class="button-group" v-if="active == 0">
-              <el-button size="medium" round @click="change(1, '手机登录')">手机登录</el-button>
-              <el-button round size="medium" @click="change(2, '注册')">注册</el-button>
-            </div>
+            <el-card v-if="active == 0">
+              <div class="button-group">
+                <el-button size="medium" round @click="change(1, '手机登录')">手机登录</el-button>
+                <el-button round size="medium" @click="change(2, '注册')">注册</el-button>
+              </div>
+            </el-card>
             <phone-login v-else-if="active == 1" @register="editActive" @success="login"></phone-login>
             <register v-else @login="editActive" :name="this.title"></register>
           </el-dialog>
@@ -323,17 +326,6 @@ export default {
   i
     margin-right 10px
     font-size 1.3em
-  .dialog
-    /*color white*/
-    >>>.el-dialog__header
-      background-color black
-      border-bottom none
-    >>>.el-dialog__body
-      background-color black
-      border-top none
-      padding 10px
-    >>>.el-dialog__title
-      color white
   .music-enter-active, .music-leave-active
     transition opacity 1s
   .music-enter, .music-leave-to
@@ -370,25 +362,24 @@ export default {
     li:hover
       background-color #eeeeee
   .el-aside
-    background-color #171717
+    background-color #111111
     position fixed
     left 0
     top 50px
     height 100%
     padding 20px 5px
   .el-main
-    overscroll-behavior contain
     margin-left 220px
     margin-top 50px
   .el-header
-    z-index 10
+    z-index 5
     position fixed
     width 100%
     left 0
     top 0
   .aside
     cursor pointer
-    margin 10px 10px 0 10px
+    padding 10px 10px 0 10px
     height 50px
     font-size 12px
     img
@@ -409,11 +400,7 @@ export default {
           font-size 12px
           color #888888
   .aside:hover
-    img
-      width 45px
-      height 45px
-    div
-      left 55px
+    background-color #2d2c2c
   .avatar
     width 55px
     height 55px
@@ -425,10 +412,12 @@ export default {
       left 20px
       top -20px
   .mySinger
+    color #888888
+    font-size 14px
     box-sizing border-box
     padding 5px 20px 5px 20px
-    background-color #1c1c1c
     cursor pointer
   .mySinger:hover
-    font-size 20px
+    color white
+    background-color #2d2c2c
 </style>

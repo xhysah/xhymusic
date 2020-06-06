@@ -28,7 +28,7 @@
             <template v-for="item in mvComments">
               <div :key="item.commentId">
                 <div class="simLine"></div>
-                <comments-table :comment="item" width="530px"></comments-table>
+                <comments-table :comment="item" width="600px"></comments-table>
               </div>
             </template>
           </div>
@@ -45,7 +45,7 @@
           </el-pagination>
         </div>
       </el-main>
-      <el-aside width="240px">
+      <el-aside width="300px">
         <div class="simiHeader">视频简介</div>
         <div class="line"></div>
         <div class="word">发布时间：{{mvInf.publishTime}}</div>
@@ -225,6 +225,8 @@ export default {
     display flex
     justify-content center
   .comments
+    width 92%
+    margin auto
     margin-top 30px
     .all
       margin-bottom 10px
@@ -246,7 +248,7 @@ export default {
     color #888888
     margin-top 5px
   .sim
-    margin 10px 10px 0 10px
+    margin 10px 10px 0 0
     height 65px
     font-size 14px
     img
@@ -256,11 +258,11 @@ export default {
       position relative
       left 100px
       top -60px
-      width 120px
+      width 150px
       cursor pointer
       span
         display inline-block
-        width 120px
+        width 190px
         overflow hidden
         text-overflow ellipsis
         white-space nowrap
@@ -269,11 +271,12 @@ export default {
           color #888888
   .sim:hover
     img
-      width 100px
+      width 95px
       height auto
     div
       left 110px
   .header
+    margin-top 20px
     margin-left 22px
     .mv
       position relative
@@ -296,16 +299,14 @@ export default {
       span:hover
         text-decoration underline
         cursor pointer
-  .el-main
-    padding 0
   .video
-    margin 10px
+    margin 20px 10px
     width 100%
     display flex
     justify-content center
     align-items center
     video
-      width 700px
+      width 94%
     i
       font-size 80px
       position absolute

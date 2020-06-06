@@ -43,5 +43,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+  .grid-2
+    cursor pointer
 </style>

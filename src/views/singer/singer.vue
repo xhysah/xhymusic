@@ -34,9 +34,9 @@
                 <span :key="n" :class="{actives: currentId3=== String.fromCharCode(n+96)}" class="spell-item"
                       @click="searchSinger(String.fromCharCode(n+96))">{{String.fromCharCode(n+64)}}</span>
               </template>
-              <el-divider direction="vertical"></el-divider>
-              <span class="last" :class="{actives: currentId3 === 0}" @click="searchSinger(0)">#</span>
             </div>
+            <el-divider direction="vertical"></el-divider>
+            <span class="last" :class="{actives: currentId3 === 0}" @click="searchSinger(0)">#</span>
           </div>
         </div>
       <!--        歌手信息-->

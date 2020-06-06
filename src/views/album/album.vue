@@ -8,7 +8,7 @@
           <img :src="album.blurPicUrl" alt="">
           <div class="aside">
             <span class="head"><span>专辑</span><div></div>{{album.name}}</span>
-            <span class="singer">歌手：<span>{{album.artist.name}}</span></span>
+            <span class="singer" @click="showInformation(album.artist.id)">歌手：<span>{{album.artist.name}}</span></span>
             <span class="time">发布时间：{{changeTime(album.publishTime)}}</span>
             <div class="btn-group">
               <el-button size="mini" type="danger" icon="el-icon-video-play" plain @click="play()">播放</el-button>
@@ -50,10 +50,10 @@
         <div v-else class="center">暂无评论</div>
       </el-main>
       <!--    侧边栏部分-->
-      <el-aside width="260px">
+      <el-aside width="220px">
         <div class="otherHeader">
           <span>歌手其他专辑</span>
-          <span class="more">更多</span>
+          <span @click="showInformation(album.artist.id)" class="more">更多</span>
         </div>
         <div class="line"></div>
         <div v-for="(item, index) in otherAlbums" :key="index" class="other"  @click="goAlbum(item.id)">
@@ -188,6 +188,10 @@ export default {
           }
         }
       })
+    },
+    // 根据id，去往歌手详细信息页面
+    showInformation (id) {
+      this.$router.push({ name: 'singerInformation', params: { sid: id } })
     }
   },
   computed: {
@@ -214,17 +218,17 @@ export default {
     margin 3px
     box-shadow 0 0 10 color
   .other
-    margin 10px 10px 0 10px
-    height 65px
+    margin 10px 0 0 0
+    height 55px
     font-size 14px
     img
-      width 55px
-      height 55px
+      width 50px
+      height 50px
     div
       position relative
-      left 70px
+      left 60px
       top -60px
-      width 170px
+      width 160px
       cursor pointer
       span
         display inline-block
@@ -237,16 +241,18 @@ export default {
           color #888888
   .other:hover
     img
-      width 65px
-      height 65px
+      width 55px
+      height 55px
     div
-      left 80px
+      left 70px
   .otherHeader
     margin-top 80px
-    margin-bottom 10px
+    margin-bottom 5px
     .more
+      cursor pointer
       font-size 6px
       position relative
+      color #888888
       left 10px
    .aside
      position relative
@@ -272,6 +278,7 @@ export default {
           border 11px solid
           border-color transparent transparent transparent red
     .singer
+      cursor pointer
       position absolute
       top 55px
       color #888888

@@ -51,14 +51,14 @@
           </el-pagination>
         </div>
       </el-main>
-      <el-aside width="200px">
+      <el-aside width="220px">
         <div class="simiHeader">相似歌单</div>
         <div class="line"></div>
         <div v-for="(item, index) in relateSongMenu" :key="index" class="sim"  @click="goDetail(item.id)">
           <img :src="item.coverImgUrl" alt="">
           <div class="word">
             <span>{{item.name}}</span><br>
-            <span>by{{item.creator.nickname}}</span>
+            <span>by {{item.creator.nickname}}</span>
           </div>
         </div>
       </el-aside>
@@ -296,24 +296,24 @@ export default {
           color red
           margin-right 5px
   .simiHeader
-    margin-top 80px
-    margin-bottom 10px
+    margin 80px 0 5px 0
   .word
-    width 130px
+    width 100px
   .sim
-    margin 10px 10px 0 10px
+    cursor pointer
+    margin 10px 10px 0 0
     height 65px
     font-size 14px
     img
-      width 55px
-      height 55px
+      width 50px
+      height 50px
     div
       position relative
-      left 70px
-      top -60px
+      left 60px
+      top -50px
       span
         display inline-block
-        width 170px
+        width 160px
         overflow hidden
         text-overflow ellipsis
         white-space nowrap
@@ -322,10 +322,10 @@ export default {
           color #888888
   .sim:hover
     img
-      width 65px
-      height 65px
+      width 52px
+      height 52px
     div
-      left 80px
+      left 70px
   .el-pagination
     display flex
     justify-content center
@@ -340,4 +340,6 @@ export default {
       margin-bottom 10px
   .el-main
     padding 0
+  .el-aside
+    margin-left 14px
 </style>

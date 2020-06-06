@@ -84,13 +84,12 @@ export default {
   .box-card
     border none
     width 450px
-    background-color black
   .loginButton
     width 120px
   .forget
     right 0
-    bottom 25px
-    margin-right 20px
+    bottom 45px
+    margin-right 40px
     position absolute
   .register
     position relative

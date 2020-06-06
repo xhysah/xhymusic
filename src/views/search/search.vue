@@ -45,7 +45,7 @@
           <el-tab-pane label="视频">
             <div class="grid-4">
               <template v-for="(item, index) in searchResult[3].videos">
-                <album-outline :key="index" length="150px" height="90px">
+                <album-outline :key="index" length="190px" height="120px">
                   <template v-slot:img>
                     <img :src="item.coverUrl" alt="" @click="goMv(item.vid, item.type)">
                   </template>

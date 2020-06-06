@@ -6,8 +6,8 @@
         <img :src="highqualityList[0].coverImgUrl" alt="" @click="goHighQuality">
         <div>
           <button @click="goHighQuality">精品歌单</button>
-          <span class="name">{{highqualityList[0].name}}</span>
-          <span class="writer">{{highqualityList[0].copywriter}}</span>
+          <span class="name" @click="goHighQuality">{{highqualityList[0].name}}</span>
+          <span class="writer" @click="goHighQuality">{{highqualityList[0].copywriter}}</span>
         </div>
       </el-row>
     </div>
