@@ -98,10 +98,10 @@
  - 5.设置超出多少行显示省略号    
         -webkit-line-clamp 2
 ## 项目截图
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516191250866.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516191250802.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516191250274.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/2020051619125020.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516191249824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516191249794.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516191249719.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://github.com/xhysah/xhymusic/tree/master/src/assets/img/recommend.png)
+![在这里插入图片描述](https://github.com/xhysah/xhymusic/tree/master/src/assets/img/ranking.png)
+![在这里插入图片描述](https://github.com/xhysah/xhymusic/tree/master/src/assets/img/songMenu.png)
+![在这里插入图片描述](https://github.com/xhysah/xhymusic/tree/master/src/assets/img/songMenuDetail.png)
+![在这里插入图片描述](https://github.com/xhysah/xhymusic/tree/master/src/assets/img/singer.png)
+![在这里插入图片描述](https://github.com/xhysah/xhymusic/tree/master/src/assets/img/singerDetail.png)
+![在这里插入图片描述](https://github.com/xhysah/xhymusic/tree/master/src/assets/img/latest.png)
