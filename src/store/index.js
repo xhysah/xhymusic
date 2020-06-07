@@ -195,12 +195,19 @@ export default new Vuex.Store({
     },
     editMemberSong (state, value) {
       state.memberSong = value
+    },
+    addSongs (state, value) {
+      window.sessionStorage.setItem('total', state.total + 1)
+      state.total = state.total + 1
+      state.songs.push(value)
+      console.log(state.songs)
     }
   },
   actions: {
     play (context, payload) {
       context.commit('editCheckFalse', true)
       context.commit('editMemberSong', false)
+      console.log(context.state.songs[payload.num])
       axios.get(`/check/music?id=${context.state.songs[payload.num].id}`).then(() => {
         axios.all([axios.get(`/song/url?id=${context.state.songs[payload.num].id}`), axios.get(`/lyric?id=${context.state.songs[payload.num].id}`)])
           .then(axios.spread((songUrl, lyric) => {
@@ -218,12 +225,21 @@ export default new Vuex.Store({
                   lyric: lyric,
                   num: payload.num
                 })
-              } else {
+              } else if (payload.name === 'songTable') {
                 context.commit('playUrl', {
                   url: songUrl.data[0].url,
                   img: context.state.songs[payload.num].al.picUrl,
                   name: context.state.songs[payload.num].name,
                   singer: context.state.songs[payload.num].al.name,
+                  lyric: lyric,
+                  num: payload.num
+                })
+              } else {
+                context.commit('playUrl', {
+                  url: songUrl.data[0].url,
+                  img: context.state.songs[payload.num].album.picUrl,
+                  name: context.state.songs[payload.num].name,
+                  // singer: context.state.songs[payload.num].al[0].name,
                   lyric: lyric,
                   num: payload.num
                 })

@@ -1,10 +1,10 @@
-<template xmlns:song="http://www.w3.org/1999/html">
+<template>
   <div>
     <template v-for="(item, index) in rankings">
       <song :key="item.id" :songs="item" :menu="rankingList[index]"></song>
     </template>
     <div class="grid-4">
-      <template v-for="(item, index) in rankingList.slice(4)">
+      <template v-for="(item, index) in rankingList">
         <div :key="index" @click="goDetail(item.id)">
           <song-outline>
             <template v-slot:img>
@@ -62,14 +62,13 @@ export default {
     getRanking () {
       this.$http.get('/toplist/detail').then(data => {
         this.rankingList = data.list
+        console.log(this.rankingList)
       })
     },
     // 根据id获取排行榜详细数据
     getMyselfRanking (i, idx) {
       this.active = idx
       this.$http.get(`/top/list?idx=${idx}`).then(data => {
-        console.log(data.playlist.tracks.slice(0, 10))
-        // this.rankings = data.playlist.tracks.slice(0, 5)
         this.$set(this.rankings, i, data.playlist.tracks.slice(0, 5))
         this.currentId = data.playlist.id
       })

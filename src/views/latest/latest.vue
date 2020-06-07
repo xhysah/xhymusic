@@ -5,10 +5,10 @@
         <template v-for="item in cate">
           <span :class="{active:activeName===item.name}" :key="item.id" @click="getSongs(item.id, item.name)">{{item.name}}</span>
         </template>
-        <el-button class="cate" icon="el-icon-video-play" plain>播放全部</el-button>
+        <el-button class="cate" icon="el-icon-video-play" plain @click="playAll">播放全部</el-button>
       </el-row>
       <template v-for="(item, index) in musics" class="box">
-        <div :key="item.id" class="music" :class="{odd:index%2 ===0}">
+        <div :key="item.id" class="music" :class="{odd:index%2 ===0}" @click="play(item.id, index)">
           <div class="num">{{double(index+1)}}</div>
           <img :src="item.album.picUrl">
           <div class="name">{{item.name}}</div>
@@ -62,6 +62,26 @@ export default {
     }
   },
   methods: {
+    playAll () {
+      this.$store.commit('getTotal', this.musics.length)
+      this.$store.commit('getSongs', this.musics)
+      this.$store.dispatch('play', { num: 0, name: 'playUrl' })
+    },
+    play (id, index) {
+      if (this.active === id) {
+        this.$store.commit('editActive', id + 1)
+        this.$store.commit('pauseMusic')
+      } else if (this.active === id + 1) {
+        this.$store.commit('playMusic')
+        this.$store.commit('editActive', id)
+      } else {
+        if (window.sessionStorage.getItem('songs') !== this.musics) {
+          this.$store.commit('getSongs', this.musics)
+        }
+        this.$store.commit('getTotal', this.musics.length)
+        this.$store.dispatch('play', { num: index, name: 'playUrl' })
+      }
+    },
     getSongs (type, name) {
       this.activeName = name
       this.$http.get(`/top/song?type=${type}`).then(data => {
@@ -94,12 +114,17 @@ export default {
       return `${this.double(Math.floor(time / 60000))}:${this.double(Math.floor(time / 1000 % 60))}`
     }
   },
-  computed: {}
+  computed: {
+    active () {
+      return this.$store.state.active
+    }
+  }
 }
 </script>
 
 <style lang="stylus" scoped>
   .el-main
+    padding 20px
     .el-row
       span
         cursor pointer

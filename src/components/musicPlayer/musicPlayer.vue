@@ -178,11 +178,11 @@ export default {
 
 <style lang="stylus" scoped>
   .audio1
-    padding 10px
+    margin auto
+    padding 10px 0 10px 50px
     border-radius 10px 10px 0 0
     background-color #000000
   .audio
-    width 100%
     .i-group
       display inline-block
       width 102px

@@ -47,7 +47,9 @@
       <div class="hot" @click="goLatest">最新音乐<i class="el-icon-arrow-right"></i></div>
       <div class="grid-2 latest">
         <template v-for="item in latestMusic">
-          <music-outline :key="item.id" :music="item"></music-outline>
+          <div :key="item.id">
+            <music-outline :music="item"></music-outline>
+          </div>
         </template>
       </div>
       <div class="hot">推荐MV<i class="el-icon-arrow-right"></i></div>
@@ -196,4 +198,6 @@ export default {
     padding-bottom 4px
   .latest
     margin 10px 20px
+    div
+      width 100%
 </style>
