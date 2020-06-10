@@ -96,7 +96,8 @@
  - 4.设置盒子参考方式  
        -webkit-box-orient: vertical
  - 5.设置超出多少行显示省略号    
-        -webkit-line-clamp 2
+        -webkit-line-clamp 2	
+## 项目演示：[地址](https://www.bilibili.com/video/BV1ci4y1x7YV)
 ## 项目截图
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200606174625811.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200606174625768.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
