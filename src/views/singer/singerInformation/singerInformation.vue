@@ -84,8 +84,8 @@
 </template>
 
 <script>
-import albumOutline from '../../../components/songOutline /albumOutline'
-import singerOutline from '../../../components/songOutline /singerOutline'
+import albumOutline from '../../../components/songOutline/albumOutline'
+import singerOutline from '../../../components/songOutline/singerOutline'
 import songTable from '../../../components/songTable/songTable'
 export default {
   name: 'singerInformation',

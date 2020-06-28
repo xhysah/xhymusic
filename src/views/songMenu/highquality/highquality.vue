@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import highOutline from '../../../components/songOutline /highOutline'
+import highOutline from '../../../components/songOutline/highOutline'
 export default {
   name: 'highuality',
   components: {

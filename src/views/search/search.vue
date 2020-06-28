@@ -73,8 +73,8 @@
 </template>
 
 <script>
-import albumOutline from '../../components/songOutline /albumOutline'
-import singerOutline from '../../components/songOutline /singerOutline'
+import albumOutline from '../../components/songOutline/albumOutline'
+import singerOutline from '../../components/songOutline/singerOutline'
 import songmenu from '../../components/songTable/songmenu'
 import lyric from '../../components/lyric/lyric'
 import songs from '../../components/songTable/songs'

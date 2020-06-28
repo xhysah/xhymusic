@@ -75,8 +75,8 @@
 </template>
 
 <script>
-import musicOutline from '../../components/songOutline /musicOutline'
-import songOutline from '../../components/songOutline /songOutline'
+import musicOutline from '../../components/songOutline/musicOutline'
+import songOutline from '../../components/songOutline/songOutline'
 export default {
   name: 'recommend',
   components: {
