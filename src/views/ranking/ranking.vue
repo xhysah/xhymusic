@@ -25,7 +25,7 @@
 
 <script>
 import song from '../../components/songTable/song'
-import songOutline from '../../components/songOutline /songOutline'
+import songOutline from '../../components/songOutline/songOutline'
 export default {
   name: 'ranking',
   components: {

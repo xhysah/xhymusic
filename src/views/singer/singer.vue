@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import singerOutline from '../../components/songOutline /singerOutline'
+import singerOutline from '../../components/songOutline/singerOutline'
 export default {
   name: 'singer',
   created () {

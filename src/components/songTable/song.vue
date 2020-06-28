@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import songOutline from '../songOutline /songOutline'
+import songOutline from '../songOutline/songOutline'
 export default {
   name: 'song',
   components: {

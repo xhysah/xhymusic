@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import songOutline from '../../components/songOutline /songOutline'
+import songOutline from '../../components/songOutline/songOutline'
 export default {
   name: 'songMenu',
   components: {
