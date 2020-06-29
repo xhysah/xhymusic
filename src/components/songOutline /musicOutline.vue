@@ -1,6 +1,7 @@
 <template>
   <div class="box">
     <img :src="music.album.picUrl">
+    <div class="num">{{double(index+1)}}</div>
     <div class="name">{{music.name}}</div>
     <div class="singer">
       <template v-for="(item, index) in music.artists">
@@ -15,7 +16,8 @@
 export default {
   name: 'musicOutline',
   props: {
-    music: Object
+    music: Object,
+    index: Number
   },
   data () {
     return {}
@@ -23,6 +25,16 @@ export default {
   methods: {
     goSinger (id) {
       this.$router.push({ name: 'singerInformation', params: { sid: id } })
+    },
+    double (num) {
+      if (num.toString().length >= 2) {
+        return num
+      } else {
+        if (num === 0) {
+          return '00'
+        }
+        return '0' + num
+      }
     }
   },
   computed: {}
@@ -39,7 +51,7 @@ export default {
     padding 4px 0
     .singer
       position absolute
-      left 90px
+      left 100px
       top 40px
       font-size 12px
       color #888888
@@ -49,7 +61,13 @@ export default {
     .name
       position absolute
       top 10px
-      left 90px
+      left 100px
+    .num
+      position absolute
+      left 70px
+      top 20px
+      color #555454
+      font-size 14px
   img
     width 60px
     height 60px

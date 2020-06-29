@@ -70,7 +70,7 @@
       </el-aside>
       <!--    显示的页面-->
       <el-main>
-        <router-view/>
+        <keep-alive><router-view/></keep-alive>
       </el-main>
     </el-container>
     <!--    显示搜索框-->
@@ -369,7 +369,7 @@ export default {
     height 100%
     padding 20px 5px
   .el-main
-    margin-left 220px
+    margin-left 230px
     margin-top 50px
   .el-header
     z-index 5

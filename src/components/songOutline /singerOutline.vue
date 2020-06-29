@@ -51,8 +51,6 @@ export default {
         white-space nowrap
   .img:hover
     img
-      width 105%
-      height 105%
       box-shadow 0 0 10px red
     +.sentence
       visibility hidden

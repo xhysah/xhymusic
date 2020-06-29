@@ -33,6 +33,16 @@ export default {
     this.getSongs(0, '全部')
     this.$store.commit('editActiveName', 'latest')
   },
+  mounted () {
+    // 监听scroll事件，滚动到最顶部，再加载图片
+    window.addEventListener('scroll', () => {
+      if (document.documentElement.scrollTop + document.documentElement.clientHeight + 10 >= document.documentElement.scrollHeight) {
+        if (this.musicsAll.length - this.musics.length > 0) {
+          this.scrollShow()
+        }
+      }
+    })
+  },
   data () {
     return {
       musics: [],
@@ -58,7 +68,8 @@ export default {
           id: 16
         }
       ],
-      activeName: ''
+      activeName: '',
+      musicsAll: {}
     }
   },
   methods: {
@@ -85,8 +96,8 @@ export default {
     getSongs (type, name) {
       this.activeName = name
       this.$http.get(`/top/song?type=${type}`).then(data => {
-        this.musics = data.data
-        console.log(data.data)
+        this.musics = data.data.slice(0, 8)
+        this.musicsAll = data.data
       })
     },
     goSinger (id) {
@@ -112,6 +123,13 @@ export default {
     },
     duration (time) {
       return `${this.double(Math.floor(time / 60000))}:${this.double(Math.floor(time / 1000 % 60))}`
+    },
+    scrollShow () {
+      if (this.musicsAll.length - this.musics.length >= 5) {
+        this.musics = this.musics.concat(this.musicsAll.slice((this.musics.length), (this.musics.length + 5)))
+      } else {
+        this.musics = this.musics.concat(this.musicsAll.slice((this.musics.length + 1)))
+      }
     }
   },
   computed: {

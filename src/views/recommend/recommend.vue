@@ -46,9 +46,9 @@
       </div>
       <div class="hot" @click="goLatest">最新音乐<i class="el-icon-arrow-right"></i></div>
       <div class="grid-2 latest">
-        <template v-for="item in latestMusic">
+        <template v-for="(item, index) in latestMusic">
           <div :key="item.id">
-            <music-outline :music="item"></music-outline>
+            <music-outline :music="item" :index="index"></music-outline>
           </div>
         </template>
       </div>

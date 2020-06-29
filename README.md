@@ -28,7 +28,7 @@
  	下载npm i element-ui -save  
  	我是在src下面建了一个elementUI文件夹，再建了一个element.js文件  
  	在这个文件中，按需引入elementUI  
- ```javacsipt
+ ```javascript
  import Vue from 'vue'
  import {
    	Form,
@@ -36,7 +36,7 @@
   }from 'element-ui';
   Vue.use(Form)
   Vue.use(FormItem)
-  ```
+```
   再在main.js中引入import './elementUi/element'
  最后删掉views，components里面原本存在的vue文件，连同src/router/index.js里的路由一起删掉----然后做完这些，我就开始研究文档了，一开始真的好难上手
  [网易云github地址](https://github.com/Binaryify/NeteaseCloudMusicApi).  
@@ -44,7 +44,7 @@
 ## 遇到的问题
 - ### 播放音乐
 最开始的时候，我知道肯定会用audio标签，建立了一个musicPlayer组件，然后把它固定在浏览器底部，因为有好几个页面都有音乐播放，所以我只能把音乐数据放在vuex里面统一管理，传给vuex的值都是可用数据了，每次只能播放一首歌，播放完后，就直接停止了，我应该在他的ended事件里面做些什么。逻辑是这样的
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516185345847.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516185345847.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)  
 大概吧，我真的不知道怎么表述了，反正数据，我都存在vuex里面了，
 总结：
 - 1.在actions里面可以调用mutation--------context.commit('事件类型','参数')，网络请求等异步操作，放在actions里面------------组件调用this.$store.dispatch('事件类型', '参数')
@@ -56,7 +56,8 @@
 - ### flex布局
 在项目中，我经常遇到布局问题，因为好多图片，都要居中对齐，看起来整洁一点，总结一下经常用的
 - 容器的justify-content属性，属性值space-between两端项目之间的距离都相等，center居中对齐
-- 容器的flex-warp----定义一行排不下item，如何换行----wrap换行
+- 容器的flex-wrap----定义一行排不下item，如何换行----wrap换行
+- 容器的align-items--定义在交叉轴上如何对齐，可以用来垂直居中块级元素
 - 容器属性
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200516200935636.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3hoeXh4aHducw==,size_16,color_FFFFFF,t_70)
 - 项目属性
@@ -66,6 +67,7 @@
 - absolute：绝对定位，参考最近一个不为static的父级元素的位置
 - fixed：固定定位，参照对象为可视窗口
 - static ：默认，按照正常流进行排列
+- inherit：继承父属性的position值
 - ### 修饰符sync
 在我使用elementUI时，我发现经常有数据，会加上这个修饰符.sync,一直不明白是什么意思
 
@@ -77,6 +79,9 @@
 数据存储不正确，获取的sessionStorage数据也就不对了
 - 1.存储时：JSON.stringify()方法转换成字符串，再存储到sessionStorage中
 - 2.使用时：通过JSON.parse()方法将字符串转换成JSON格式即可
+- ### v-model原理
+本质上是一个语法糖，通过@input事件+v-bind指令实现数据的双向绑定  
+<input v-model='testValue'> == <input :value="testValue" @input="testValue = $event.target.value">
 - ### 使单行文字超过一定长度显示...
 - 1.规定元素的宽度  
        width: 200px;

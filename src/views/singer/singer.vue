@@ -65,6 +65,16 @@ export default {
     this.firstShow()
     this.$store.commit('editActiveName', 'singer')
   },
+  mounted () {
+    // 监听scroll事件，滚动到最顶部，再加载图片
+    window.addEventListener('scroll', () => {
+      if (document.documentElement.scrollTop + document.documentElement.clientHeight + 10 >= document.documentElement.scrollHeight) {
+        if (this.singersAll.length - this.singers.length > 0) {
+          this.scrollShow()
+        }
+      }
+    })
+  },
   components: {
     singerOutline
   },
@@ -117,7 +127,8 @@ export default {
       },
       currentId: -1,
       currentId2: -1,
-      currentId3: -1
+      currentId3: -1,
+      singersAll: {}
     }
   },
   methods: {
@@ -127,13 +138,15 @@ export default {
         this.currentId2 = name
         this.activeId.typeId = name
         this.$http.get(`/artist/list?type=${name}&area=${this.activeId.areaId}&initial=${this.activeId.initial}`).then(data => {
-          this.singers = data.artists
+          this.singers = data.artists.slice(0, 15)
+          this.singersAll = data.artists
         })
       } else {
         this.currentId = name
         this.activeId.areaId = name
         this.$http.get(`/artist/list?type=${this.activeId.typeId}&area=${name}&initial=${this.activeId.initial}`).then(data => {
-          this.singers = data.artists
+          this.singers = data.artists.slice(0, 15)
+          this.singersAll = data.artists
         })
       }
     },
@@ -143,15 +156,24 @@ export default {
       this.activeId.initial = value
       this.$http.get(`/artist/list?type=${this.activeId.typeId}&area=${this.activeId.areaId}&initial=${value}`).then(data => {
         console.log(data)
-        this.singers = data.artists
+        this.singers = data.artists.slice(0, 15)
+        this.singersAll = data.artists
       })
+    },
+    scrollShow () {
+      if (this.singersAll.length - this.singers.length >= 5) {
+        this.singers = this.singers.concat(this.singersAll.slice((this.singers.length), (this.singers.length + 5)))
+      } else {
+        this.singers = this.singers.concat(this.singersAll.slice((this.singers.length + 1)))
+      }
     },
     // 显示热门歌手
     firstShow () {
       this.activeId.typeId = -1
       this.activeId.areaId = -1
       this.$http.get('/artist/list?type=-1&area=-1').then(data => {
-        this.singers = data.artists
+        this.singers = data.artists.slice(0, 15)
+        this.singersAll = data.artists
       })
     },
     // 根据id，去往歌手详细信息页面
