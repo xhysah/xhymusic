@@ -5,5 +5,7 @@
 </template>
 
 <style lang="stylus">
-
+  ::-webkit-scrollbar {
+    display: none;
+  }
 </style>

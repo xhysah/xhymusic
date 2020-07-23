@@ -48,16 +48,16 @@ export default {
         }
         // 得到token，用户id
         this.$http.get('/login/cellphone', { params: this.loginForm }).then(data => {
-          window.localStorage.setItem('token', data.token)
+          this.$store.commit('getToken', data.token)
           // 得到用户的歌单id
           this.$http.get(`/user/playlist?uid=${data.account.id}`).then(data => {
+            // 回传第一个歌单的编号id
             this.$store.commit('getSongMenuId', data.playlist[0].id)
           })
           this.$message.success('登录成功')
           this.$store.commit('getAccountId', data.account.id)
-          window.localStorage.setItem('phone', this.loginForm.phone)
-          window.localStorage.setItem('password', this.loginForm.password)
-          window.localStorage.setItem('imgUrl', data.profile.avatarUrl)
+          this.$store.commit('getPhone', this.loginForm.phone)
+          this.$store.commit('imgUrl', data.profile.avatarUrl)
           this.$emit('success', data.profile.avatarUrl)
         }).catch(() => {
           this.$message.error('密码错误')

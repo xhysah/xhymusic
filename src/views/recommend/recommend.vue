@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!--    banner-->
+    <!--    banner  轮播图  -->
     <el-carousel :interval="5000" type="card" height="180px">
       <el-carousel-item v-for="(item, index) in banners" :key="index">
         <img class="banner" :src="item.imageUrl" :alt="item.typeTitle">

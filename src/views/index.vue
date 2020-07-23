@@ -341,7 +341,7 @@ export default {
     border-radius 5px
     .item
       width 130px
-      //超粗文字部分，隐藏
+      //超出文字部分，隐藏
       overflow hidden
       // 文本被修建
       text-overflow ellipsis

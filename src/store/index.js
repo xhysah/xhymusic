@@ -33,14 +33,20 @@ export default new Vuex.Store({
     total: window.sessionStorage.getItem('total'),
     // songstable还是songs
     tableName: window.sessionStorage.getItem('tableName'),
+    // 用户token
+    token: '',
+    // 用户手机号
+    phone: '',
+    // 用户头像
+    imgUrl: '',
     // 用户id，看是否存在用户id，判断用户是否登录
-    accountId: window.localStorage.getItem('accountId'),
+    accountId: '',
     // 用户的歌单id，用于添加/取消收藏歌曲
-    songMenuId: window.localStorage.getItem('songMenuId'),
+    songMenuId: '',
     checkFalse: true,
     memberSong: false
   },
-  getters: {
+  getters: { // getters 为计算属性，只有当数据发生变化才会重新计算
     // 播放进度
     percentage (state) {
       if (state.metaDuration === 0) {
@@ -183,12 +189,12 @@ export default new Vuex.Store({
     // 得到用户id
     getAccountId (state, value) {
       state.accountId = value
-      window.localStorage.setItem('accountId', value)
+      // window.localStorage.setItem('accountId', value)
     },
     // 得到用户歌单id
     getSongMenuId (state, value) {
       state.songMenuId = value
-      window.localStorage.setItem('songMenuId', value)
+      // window.localStorage.setItem('songMenuId', value)
     },
     editCheckFalse (state, value) {
       state.checkFalse = value
@@ -201,6 +207,15 @@ export default new Vuex.Store({
       state.total = state.total + 1
       state.songs.push(value)
       console.log(state.songs)
+    },
+    getToken (state, value) {
+      state.token = value
+    },
+    getPhone (state, value) {
+      state.phone = value
+    },
+    getImgUrl (state, value) {
+      state.imgUrl = value
     }
   },
   actions: {
